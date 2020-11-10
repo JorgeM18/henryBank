@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {useDispatch} from 'react-redux'
-import {createUser} from '../../Redux/actions/user'
+import {createUser} from '../../Store/actions/user'
 import { View, Button, TextInput, ScrollView, StyleSheet } from 'react-native'
 
 
