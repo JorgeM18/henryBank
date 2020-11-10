@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 
 const createUser =  async (ctx)=>{ // Recibe el ctx (contexto) que son todos los datos 
-   
+   console.log(ctx)
   try{
       const hash = await bcrypt.hash(ctx.params.password, 10);
       ctx.params.password = hash

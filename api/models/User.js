@@ -37,7 +37,7 @@ module.exports = (sequelize) => {
     },
     documentnum:{
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       unique: true
     },
     birth:{

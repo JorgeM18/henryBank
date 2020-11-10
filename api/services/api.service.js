@@ -22,7 +22,7 @@ module.exports = {
 
 		// Global Express middlewares. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Middlewares
 		use: [],
-
+		cors: {credentials: true},
 		routes: [
 			{
 				path: "/api",

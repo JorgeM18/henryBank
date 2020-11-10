@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
+import {useDispatch} from 'react-redux'
+import {createUser} from '../../Redux/actions/user'
 import { View, Button, TextInput, ScrollView, StyleSheet } from 'react-native'
+
 
 
 
@@ -7,7 +10,7 @@ const CreateUser = (props) => {
     const [state, setState] = useState({
         name: '',
         email: '',
-        phone: ''
+        password: ''
     })
     const onChangeValue = (name, e) => {
         setState({
@@ -15,15 +18,11 @@ const CreateUser = (props) => {
             [name]: e
         })
     }
+    const dispatch=useDispatch()
 
-    const createNewUser = async () => {
-        if(state.name === '') {alert('insert Name') }
-        else{
-         console.log(state)
-        props.navigation.navigate('UserList')
-
-        }
-           
+    const createNewUser =async  () => {
+    
+        dispatch(createUser(state))
 
     }
 
@@ -35,19 +34,19 @@ const CreateUser = (props) => {
                     name="name"
                     onChangeText={e => onChangeValue('name', e)} />
             </View>
-            <br />
+   
             <View style={style.inputGroup}>
                 <TextInput placeholder="Email User"
                     name="email"
                     onChangeText={e => onChangeValue('email', e)} />
             </View>
-            <br />
+          
             <View style={style.inputGroup}>
-                <TextInput placeholder="Phone Number"
-                    name="phone"
-                    onChangeText={e => onChangeValue('phone', e)} />
+                <TextInput placeholder="Password"
+                    name="password"
+                    onChangeText={e => onChangeValue('password', e)} />
             </View>
-            <br />
+         
             <View >
 
                 <Button style={style.btn} title="Save User" onPress={() => createNewUser()} />
