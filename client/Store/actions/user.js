@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const ADD_USER='ADD_USER'
 
-const localhost='192.168.1.2:3000'
+const localhost='192.168.0.8:3000'
 
 //ACTIONS CREATE: CREAR UN USUARIO 
 export function createUser(user){
