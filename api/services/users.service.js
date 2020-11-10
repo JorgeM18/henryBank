@@ -7,6 +7,7 @@ const { forgotPassword, resetPassword, updatePassword } = require('../controller
 const approveUser = require('../controllers/users/approveUser.controllers');
 // const createUser = require('../controllers/users/users.controllers')
 const login = require('../controllers/authentication/login.controllers');
+
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -18,7 +19,7 @@ module.exports = {
 	 * Settings
 	 */
 	settings: {
-
+		
 	},
 
 	/**
@@ -52,11 +53,6 @@ module.exports = {
             params:{
                 email:"email",
                 password: "string",
-                documenttype: "string",
-                documentnum: "string"
-            },
-            async handler(ctx){ 
-                 return `registrando a, ${ctx.params.email}`
             },
             handler: createUser
 		},
