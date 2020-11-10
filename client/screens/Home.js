@@ -1,60 +1,119 @@
+
 import React from 'react'
-import {Button, StyleSheet} from 'react-native'
-
-import { ScrollView } from "react-native-gesture-handler";
-
-
+import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { Icon } from 'react-native-elements'
 
 const Home = (props) => {
 
-
     return (
-        <ScrollView style={style.container}>
-            <Button 
-            title="Create User" 
-            onPress={() => props.navigation.navigate("CreateUser")} 
-            style={style.btn}/>
-            
-            <Button title="List User" 
-            onPress={() => props.navigation.navigate("ListUser")} 
-            style={style.btn}/>
-            
-            <Button title="Faq" 
-            onPress={() => props.navigation.navigate("Faq")} />
-            <Button title="Login" 
-            onPress={() => props.navigation.navigate("Login")} />
+        <View style={style.container}>
+            <View style={style.box1}></View>
+            <View style={style.box2}>
+                <View style={{ paddingTop: 50, paddingHorizontal: 14 }}>
 
-            style={style.btn}/>
-        </ScrollView>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View>
+                            <Image
+                                source={require('../screens/images/Logo-04.png')}
+                                style={style.Image}
+                            />
+
+                        </View>
+                        <View>
+                            <Text style={style.text}>GO</Text>
+                            <Text style={{ fontSize: 19, color: '#fff', opacity: 0.6, marginTop: 10, marginHorizontal: '2.5%' }}>E-Wallet for the</Text>
+                            <Text style={{ fontSize: 19, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>gaming comunity</Text>
+                        </View>
+
+                    </View>
+                </View>
+
+
+            </View>
+            <View style={style.box3}>
+                <View style={{ paddingVertical: 20 }}>
+                    <TouchableOpacity style={style.create}
+                        onPress={() => props.navigation.navigate("CreateUser")} >
+                        <Text style={{ fontSize: 16, marginHorizontal: '20%' }}>Create User</Text>
+                    </TouchableOpacity>
+                </View>
+                <View>
+                    <TouchableOpacity style={style.login}
+                        onPress={() => props.navigation.navigate("Login")}>
+                        <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginHorizontal: '7%'}}><Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
+
+                </View>
+
+            </View>
+            <View style={style.box4}>
+                <Icon
+                    reverse
+                    name='help-circled'
+                    size={15}
+                />
+
+            </View>
+        </View>
 
     )
 
 }
+const style = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#1e1e1e'
+    },
+    box1: {
+        padding: 20,
+        flex: 1
+    },
+    box2: {
+        flex: 5,
+    },
+    box3: {
+        padding: 20,
+        flex: 4,
+        alignItems: 'center'
+    },
+    box4: {
+        padding: 20,
+        flex: 1,
+        alignItems:'flex-end',
+    },
+    Image: {
+        width: 150,
+        height: 120,
+        // borderRadius: 40
+    },
+    text: {
+        fontSize: 26,
+        color: '#fff',
+        fontWeight: 'bold',
 
-const style= StyleSheet.create({
-    container:{
-        flex:1,
-        padding:35,
+        // textAlign: 'center'
     },
-    loader:{
-        left:0,
-        right:0,
-        top:0,
-        bottom:0,
-        position:"absolute",
-        alignItems:"center",
-        justifyContent:"center",
+    create: {
+        width: 150,
+        height: 50,
+        borderRadius: 10,
+        justifyContent: 'center',
+        backgroundColor: '#FFF',
     },
-    inputGroup:{
-        flex:1,
-        padding:0,
-        marginBottom:15,
-        borderBottomWidth:1,
-        borderColor:"#cccccc",
-    },
-    btn:{
-        marginBottom:7,
-    },
+    login: {
+        width: 150,
+        height: 50,
+        borderRadius: 10,
+        justifyContent: 'center',
+        backgroundColor: '#1e1e1e',
+        borderWidth:1,
+        borderStyle:'solid',
+        borderColor:'#FFF'
+    }
 });
 
 export default Home;
+
+     {/* <Button title="Faq" 
+            onPress={() => props.navigation.navigate("Faq")} /> */}

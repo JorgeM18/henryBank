@@ -7,7 +7,7 @@ import store from './Store/store'
 
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
-import Faq from './src/componentes/Faq'
+// import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
 const Stack= createStackNavigator()
 
@@ -16,10 +16,30 @@ function MyStack(){
     <Stack.Navigator>
       {/* este nos va a permitir crear las pantallas */}
 
-     <Stack.Screen name="Home" component={Home}/>
-     <Stack.Screen name= "CreateUser" component={CreateUser}/>
-     <Stack.Screen name= "Faq" component={Faq}/>
-     <Stack.Screen name= "Login" component={Login}/>
+      <Stack.Screen name="Home" component={Home}
+          options={{
+            headerTitle:'',
+            headerStyle: {
+              backgroundColor: '#1e1e1e',
+            },}}
+            />
+      <Stack.Screen name="CreateUser" 
+      component={CreateUser}
+      options={{title: 'Create a New User',
+      headerStyle: {
+        backgroundColor: '#1e1e1e',
+        
+      },
+      headerTintColor:'#fff',
+      headerTitleAlign:'center',
+      headerTitleStyle:'bold'}}/> 
+     {/* <Stack.Screen name= "Faq" component={Faq}/> */}
+     <Stack.Screen name= "Login" component={Login}
+       options={{
+        headerTitle:'',
+        headerStyle: {
+          backgroundColor: '#1e1e1e',
+        },}}/>
     </Stack.Navigator>
   )
 }
