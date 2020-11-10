@@ -3,17 +3,90 @@ const {User} = require('../../db');
 const bcrypt = require('bcrypt');
 
 
-const createUser =  async (ctx)=>{ // Recibe el ctx (contexto) que son todos los datos 
-   console.log(ctx)
+const crypto = require('crypto');
+require('dotenv').config();
+const nodemailer = require('nodemailer');
+const { Sequelize } = require('sequelize');
+
+const Op = Sequelize.Op;
+const BCRYPT_SALT_ROUNDS = 12;
+const {
+    EMAIL_ADDRESS, 
+    EMAIL_PASSWORD
+  } = process.env;
+
+var fs = require('fs');
+
+
+
+
+const createUser =  async (ctx)=>{              // crea un usuario y envia el mail de validacion
+    const pin = Math.floor(Math.random() * 999999);
+    ctx.params.pin = pin
+    console.log(ctx.params)
   try{
       const hash = await bcrypt.hash(ctx.params.password, 10);
       ctx.params.password = hash
       const user = await User.create(ctx.params);
+
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: EMAIL_ADDRESS,
+          pass: EMAIL_PASSWORD,
+        },
+      });
+
+    //   const mailOptions = {
+    //     from: 'gohenrybank2020@gmail.com',
+    //     to: `${user.email}`,
+    //     subject: 'Gracias por ingresar! Confirme su cuenta',
+    //     text:
+    //       'Este es un mail para confirmar y completar su cuenta de Go Henry Bank\n\n'
+    //       + 'Por favor cliquea en el siguiente link, o copielo y peguelo en el navegador para completar el proceso.\n\n'
+    //       + `http://localhost:3000/NIDEA\n\n`
+    //       + 'Si usted no hizo este pedido, por favor ignore este mail.\n',
+    //   };
+
+    //   console.log('sending mail');
+
+    //   transporter.sendMail(mailOptions, (err, response) => {
+    //     if (err) {
+    //       console.error('there was an error: ', err);
+    //       console.log('error en el envio de mail');
+    //     } else {
+    //       console.log('here is the res: ', response);
+    //       console.log('recovery email sent');
+    //     }
+    //   });
+
+    fs.readFile('./emailtemp/createUserTemp/crateUserMail.html', {encoding: 'utf-8'}, function (err, html) {
+        if (err) {
+          console.log(err);
+        } else {
+          var mailOptions = {
+            from: 'gohenrybank2020@gmail.com',
+            to: `${user.email}`,
+            subject: 'Gracias por ingresar! Confirme su cuenta',
+            html: html
+          };
+          transporter.sendMail(mailOptions, function(error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+        }
+    })
+
+
       const json = {
                message:"success", 
                content: user
-           } // Luego toma la respuesta que da
-      return json // Y se retorna 
+           }
+           
+      return json
   }
     catch(err) {
         console.log(err)

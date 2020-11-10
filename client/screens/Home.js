@@ -22,8 +22,7 @@ const Home = (props) => {
             <Button title="Faq" 
             onPress={() => props.navigation.navigate("Faq")} />
             <Button title="Login" 
-            onPress={() => props.navigation.navigate("Login")} />
-
+            onPress={() => props.navigation.navigate("Login")}
             style={style.btn}/>
         </ScrollView>
 
