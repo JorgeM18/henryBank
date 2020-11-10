@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+
 import { useDispatch } from 'react-redux'
 import { createUser } from '../../Store/actions/user'
 import {
@@ -9,8 +10,6 @@ import {
     TouchableOpacity,
     Alert
 } from 'react-native'
-
-
 
 const CreateUser = (props) => {
     const [state, setState] = useState({
