@@ -26,7 +26,7 @@ export default function RegisterAdress() {
             checkAddress()
             Alert.alert(
                 'Mis Datos',
-                JSON.stringify(state)
+                JSON.stringify(state)  /// dato a enviar a la base de datos
               )
         } else {
             setErrorMessage('Debe ingresar todos los campos')
@@ -43,10 +43,24 @@ export default function RegisterAdress() {
           try {
               if (state.pais !== 'Argentina') return
                 const consultaDomicilio = `https://apis.datos.gob.ar/georef/api/direcciones?direccion=${state.calle} nro ${state.numero}&localidad=${state.localidad}&provincia=${state.provincia}`
+                console.log('direccion', consultaDomicilio)
               const response = await fetch(consultaDomicilio)
               const result = await response.json()
-              console.log('result', result)
-            
+              const {parametros: {
+                  direccion: {
+                      altura: {valor},
+                     calles: [calles],
+                  },
+                  localidad: localidad,
+                  provincia: provincia
+              } } = result
+              setState({... state,
+                calle: calles,
+                numero: valor,
+                localidad: localidad,
+                provincia: provincia,
+                pais: Argentina,
+            })
           }
           catch (error) {
             setErrorMessage(error.message)
