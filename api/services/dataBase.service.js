@@ -44,7 +44,7 @@ module.exports = {
 	 * Service created lifecycle event handler
 	 */
 	created() {
-        conn.sync({force:false}).then(()=>{   // por q conviene true o por q conviene false? 
+        conn.sync({force:true}).then(()=>{   // por q conviene true o por q conviene false? 
             console.log('dataBase ok')
         })   
 

@@ -3,8 +3,8 @@
 //const getCard = require('../controllers/getCard') // Se trae el controller (lo que va a hacer la accion cuando se ejecute) desde la carpeta "controllers" 
 //const addCard = require('../controllers/addCard')
 const { createUser, getMyData, editData } = require('../controllers/users/users.controllers');
-const { forgotPassword, resetPassword, updatePassword } = require('../controllers/users/resetPassword.controllers');
-const approveUser = require('../controllers/users/approveUser.controllers');
+const { forgotPassword, validatePasswordPin, updatePassword } = require('../controllers/users/resetPassword.controllers');
+const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
 // const createUser = require('../controllers/users/users.controllers')
 const login = require('../controllers/authentication/login.controllers');
 const logout = require('../controllers/authentication/logout.controller');
@@ -84,6 +84,14 @@ module.exports = {
 			handler: editData
 		},
 		
+		validateUserPin: {
+			rest: {
+				method: 'POST',
+				path: '/validateUserPin'
+			},
+			handler: validateUserPin
+		},
+
 		 approveUser:{
             rest:{ 
                 method:"PUT",
@@ -111,12 +119,12 @@ module.exports = {
 			handler: forgotPassword
 		}, 
 
-		resetPassword: {
+		validatePasswordPin: {
 			rest: {
-				method: 'GET',
-				path: '/resetPassword'
+				method: 'POST',
+				path: '/validatePasswordPin'
 			},
-			handler: resetPassword
+			handler: validatePasswordPin
 		}, 
 
 		updatePassword: {
@@ -125,7 +133,6 @@ module.exports = {
 				path: '/updaterPassword'
 			},
 			handler: updatePassword
-	
 		}
 
     },
