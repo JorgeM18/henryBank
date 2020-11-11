@@ -35,6 +35,7 @@ const CreateUser = () => {
         password: ''
     })
 
+
     const { colors } = useTheme();
     const dispatch = useDispatch()
 
@@ -46,6 +47,10 @@ const CreateUser = () => {
                 checktextInput: true,
                 isValidUser: true
             });
+            setState({
+                ...state,
+                name:value
+            })
         } else {
             setNewUser({
                 ...newUser,
@@ -65,6 +70,10 @@ const CreateUser = () => {
                 checkemailInput: true,
                 isValidEmail: true
             });
+            setState({
+                ...state,
+                email:value
+            })
         } else {
             setNewUser({
                 ...newUser,
@@ -73,22 +82,27 @@ const CreateUser = () => {
                 isValidEmail: false
 
             });
+          
         }
     }
     const handlePassChange = (pass) => {
-        if (pass.trim().length > 6) {
+        if (pass.trim().length >= 6) {
             setNewUser({
                 ...newUser,
                 password: pass,
                 isValidPassword: true
             })
+            setState({
+                ...state,
+                password:pass
+            });
         } else {
             setNewUser({
                 ...newUser,
                 password: pass,
                 isValidPassword: false
-            })
-
+            });
+         
         }
 
     }
@@ -114,21 +128,29 @@ const CreateUser = () => {
         }
 
     }
+    const settearStado=(user)=>{
+        setState({
+            name: user.name,
+            email: user.email,
+            password: user.password
+        })
+
+    }
     const createNewUser =  () => {
-   
-        if (newUser.name === '' ||
-            newUser.password === '' ||
-           newUser.email === '') {
+       
+        if (state.name === '' ||
+        state.password === '' ||
+        state.email === '') {
             mostrarAlerta();
 
         } else {
-            setState({
-                name: newUser.name,
-                email: newUser.email,
-                password: newUser.password
-            })
-           
+          
             dispatch(createUser(state))
+            setState({
+                name: '',
+                email: '',
+                password: ''
+            })
 
         }
 
@@ -279,17 +301,17 @@ const CreateUser = () => {
                         </Animatable.View>
                     }
 
-                    <View style={styles.button}>
+                <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.register}
-                            onPress={() => createNewUser()}
+                            onPress={createNewUser}
                         >
 
                             <Text style={[styles.textRegister, {
                                 color: '#fff'
                             }]}>Register User</Text>
 
-                        </TouchableOpacity>
+                </TouchableOpacity>
 
                     </View>
                 </Animatable.View>

@@ -18,10 +18,10 @@ const {
 var fs = require('fs');
 
 
+var pin = Math.floor(Math.random() * 999999);
 
 
 const createUser =  async (ctx)=>{              // crea un usuario y envia el mail de validacion
-    const pin = Math.floor(Math.random() * 999999);
     ctx.params.pin = pin
     console.log(ctx.params)
   try{
