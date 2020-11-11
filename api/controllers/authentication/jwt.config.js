@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { Errors } = require('moleculer-web');
 const { MoleculerError } = require("moleculer").Errors;
 const { PRIVATE_KEY} = process.env;
+const {Blacklist} = require('../../db.js');
 
 async function authenticate (ctx, route, req){
     
@@ -20,6 +21,11 @@ async function authenticate (ctx, route, req){
     if(auth.startsWith("Bearer")){
         const token = auth.split(' ')[1];
         let data = {token};
+
+        const blacklist = await Blacklist.findOne({where: {token}})
+        if(!blacklist.isactive){
+            throw new Errors.UnAuthorizedError(Errors.ERR_INVALID_TOKEN);
+        }
         await jwt.verify(token, PRIVATE_KEY, async (err, decoded)=>{
             if(err){
                 throw new Errors.UnAuthorizedError(Errors.ERR_INVALID_TOKEN);
