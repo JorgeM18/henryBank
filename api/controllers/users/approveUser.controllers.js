@@ -1,27 +1,31 @@
-
 const {User} = require('../../db');
+const { MoleculerError } = require("moleculer").Errors;
+const { Errors } = require('moleculer-web');
 
 const validateUserPin = async (ctx) => {
-    const user = await User.findOne({
-        where: {
-          pin: ctx.params.pin,
-        },
-      })
+  const user = await User.findOne({
+      where: {
+        pin: ctx.params.pin,
+      },
+    })
 
-        if (user == null) {
-          console.error('password reset link is invalid or has expired');
-          return 'password reset pin is invalid or has expired';
-        } else if (user != null) {
-          console.log('user exists in db');
-          return "pin ok"
-        }
+      if (user == null) {
+        console.error('password reset link is invalid or has expired');
+        throw new MoleculerError("Invalid user pin", 404, "SERVICE_NOT_FOUND", {pin:false})
+      } else if (user != null) {
+        return{ 
+          message:"success", 
+          pin:true
+      };
+      } 
 }
 
 const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
     const { email, name, lastname, pin, phone, birth, image, province, city, address, addressnum } = ctx.params
-    let json;
+    
+    try{
 
-    await User.update({
+     const data = await User.update({
         name: name,
         lastname: lastname,
         pin: null,
@@ -32,13 +36,20 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
         city: city,
         address: address,
         addressnum: addressnum,
-        approved: true}, { where: { email: email } })
-    .then(console.log("User Approved"))
-    .catch(err=>{
-         console.log(err)
-     })
- 
-     return json 
+        approved: true}, { where: { email: email } 
+      })
+
+        if(data[0] === 1){
+          return { 
+            message:"success", 
+            user:true
+          }
+         }else{
+          throw new Errors
+         }
+    }catch(err){
+      throw new MoleculerError("Error", 404, "SERVICE_NOT_FOUND", {user:false})
+    }
 }
 
 module.exports = {

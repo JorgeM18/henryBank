@@ -6,6 +6,8 @@ const { Sequelize } = require('sequelize');
 const bcrypt = require('bcrypt');
 const hbs = require('nodemailer-express-handlebars');
 const { MoleculerError } = require("moleculer").Errors;
+const { Errors } = require('moleculer-web');
+
 const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 10;
 const {
@@ -131,7 +133,7 @@ const updatePassword = async (ctx) => {     // actualiza la contrasenia
      
     const hash = await bcrypt.hash(ctx.params.password, BCRYPT_SALT_ROUNDS);
     var updated = null
-    
+
     if(user) {
       updated = await user.update({
             password: hash,
