@@ -6,8 +6,6 @@ import { ScrollView } from "react-native-gesture-handler";
 
 
 const Home = (props) => {
-
-
     return (
         <ScrollView style={style.container}>
             <Button 
@@ -21,9 +19,9 @@ const Home = (props) => {
             
             <Button title="Faq" 
             onPress={() => props.navigation.navigate("Faq")} />
-            <Button title="Login" 
-            onPress={() => props.navigation.navigate("Login")} />
 
+            <Button title="Login" 
+            onPress={() => props.navigation.navigate("Login")}
             style={style.btn}/>
         </ScrollView>
 

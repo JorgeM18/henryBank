@@ -1,138 +1,90 @@
-// import React from 'react'
-// import { StyleSheet, Text, View } from 'react-native'
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import data from './data';
+import { Transition, Transitioning } from 'react-native-reanimated';
+import * as Animatable from 'react-native-animatable';
 
-// const Faq = () => {
-//     return (
-//         <View>
-//             <Text></Text>
-//         </View>
-//     )
-// }
+const transition = (
+  <Transition.Together>
+    <Transition.In type='fade' durationMs={200} />
+    <Transition.Change />
+    <Transition.Out type='fade' durationMs={200} />
+  </Transition.Together>
+);
 
-// export default Faq
+export default function App() {
+  const [currentIndex, setCurrentIndex] = React.useState(null);
+  const ref = React.useRef();
 
-// const styles = StyleSheet.create({})
-
-import React, { Component, Fragment } from "react";
-import Faq from "react-faq-component";
-import './Faq.css'
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-
-const data = {
-    rows: [
-        {
-            title:
-                "Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet",
-            content: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sed tempor sem. Aenean vel turpis feugiat,
-            ultricies metus at, consequat velit.
-           `,
-        },
-        {
-            title: "Nunc maximus, magna at ultricies elementum",
-            content:
-                "Nunc maximus, magna at ultricies elementum, risus turpis vulputate quam, vitae convallis ex tortor sed dolor.",
-        },
-        {
-            title: "Can I use html as content",
-            content: `Yes, here is an example of a <a href="https://binodswain.github.io/react-faq-component/">link</a>`,
-        },
-        {
-            title: "What is the package version",
-            content: "v1.0.0",
-        },
-        {
-            title: "How about <Link/> to other page (react-router-dom)",
-            content: (
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li>
-                            <Link to="/about">About</Link>
-                        </li>
-                        <li>
-                            <Link to="/users">Users</Link>
-                        </li>
-                    </ul>
-                </nav>
-            ),
-        },
-    ],
-};
-
-const styles = {
-    bgColor: 'black',
-    titleTextColor: "white",
-    titleTextColor: "blue",
-    rowTitleColor: "blue",
-    rowContentColor: 'grey',
-    timingFunc: "linear",
-};
-
-const config = {
-    animate: true,
-    arrowIcon: "V",
-    tabFocus: true,
-};
-
-export default class App extends Component {
-    render() {
+  return (
+    <Transitioning.View
+      ref={ref}
+      transition={transition}
+      style={styles.container}
+    >
+      <StatusBar hidden />
+      {data.map(({ bg, color, category, subCategories }, index) => {
         return (
-            <Fragment>
-                <Router>
-                    <div>
-                        <Switch>
-                            <Route path="/about">
-                                <About />
-                            </Route>
-                            <Route path="/users">
-                                <Users />
-                            </Route>
-                            <Route path="/">
-                                <Home />
-                            </Route>
-                        </Switch>
-                    </div>
-                </Router>
-            </Fragment>
+          <TouchableOpacity
+            key={category}
+            onPress={() => {
+              ref.current.animateNextTransition();
+              setCurrentIndex(index === currentIndex ? null : index);
+            }}
+            style={styles.cardContainer}
+            activeOpacity={0.9}
+          >
+            <View style={[styles.card, { backgroundColor: bg }]}>
+              <Animatable.Text animation="zoomInUp" style={[styles.heading, { color }]}>{category}</Animatable.Text>
+              {index === currentIndex && (
+                <Animatable.View animation="zoomIn" style={styles.subCategoriesList}>
+                  {subCategories.map((subCategory) => (
+                    <Text key={subCategory} style={[styles.body, { color }]}>
+                      {subCategory}
+                    </Text>
+                  ))}
+                </Animatable.View>
+              )}
+            </View>
+          </TouchableOpacity>
         );
-    }
+      })}
+    </Transitioning.View>
+  );
 }
 
-function Home() {
-    return (
-        <div style={{bgColor: 'black'}}>
-            <h2>FAQ</h2>
-            <div>
-                <Faq
-                    data={data}
-                    styles={{
-                        bgColor: "white",
-                        titleTextColor: "#48482a",
-                        rowTitleColor: "#000000",
-                        rowTitleTextSize: "large",
-                        rowContentColor: "#48484a",
-                        rowContentTextSize: "16px",
-                        rowContentPaddingTop: "10px",
-                        rowContentPaddingBottom: "10px",
-                        rowContentPaddingLeft: "50px",
-                        rowContentPaddingRight: "150px",
-                        arrowColor: "black",
-                        transitionDuration: "1s",
-                        timingFunc: "linear",
-                    }}
-                />
-                <br />     
-            </div>
-        </div>
-    );
-}
-
-function About() {
-    return <h2>About</h2>;
-}
-
-function Users() {
-    return <h2>Users</h2>;
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#181C23',
+    justifyContent: 'center',
+    marginVertical: 10,
+    
+  },
+  cardContainer: {
+    flexGrow: 1,
+    marginVertical: 10,
+    marginHorizontal:10
+  },
+  card: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heading: {
+    fontSize: 38,
+    fontWeight: '900',
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    letterSpacing: -2,
+  },
+  body: {
+    fontSize: 20,
+    lineHeight: 20 * 1.5,
+    textAlign: 'center',
+  },
+  subCategoriesList: {
+    marginTop: 20,
+  },
+});
