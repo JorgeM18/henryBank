@@ -74,7 +74,7 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             const mailOptions = {
               from: 'gohenrybank2020@gmail.com',
               to: `${user.email}`,
-              subject: 'Recupere su cuenta',
+              subject: 'Recupere su cuenta de Go HBank',
                 template: "passwordReset",
                 context: pinObject
         
