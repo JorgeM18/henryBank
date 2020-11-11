@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
         allowNull: true
     },
     documentnum:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
       unique: true
     },
@@ -68,8 +68,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true
     }, 
-    resetPasswordToken: DataTypes.STRING,
-    resetPasswordExpires: DataTypes.DATE
+    passwordResetPIN: DataTypes.INTEGER,
+    resetPinExpires: DataTypes.DATE
   });
 }; 
   
