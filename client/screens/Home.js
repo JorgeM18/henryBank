@@ -17,14 +17,6 @@ const Home = (props) => {
                                 source={require('../screens/images/Logo-04.png')}
                                 style={style.Image}
                             />
-
-
-const Home = (props) => {
-    return (
-        <ScrollView style={style.container}>
-            
-       
-
                         </View>
                         <View>
                             <Text style={style.text}>GO</Text>
@@ -65,8 +57,6 @@ const Home = (props) => {
 
             </View>
         </View>
-                     </ScrollView>
-
     )
 
 }
