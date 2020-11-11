@@ -1,21 +1,38 @@
-import React from 'react';
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useState, useEffect}from 'react';
+import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import PassMeter from 'react-native-passmeter'
+
+import { connect } from "react-redux";
+import {loginUser} from './../Store/actions/user'
 
 const MAX_LEN = 15;
 const MIN_LEN = 6;
 const PASS_LABELS = ["Too Short", "Weak", "Normal", "Strong", "Secure"];
 const deviceWindow = Dimensions.get('window')
 
-export default class Login extends React.Component {
-   constructor(props){ 
-    super(props);
-    this.state={
-      email:"",
-      password:""
+ function Login ({loginUser, user}) {
+   
+   const  [state, setState] = useState({
+        email:"",
+        password:""
+  }   )
+
+useEffect(() => {
+     if(user.isAuthenticated){
+         console.log('esta autenticado')
+         //aca va el redireccionamiento a posicion consolidada
+     } else {
+        Alert.alert(
+            'Error',
+           'Usuario o contraseña erroneo'
+          )
+     }
+}, [user])
+
+const handleSubmit = () => {
+    loginUser(state)
 }
-}
-    render(){
+   
     return(
         <View style = {styles.container}>
             
@@ -26,7 +43,8 @@ export default class Login extends React.Component {
             style={styles.inputViewSafe}
             placeholder = "Email..."
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {text => this.setState({email:text})}/>
+            onChangeText = {text => setState({...state,
+                email:text})}/>
             </View>
             {/* <View style = {styles.inputView}> 
             <TextInput 
@@ -44,26 +62,27 @@ export default class Login extends React.Component {
             maxLength={15}
             placeholder = "Password..."
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {text => this.setState({password:text})}/>
+            onChangeText = {text => setState({...state,
+                    password:text})}/>
           
-            <PassMeter
+            {/* <PassMeter
             showLabels
             password={this.state.password}
             maxLength={MAX_LEN}
             minLength={MIN_LEN}
             labels={PASS_LABELS}
-            />
+            /> */}
               </SafeAreaView>
             <TouchableOpacity >
                 <Text style={styles.forgot}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.loginBtn} >
+            <TouchableOpacity style={styles.loginBtn}  onPress={() => handleSubmit()} >
             <Text style={styles.loginTextBtn}>LOGIN</Text>
             </TouchableOpacity>
         </View>
     );
  }
-}
+
 
 const styles = StyleSheet.create({
     container:{
@@ -138,3 +157,17 @@ inputGroup: {
 }
 })
 
+const mapStateToProps = (state) => {
+    return {
+      user: state.user
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      loginUser: (user) => dispatch(loginUser(user)),
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(Login);
+  
