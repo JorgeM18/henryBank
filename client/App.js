@@ -9,6 +9,7 @@ import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
+import CompleteDataUser from './screens/Users/CompleteDataUser'
 const Stack= createStackNavigator()
 
 function MyStack(){
@@ -34,6 +35,11 @@ function MyStack(){
       component={CreateUser}
       options={{title: '',
      }}/> 
+      <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
+        options={{
+          headerTitle: ''
+        }}
+      />
      {/* <Stack.Screen name= "Faq" component={Faq}/> */}
      <Stack.Screen name= "Login" component={Login}
        options={{
