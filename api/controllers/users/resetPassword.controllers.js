@@ -24,7 +24,7 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             console.log(EMAIL_ADDRESS, 
                 EMAIL_PASSWORD)
             console.error('email required');
-            return 'email required';               // *EL DE ARRIBA*
+            throw new MoleculerError("email required", 400, "SERVICE_NOT_FOUND")  // *EL DE ARRIBA*
         }
         console.error(ctx.params.email);
   try {
@@ -38,8 +38,8 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             })
             
             if (!user) {
-                console.error('email not in database');
-                return 'email not in db';                    
+               // console.error('email not in database');
+               throw new Errors            
             } 
             
             else {
@@ -89,9 +89,14 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
               });
       
       }
+      return{
+          message:"success",
+          send:true
+      }
   }    
   catch {
       // if(error) return error;
+      throw new MoleculerError("email not in database", 404, "SERVICE_NOT_FOUND")  
       }
   }
 
@@ -108,16 +113,19 @@ const validatePasswordPin = async (ctx) => {       //verifico la validez del pin
         },
       })
         const json =  {
-            name: user.name,
             message: 'password reset pin ok',
+            data:{
+                name: user.name
+            }
         };
         return json;    
     }
-    catch {
+    catch(err) {
+        throw new MoleculerError("Invalid user pin", 404, "SERVICE_NOT_FOUND")
 
     // if (user == null) {
-        console.error('password reset pin is invalid or has expired');
-        return 'password reset pin is invalid or has expired';
+        // console.error('password reset pin is invalid or has expired');
+        // return 'password reset pin is invalid or has expired';
     // } 
 }
 }
@@ -133,6 +141,7 @@ const updatePassword = async (ctx) => {     // actualiza la contrasenia
      
     const hash = await bcrypt.hash(ctx.params.password, BCRYPT_SALT_ROUNDS);
     var updated = null
+    
 
     if(user) {
       updated = await user.update({
@@ -148,7 +157,8 @@ const updatePassword = async (ctx) => {     // actualiza la contrasenia
     }
     else {
       console.error('no user exists in db to update');
-      return 'no user exists in db to update';
+      //return 'no user exists in db to update';
+      throw new MoleculerError("no user exists in db to update", 404, "SERVICE_NOT_FOUND")
     }
 }
 
