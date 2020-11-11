@@ -1,14 +1,29 @@
 
 const {User} = require('../../db');
 
-module.exports = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
+const validateUserPin = async (ctx) => {
+    const user = await User.findOne({
+        where: {
+          pin: ctx.params.pin,
+        },
+      })
+
+        if (user == null) {
+          console.error('password reset link is invalid or has expired');
+          return 'password reset link is invalid or has expired';
+        } else if (user != null) {
+          console.log('user exists in db');
+        }
+}
+
+const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
     const { email, name, lastname, pin, phone, birth, image, province, city, address, addressnum } = ctx.params
     let json;
 
     await User.update({
         name: name,
         lastname: lastname,
-        pin: pin,
+        pin: null,
         phone: phone,
         birth: birth,
         image: image,
@@ -25,3 +40,7 @@ module.exports = async (ctx) => { // Recibe el ctx (contexto) que son todos los 
      return json 
 }
 
+module.exports = {
+        validateUserPin,
+    approveUser
+}
