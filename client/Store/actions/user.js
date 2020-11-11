@@ -33,7 +33,6 @@ export function createUser(user){
 // login user
 // aca me deberia llegar el usuario y la password
 export const loginUser = (user) => (dispatch) => {
-  console.log('user reducer', user)
     const userEnv = {
       email: user.email,
       password: user.password,
@@ -42,7 +41,6 @@ export const loginUser = (user) => (dispatch) => {
     return axios
       .post(`http://${localhost}/api/user/login`, userEnv)
       .then((res) => {
-        console.log('respuesta---', res.data)
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
       })
       .catch((error) => {
@@ -53,4 +51,8 @@ export const loginUser = (user) => (dispatch) => {
         // );
         dispatch({ type: LOGIN_FAIL });
       });
+  };
+
+  export const logout = () => {
+    return dispatch({ type: LOGOUT_SUCCESS })
   };

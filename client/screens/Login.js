@@ -1,6 +1,5 @@
-
-import React from 'react';
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import React, {useState, useEffect}from 'react';
+import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import PassMeter from 'react-native-passmeter'
 
 import { connect } from "react-redux";
@@ -21,6 +20,7 @@ const deviceWindow = Dimensions.get('window')
 useEffect(() => {
      if(user.isAuthenticated){
          console.log('esta autenticado')
+         //aca va el redireccionamiento a posicion consolidada
      } else {
         Alert.alert(
             'Error',
