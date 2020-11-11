@@ -13,33 +13,32 @@ const Stack= createStackNavigator()
 
 function MyStack(){
   return(
-    <Stack.Navigator>
+    <Stack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: '#1e1e1e',
+
+      },
+      headerTintColor: '#fff',
+      headerTitleAlign: 'center',
+      headerTitleStyle: 'bold'
+    }}>
       {/* este nos va a permitir crear las pantallas */}
 
       <Stack.Screen name="Home" component={Home}
           options={{
             headerTitle:'',
-            headerStyle: {
-              backgroundColor: '#1e1e1e',
-            },}}
+          }}
             />
       <Stack.Screen name="CreateUser" 
       component={CreateUser}
-      options={{title: 'Create a New User',
-      headerStyle: {
-        backgroundColor: '#1e1e1e',
-        
-      },
-      headerTintColor:'#fff',
-      headerTitleAlign:'center',
-      headerTitleStyle:'bold'}}/> 
+      options={{title: '',
+     }}/> 
      {/* <Stack.Screen name= "Faq" component={Faq}/> */}
      <Stack.Screen name= "Login" component={Login}
        options={{
         headerTitle:'',
-        headerStyle: {
-          backgroundColor: '#1e1e1e',
-        },}}/>
+        }}/>
     </Stack.Navigator>
   )
 }
