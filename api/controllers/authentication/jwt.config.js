@@ -4,10 +4,11 @@ const { Errors } = require('moleculer-web');
 const { MoleculerError } = require("moleculer").Errors;
 const { PRIVATE_KEY} = process.env;
 const {Blacklist} = require('../../db.js');
+const protectedRoutes = require('./protected-routes')
 
 async function authenticate (ctx, route, req){
     
-    if(req.$action.name === "user.login"){
+    if(!protectedRoutes.includes(req.$action.name)){
         return null
     }
 
