@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
         allowNull: true
     },
     documentnum:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
       unique: true
     },
