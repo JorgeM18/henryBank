@@ -42,7 +42,9 @@ const Home = (props) => {
                         onPress={() => props.navigation.navigate("Login")}>
                         <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginHorizontal: '7%'}}><Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
+                    <TouchableOpacity 
+                    onPress={()=>props.navigation.navigate("ForgotPassword")}
+                    style={{marginHorizontal: '7%'}}><Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
 
                 </View>
 
