@@ -9,6 +9,7 @@ import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 // import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
+import ForgotPassword from './screens/ForgotPassword'
 const Stack= createStackNavigator()
 
 function MyStack(){
@@ -40,6 +41,8 @@ function MyStack(){
         headerStyle: {
           backgroundColor: '#1e1e1e',
         },}}/>
+        <Stack.Screen name= "ForgotPassword" component={ForgotPassword}
+        />
     </Stack.Navigator>
   )
 }
