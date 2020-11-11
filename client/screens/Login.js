@@ -18,15 +18,18 @@ const deviceWindow = Dimensions.get('window')
   }   )
 
 useEffect(() => {
-     if(user.isAuthenticated){
-         console.log('esta autenticado')
-         //aca va el redireccionamiento a posicion consolidada
-     } else {
-        Alert.alert(
-            'Error',
-           'Usuario o contraseña erroneo'
-          )
-     }
+
+    if (user.user){
+        if(user.isAuthenticated){
+            console.log('esta autenticado')
+            //aca va el redireccionamiento a posicion consolidada
+        } else {
+           Alert.alert(
+               'Error',
+              'Usuario o contraseña erroneo'
+             )
+        }
+    }
 }, [user])
 
 const handleSubmit = () => {

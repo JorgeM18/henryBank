@@ -7,7 +7,7 @@ const { conn } = require('../db');
  */
 
 module.exports = {
-	name: "greeter",
+	name: "database",
 
 	/**
 	 * Settings
