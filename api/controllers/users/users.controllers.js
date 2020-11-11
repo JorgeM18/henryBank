@@ -122,11 +122,11 @@ const editData = async (ctx) => {                         // editar num telefono
           if(user[0]){
             return json;
             } else {
-                return "no existe el usuario"
+              throw new Errors
             }
     }
     catch(err) {
-        return 'Los datos ingresados no son permitidos'
+      throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
     }
 
 }
