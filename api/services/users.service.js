@@ -130,7 +130,7 @@ module.exports = {
 		updatePassword: {
 			rest: {
 				method: 'PUT',
-				path: '/updaterPassword'
+				path: '/updatePassword'
 			},
 			handler: updatePassword
 		}

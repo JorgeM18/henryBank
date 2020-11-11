@@ -10,9 +10,10 @@ const validateUserPin = async (ctx) => {
 
         if (user == null) {
           console.error('password reset link is invalid or has expired');
-          return 'password reset link is invalid or has expired';
+          return 'password reset pin is invalid or has expired';
         } else if (user != null) {
           console.log('user exists in db');
+          return "pin ok"
         }
 }
 
