@@ -2,7 +2,7 @@
 
 module.exports = protectedRoutes = [
    
-    "user.getMyData",
-    "user.editData",
+    // "user.getMyData",
+    // "user.editData",
    
 ]
