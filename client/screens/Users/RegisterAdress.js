@@ -5,6 +5,7 @@ import {colors} from '../../utils/colors'
 
 export default function RegisterAdress() {
     const [state, setState] = useState({
+        telefono: '',
         calle: '',
         numero: '',
         localidad: '',
@@ -21,10 +22,11 @@ export default function RegisterAdress() {
         
     }
     const handleSubmit = () => {
-        if (state.calle && state.localidad && state.numero && state.provincia && state.pais) {
+        if (state.telefono && state.calle && state.localidad && state.numero && state.provincia && state.pais) {
+            checkAddress()
             Alert.alert(
-                'Mi Domicilio',
-                JSON.stringify(state)
+                'Mis Datos',
+                JSON.stringify(state)  /// dato a enviar a la base de datos
               )
         } else {
             setErrorMessage('Debe ingresar todos los campos')
@@ -35,6 +37,35 @@ export default function RegisterAdress() {
     useEffect(() =>{
         load()
       }, [])
+
+      async function checkAddress () {
+          console.log('state', state)
+          try {
+              if (state.pais !== 'Argentina') return
+                const consultaDomicilio = `https://apis.datos.gob.ar/georef/api/direcciones?direccion=${state.calle} nro ${state.numero}&localidad=${state.localidad}&provincia=${state.provincia}`
+                console.log('direccion', consultaDomicilio)
+              const response = await fetch(consultaDomicilio)
+              const result = await response.json()
+              const {parametros: {
+                  direccion: {
+                      altura: {valor},
+                     calles: [calles],
+                  },
+                  localidad: localidad,
+                  provincia: provincia
+              } } = result
+              setState({... state,
+                calle: calles,
+                numero: valor,
+                localidad: localidad,
+                provincia: provincia,
+                pais: Argentina,
+            })
+          }
+          catch (error) {
+            setErrorMessage(error.message)
+          }
+      }
     
       async function load() {
         try {
@@ -83,8 +114,15 @@ export default function RegisterAdress() {
         <View style={styles.container}>
             <View>
                 <Text style={styles.domicilio}>
-                    Domicilio
+                    Alta de Cliente
                 </Text>
+                <TextInput 
+                    style={styles.input}
+                    placeholder='Telefono'
+                    name='telefono'
+                    defaultValue={state.telefono}
+                    onChangeText={(e) => handleChange('telefono', e)}
+                />
                 <TextInput 
                     style={styles.input}
                     placeholder='Calle'
@@ -135,28 +173,33 @@ export default function RegisterAdress() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.BACKGROUND_COLOR,
-        color: colors.PRIMARY_COLOR,
+        backgroundColor: '#FFF',
+        color: colors.BACKGROUND_COLOR,
         marginTop: 30,
         paddingLeft: 20,
         paddingRight: 20,
     },
     domicilio: {
+        borderColor: colors.BACKGROUND_COLOR,
+        backgroundColor: colors.BACKGROUND_COLOR,
         textAlign:'center',
         fontSize: 18,
-        color: colors.SECONDARY_COLOR,
+        marginBottom: 10,
+        padding: 10,
+        color: '#FFF',
     },
     input: {
         height: 40,
-        borderColor: colors.SECONDARY_COLOR,
-        color: colors.PRIMARY_COLOR,
-        borderBottomWidth: 2,
+        borderColor: colors.BACKGROUND_COLOR,
+        color: colors.BACKGROUND_COLOR,
+        borderWidth: 1,
+        padding: 10,
         marginBottom: 20
     },
     button: {
         alignSelf: 'center',
         textAlign: 'center',
-        backgroundColor: colors.SECONDARY_COLOR,
+        backgroundColor: colors.BACKGROUND_COLOR,
         marginTop: 30,
         paddingTop: 15,
         paddingBottom: 20,
@@ -165,6 +208,6 @@ const styles = StyleSheet.create({
     },
     textButton: {
         textAlign: 'center',
-        color: colors.BACKGROUND_COLOR
+        color: '#fff'
     }
 })

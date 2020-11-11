@@ -7,7 +7,7 @@ const { forgotPassword, validatePasswordPin, updatePassword } = require('../cont
 const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
 // const createUser = require('../controllers/users/users.controllers')
 const login = require('../controllers/authentication/login.controllers');
-
+const logout = require('../controllers/authentication/logout.controller');
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -43,6 +43,16 @@ module.exports = {
 					email:"email",
 				},
 			handler:login	
+		},
+		logout:{
+			rest:{
+				method:"POST",
+				path:"/logout"
+			},
+			params:{
+				token:"string"
+			},
+			handler:logout
 		},
 
         createUser:{

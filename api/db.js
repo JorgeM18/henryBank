@@ -43,7 +43,8 @@ const {
     User,
     Account,
     Card, 
-    Movement
+    Movement,
+    Blacklist
  } = sequelize.models;
 
 //Aca vendrian las relaciones
