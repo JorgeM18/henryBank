@@ -61,6 +61,7 @@ const CreateUser = () => {
             });
         }
     }
+ // CAMBIO DE PRUEBA
     const handlerEmailChange = (value) => {
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (reg.test(value) === true) {
