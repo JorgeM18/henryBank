@@ -7,7 +7,7 @@ import store from './Store/store'
 
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
-// import Faq from './src/componentes/Faq'
+import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
 const Stack= createStackNavigator()
 

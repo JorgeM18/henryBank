@@ -68,8 +68,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true
     }, 
-    resetPasswordToken: DataTypes.STRING,
-    resetPasswordExpires: DataTypes.DATE
+    passwordResetPIN: DataTypes.INTEGER,
+    resetPinExpires: DataTypes.DATE
   });
 }; 
   
