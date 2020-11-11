@@ -4,8 +4,9 @@ require('dotenv').config();
 const nodemailer = require('nodemailer');
 const { Sequelize } = require('sequelize');
 const bcrypt = require('bcrypt');
-
 const { MoleculerError } = require("moleculer").Errors;
+const { Errors } = require('moleculer-web');
+
 const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 10;
 const {

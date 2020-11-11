@@ -1,4 +1,5 @@
-
+const { MoleculerError } = require("moleculer").Errors;
+const { Errors } = require('moleculer-web');
 const {User} = require('../../db');
 const bcrypt = require('bcrypt');
 // const crypto = require('crypto');
@@ -66,13 +67,14 @@ const createUser =  async (ctx)=>{              // crea un usuario y envia el ma
 
       const json = {
                message:"success", 
-               content: user
+               data: user
            }
-           
+
       return json
   }
     catch(err) {
-        console.log(err)
+      
+      throw new MoleculerError(err.errors[0].message, 404, "SERVICE_NOT_FOUND")
     }
 
 }
@@ -83,16 +85,16 @@ const getMyData = async (ctx) => {  // obtener informacion del usuario segun id
     const user = await User.findByPk(ctx.params.id)
     const json = {
         message: 'success',
-        content: user
+        data: user
     }
     if(user){
     return json;
     } else {
-        return "no existe el usuario"
+      throw new Errors
     }
 }
     catch(err) {
-        return 'noxo'
+      throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
     }
 
 }
