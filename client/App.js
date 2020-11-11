@@ -9,6 +9,7 @@ import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
+import ForgotPassword from './screens/ForgotPassword'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
 const Stack= createStackNavigator()
 
@@ -44,6 +45,11 @@ function MyStack(){
      <Stack.Screen name= "Login" component={Login}
        options={{
         headerTitle:'',
+        headerStyle: {
+          backgroundColor: '#1e1e1e',
+        },}}/>
+        <Stack.Screen name= "ForgotPassword" component={ForgotPassword}
+        />
         }}/>
     </Stack.Navigator>
   )
