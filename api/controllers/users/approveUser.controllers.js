@@ -3,6 +3,7 @@ const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
 
 const validateUserPin = async (ctx) => {
+  console.log(ctx.params)
   const user = await User.findOne({
       where: {
         pin: ctx.params.pin,
