@@ -131,7 +131,7 @@ const CreateUser = (props) => {
     }
 
     const createNewUser =  () => {
-       console.warn(state)
+    //    console.warn(state)
         if (state.name === '' ||
         state.password === '' ||
         state.email === '') {

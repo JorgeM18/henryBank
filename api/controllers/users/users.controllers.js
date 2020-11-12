@@ -101,19 +101,17 @@ const getMyData = async (ctx) => {  // obtener informacion del usuario segun id
 
 
 const editData = async (ctx) => {                         // editar num telefono y domicilio de un usuario segun id
-    const { phone, province, city, address, addressnum } = ctx.params 
+    console.log(ctx.params)   
+    const { provincia, pais, calle, numero, email} = ctx.params;
     try {
         const user = await User.update({
-            phone,
-            province,
-            city,
-            address,
-            addressnum
+            province: provincia,
+            city: pais,
+            address: calle,
+            addressnum: numero
           }, {
             returning: true,
-            where: {
-              id: ctx.params.id
-            }
+            where: { email }
           })
           const json = {
               message: 'success',
@@ -122,10 +120,11 @@ const editData = async (ctx) => {                         // editar num telefono
           if(user[0]){
             return json;
             } else {
-              throw new Errors
+              throw new Error
             }
     }
     catch(err) {
+      console.log(err)
       throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
     }
 
