@@ -97,14 +97,14 @@ module.exports = {
                 method:"PUT",
                 path:"/approveUser" 
             },
-            params:{
-                name:"string",
-                lastname:"string",
-                pin:"number",
-                phone:"number",
-                birth:"string",
-                image:"string",
-            },
+            // params:{
+            //     name:"string",
+            //     lastname:"string",
+            //     pin:"number",
+            //     phone:"number",
+            //     birth:"string",
+            //     image:"string",
+            // },
             handler: approveUser
 		},
 		

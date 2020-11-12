@@ -10,7 +10,7 @@ const MIN_LEN = 6;
 const PASS_LABELS = ["Too Short", "Weak", "Normal", "Strong", "Secure"];
 const deviceWindow = Dimensions.get('window')
 
- function Login ({loginUser, user}) {
+ function Login ({loginUser, user},props) {
    
    const  [state, setState] = useState({
         email:"",
@@ -23,6 +23,8 @@ useEffect(() => {
         if(user.isAuthenticated){
             console.log('esta autenticado')
             //aca va el redireccionamiento a posicion consolidada
+            // props.navigation.navigate("CompleteDataUser")
+
         } else {
            Alert.alert(
                'Error',
