@@ -25,7 +25,7 @@ const createUser =  async (ctx)=>{              // crea un usuario y envia el ma
       const hash = await bcrypt.hash(ctx.params.password, 10);
       ctx.params.password = hash
       const user = await User.create(ctx.params);
-
+    
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {

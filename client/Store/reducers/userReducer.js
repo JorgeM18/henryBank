@@ -13,7 +13,8 @@ export default (state=initialState, action)=>{
         case ADD_USER:
             return{
                 // user:state.user.concat(action.user)
-                user:action.user
+                // user:action.user
+                ...state
             }
 
         case 'LOGIN_SUCCESS':
