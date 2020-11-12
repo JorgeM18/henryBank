@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import data from './data';
+import data from './Data';
 import { Transition, Transitioning } from 'react-native-reanimated';
 import * as Animatable from 'react-native-animatable';
 
