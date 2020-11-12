@@ -1,12 +1,15 @@
-
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
-import { Icon } from 'react-native-elements'
+import Octicons from 'react-native-vector-icons/Octicons';
+
+
 
 const Home = (props) => {
 
     return (
         <View style={style.container}>
+        
+     
             <View style={style.box1}></View>
             <View style={style.box2}>
                 <View style={{ paddingTop: 50, paddingHorizontal: 14 }}>
@@ -21,8 +24,8 @@ const Home = (props) => {
                         </View>
                         <View>
                             <Text style={style.text}>GO</Text>
-                            <Text style={{ fontSize: 19, color: '#fff', opacity: 0.6, marginTop: 10, marginHorizontal: '2.5%' }}>E-Wallet for the</Text>
-                            <Text style={{ fontSize: 19, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>gaming comunity</Text>
+                            <Text style={{ fontSize: 19, color: '#fff',  marginTop: 10, marginHorizontal: '2.5%' }}>E-Wallet for the</Text>
+                            <Text style={{ fontSize: 19, color: '#FFF',  marginTop: 2, marginHorizontal: '2.5%' }}>gaming comunity</Text>
                         </View>
 
                     </View>
@@ -42,26 +45,28 @@ const Home = (props) => {
                         onPress={() => props.navigation.navigate("Login")}>
                         <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                    onPress={()=>props.navigation.navigate("ForgotPassword")}
-                    style={{marginHorizontal: '7%'}}><Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
+                    <TouchableOpacity style={{marginHorizontal: '7%'}} onPress={()=>{props.navigation.navigate("ForgotPassword")}}>
+                        <Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
 
                 </View>
 
             </View>
             <View style={style.box4}>
-                <Icon
-                    reverse
-                    name='help-circled'
-                    size={15}
-                />
+            <Octicons
+                            // style={style.icon}
+                            name="question"
+                            color="#FFF"
+                            size={25}
+                        />
 
             </View>
+            
         </View>
 
     )
 
 }
+export default Home;
 const style = StyleSheet.create({
     container: {
         flex: 1,
@@ -90,7 +95,7 @@ const style = StyleSheet.create({
         // borderRadius: 40
     },
     text: {
-        fontSize: 26,
+        fontSize:27,
         color: '#fff',
         fontWeight: 'bold',
 
@@ -111,11 +116,10 @@ const style = StyleSheet.create({
         backgroundColor: '#1e1e1e',
         borderWidth:1,
         borderStyle:'solid',
-        borderColor:'#FFF'
+        borderColor:'#FFF',
+        marginHorizontal:'2%'
     }
 });
 
-export default Home;
 
-     {/* <Button title="Faq" 
-            onPress={() => props.navigation.navigate("Faq")} /> */}
+

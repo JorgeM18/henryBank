@@ -97,17 +97,14 @@ module.exports = {
                 method:"PUT",
                 path:"/approveUser" 
             },
-            params:{
-                name:"string",
-                lastname:"string",
-                pin:"string",
-                phone:"string",
-                birth:"string",
-                image:"string",
-            },
-            async handler(ctx){ 
-                 return `dando de alta a ${ctx.params.name}`
-            },
+            // params:{
+            //     name:"string",
+            //     lastname:"string",
+            //     pin:"number",
+            //     phone:"number",
+            //     birth:"string",
+            //     image:"string",
+            // },
             handler: approveUser
 		},
 		
@@ -130,7 +127,7 @@ module.exports = {
 		updatePassword: {
 			rest: {
 				method: 'PUT',
-				path: '/updaterPassword'
+				path: '/updatePassword'
 			},
 			handler: updatePassword
 		}
