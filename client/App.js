@@ -10,6 +10,7 @@ import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
 import Login from './screens/Login'
 import ForgotPassword from './screens/ForgotPassword'
+import PasswordPin from './screens/PasswordPin'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
 const Stack= createStackNavigator()
 
@@ -27,20 +28,23 @@ function MyStack(){
     }}>
       {/* este nos va a permitir crear las pantallas */}
 
+      
+      
       <Stack.Screen name="Home" component={Home}
           options={{
             headerTitle:'',
-          }}
+          }} 
             />
       <Stack.Screen name="CreateUser" 
       component={CreateUser}
       options={{title: '',
      }}/> 
-      <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
+     <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
         options={{
           headerTitle: ''
         }}
       />
+      
      {/* <Stack.Screen name= "Faq" component={Faq}/> */}
      <Stack.Screen name= "Login" component={Login}
        options={{
@@ -48,7 +52,13 @@ function MyStack(){
         headerStyle: {
           backgroundColor: '#1e1e1e',
         },}}/>
-        <Stack.Screen name= "ForgotPassword" component={ForgotPassword}
+        <Stack.Screen name= "ForgotPassword" component={ForgotPassword} options={{
+            headerTitle:'',
+          }} 
+        />
+        <Stack.Screen name= "PasswordPin" component={PasswordPin} options={{
+            headerTitle:'',
+          }}
         />
     </Stack.Navigator>
   )

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text } from 'react-native';
 
-export default function ForgotPassword (props) {
-    
-const[email, setEmail] = useState('');
-
-
+export default class PasswordPin extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            pin: "",
+        }
+    }
+    render(){
         return(
             // <View>
             // <SafeAreaView style={styles.container}>
@@ -18,18 +21,18 @@ const[email, setEmail] = useState('');
             <View style= {styles.text}>
             <TextInput
             style={styles.inputText}
-            placeholder = "Email..."
+            placeholder = "pin..."
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {text => setEmail(text)}/>
+            onChangeText = {text => this.setState({pin:text})}/>
             </View>
-            <TouchableOpacity style={styles.send_emailBtn} onPress={props.navigation.navigate("CreateUser")}>
-            <Text style={styles.textButton}>Send Email</Text>
+            <TouchableOpacity style={styles.send_pinBtn} onPress={() => props.navigation.navigate("CreateUser")}>
+            <Text style={styles.textButton}>My pin</Text>
             </TouchableOpacity>
 
             </View>
         )
     }
-
+}
 
 const styles = StyleSheet.create({
 
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
 
-    send_emailBtn:{
+    send_pinBtn:{
         width: "80%",
         backgroundColor: "#f19953",
         borderRadius: 25,

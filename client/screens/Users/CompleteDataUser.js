@@ -105,12 +105,12 @@ const CreateUser = (props) => {
 
 
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Lastname User"
+                <TextInput style={style.inputGroup} placeholder=" Lastname"
 
                     onChangeText={value => setLastname(value)} />
             </View>
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Phone User"
+                <TextInput style={style.inputGroup} placeholder=" Phone number"
                     keyboardType='numeric'
                     onChangeText={value => setNumberPhone(value)} />
             </View>
@@ -125,13 +125,13 @@ const CreateUser = (props) => {
 
 
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Number Document"
+                <TextInput style={style.inputGroup} placeholder="Document number"
                     onChangeText={value => setNumberDoc(value)} />
             </View>
             <View>
 
                 <TouchableOpacity style={style.inputGroup} onPress={showDatePicker}>
-                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Select Brithday</Text>
+                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Birth date</Text>
                 </TouchableOpacity>
                 {/* <Button title="Show Date Picker" onPress={showDatePicker} color='white' />  */}
                 <DateTimePickerModal

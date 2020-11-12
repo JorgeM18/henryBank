@@ -3,7 +3,7 @@ import axios from 'axios'
 export const ADD_USER='ADD_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_FAIL = 'LOGIN_FAIL'
-const localhost='192.168.0.5:3000'
+const localhost='192.168.0.4:3000'
 
 //ACTIONS CREATE: CREAR UN USUARIO 
 export function createUser(user){
