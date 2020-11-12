@@ -38,9 +38,9 @@ const createUser =  async (ctx)=>{              // crea un usuario y envia el ma
       viewEngine: {
         partialsDir: __dirname + "/views/partials",
         layoutsDir: './views/layouts', //ESTO ANDA MUY RARO. SOLO ME DEJA BUSCAR SI LA CARPETA VIEWS ESTA EN /API Y BUSCA COMO SI ESTUVIERA PARADO AHI (PONGO ../../ Y SALE DOS PARA ATRAS DE API. PONGO ./ Y LO ENCUENTRA) QCYOOO
-        extname: ".hbs"
+        extname: ".html"
       },
-      extName: ".hbs",
+      extName: ".html",
       viewPath: "views"
     };
 
