@@ -22,23 +22,19 @@ const validateUserPin = async (ctx) => {
 }
 
 const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
-    const { email, name, lastname, pin, phone, birth, image, province, city, address, addressnum } = ctx.params
-    
+    const { email, name, lastname, typeDoc, numberDoc, birthday, numberPhone } = ctx.params
+    console.log('PARAMETROS')
+    console.log(ctx.params)
     try{
 
      const data = await User.update({
         name: name,
         lastname: lastname,
-        pin: null,
-        phone: phone,
-        birth: birth,
-        image: image,
-        province: province,
-        city: city,
-        address: address,
-        addressnum: addressnum,
-        approved: true}, { where: { email: email } 
-      })
+        documenttype: typeDoc,
+        documentnum: parseInt(numberDoc),
+        phone: parseInt(numberPhone),
+        birth: birthday,
+        approved: true}, { where: { email: email }})
 
         if(data[0] === 1){
           return { 
@@ -49,6 +45,7 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
           throw new Errors
          }
     }catch(err){
+      console.log(err)
       throw new MoleculerError("Error", 404, "SERVICE_NOT_FOUND", {user:false})
     }
 }

@@ -79,7 +79,7 @@ module.exports = {
 		editData: {
 			rest: {
 				method: 'PUT',
-				path:'/:id'
+				path:'/cuentaGo'
 			},
 			handler: editData
 		},

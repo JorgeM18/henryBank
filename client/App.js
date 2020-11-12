@@ -8,6 +8,7 @@ import store from './Store/store'
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
+import UserProfile from './screens/Users/UserProfile';
 import Login from './screens/Login'
 import ForgotPassword from './screens/ForgotPassword'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
@@ -53,6 +54,12 @@ function MyStack() {
         options={{
           headerTitle: '',
         }}
+      />
+      <Stack.Screen name="UserProfile"
+        component={UserProfile}
+        options={{
+          title: '',
+        }} 
       />
       {/* <Stack.Screen name= "Faq" component={Faq}/> */}
       <Stack.Screen name="Login" component={Login}

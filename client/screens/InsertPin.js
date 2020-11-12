@@ -8,15 +8,14 @@ function InsertPin(props){
     // const [aux, setAux]=useState(false)
     const dispatch=useDispatch()
     const verificarPin=useSelector(store=>store.user.pin)
-  console.warn(verificarPin)
+//   console.warn(verificarPin)
     const validar=()=>{
         dispatch(validarPin(pin))
         if(verificarPin){
             props.navigation.navigate("CompleteDataUser")
 
         }
-        
-          
+     
     }
  
         return(
