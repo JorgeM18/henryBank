@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import {
     View,
     TextInput,
@@ -14,8 +14,12 @@ import {
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
+import moment from "moment";
+import * as Animatable from 'react-native-animatable';
+import {updateUser} from '../../Store/actions/user'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { useTheme } from 'react-native-paper';
+
 
 const typeDocs = [
 
@@ -24,30 +28,29 @@ const typeDocs = [
     { label: 'name', value: 'name' },
 
 ]
-const CreateUser = (props) => {
+const CompleteDataUser = (props) => {
+
 
     const dispatch = useDispatch()
-
-
+    const emailUser=AsyncStorage.getItem('email')
+    console.log('email:',emailUser)
+  
     const [lastname, setLastname] = useState('')
     const [typeDoc, setTypeDoc] = useState('')
     const [numberDoc, setNumberDoc] = useState('')
     const [birthday, setBirthday] = useState('')
-    const [pin, setPin] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
 
-    const updateUser = () => {
-        console.warn(`lastname:${lastname},typeDoc${typeDoc},numberDoc${numberDoc},birthday${birthday},pin${pin}, numberPhone${numberPhone} `)
-
-
-
-    }
     //    CONFIGURACION DE DATA-PICKER
     const [fecha, setFecha] = useState('')
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [isMayor, setIsmayor] = useState(true)
 
     const showDatePicker = () => {
-        setDatePickerVisibility(true);
+       
+        setDatePickerVisibility(true)
+
+
     };
 
     const hideDatePicker = () => {
@@ -58,33 +61,32 @@ const CreateUser = (props) => {
         // console.warn("A date has been picked: ", date);
         const opciones = { year: 'numeric', month: 'long', day: "2-digit" }
         //Formatear la fecha a ingresar
-        setFecha(date.toLocaleDateString('es-ES', opciones))
-        setBirthday(date.toLocaleDateString('es-ES', opciones))
+        var fechaNac = moment(date, 'DD-MM-YYYY');
+
+        var years = moment().diff(fechaNac, 'years');
+        console.log(years)
+        if (years > 16) {
+            setFecha(date.toLocaleDateString('es-ES', opciones))
+            setBirthday(fecha)
+            setIsmayor(true)
+            // hideDatePicker();
+          
+
+        } else {
+            setIsmayor(false)
+            setFecha(date.toLocaleDateString('es-ES', opciones))
+           
+        }
         hideDatePicker();
+
+
     };
-
-    //VALIDAR LOS CAMPOS
-    const validarCampos = () => {
-
-
-
-
-    }
-    //Alerta de Error
-    const mostrarAlerta = () => {
-        Alert.alert(
-            'Error', //titulo
-            'Todos los campos son obligatorios', //Mensaje
-            [{
-                text: 'OK' //Arreglo de botones
-            }]
-        )
+    const update=()=>{
+        dispatch(updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone))
+        props.navigation.navigate("RegistreAdress")
 
     }
 
-    const verificaEdad = (date) => {
-
-    }
     const placeholderTypeDoc = {
         label: 'Select a Type Document',
         value: null,
@@ -97,8 +99,8 @@ const CreateUser = (props) => {
 
 
             <View style={style.header}>
-                <Image style={{width:70, height:70}}
-                source={require('../images/Logo-05.png')}/>
+                <Image style={{ width: 70, height: 70 }}
+                    source={require('../images/Logo-05.png')} />
 
             </View>
 
@@ -141,24 +143,21 @@ const CreateUser = (props) => {
                     onCancel={hideDatePicker}
                 />
                 {
-                    fecha !== '' ? <Text style={{ fontSize: 18,marginTop:15, alignItems:'center' }}> Date Selected: {fecha}</Text>
+                    fecha !== '' ? <Text style={{ fontSize: 18, marginTop: 15, alignItems: 'center' }}> Date Selected: {fecha}</Text>
                         : null
+                }
+                {
+                    isMayor ? null :
+                        <Animatable.View animation="fadeInLeft" duration={500}>
+                            <Text style={style.errorMsg}>You must be of legas age</Text>
+                        </Animatable.View>
                 }
 
             </View>
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Pin Number"
-                    name='pin'
-                    keyboardType='numeric'
-                    secureTextEntry={true}
-                    maxLength={4}
-                    onChangeText={value => setPin(value)} />
-            </View>
 
-            <View >
-
-                <TouchableOpacity style={style.btn} onPress={() => updateUser()}>
-                    <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '38%' }}>
+                <TouchableOpacity style={style.btn} onPress={update}>
+                    <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
                         Save User
                         </Text>
                 </TouchableOpacity>
@@ -170,7 +169,7 @@ const CreateUser = (props) => {
     )
 
 }
-export default CreateUser;
+export default CompleteDataUser;
 //CREAR LOS ESTILOS
 const style = StyleSheet.create({
     container: {
@@ -179,19 +178,23 @@ const style = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 10
     },
-    header: {  
+    header: {
         // padding: 20,
         flex: 1,
-        flexDirection:'column',
-        height:70,
-        alignItems:'center',
-        justifyContent:'center'
+        flexDirection: 'column',
+        height: 90,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     box2: {
 
     },
+    errorMsg: {
+        color: '#FF0000',
+        fontSize: 14,
+    },
     inputGroup: {
-        marginTop: 20,
+        marginVertical: 10,
         height: 40,
         borderColor: '#e1e1e1',
         borderWidth: 1,
@@ -212,9 +215,9 @@ const style = StyleSheet.create({
     picker: {
         borderColor: '#e1e1e1',
         borderWidth: 1,
-        width: 289,
+        width: 330,
         height: 45,
-        marginVertical: 20
+        marginVertical: 10
 
     },
     textInput: {
@@ -234,8 +237,8 @@ const style = StyleSheet.create({
         backgroundColor: '#FFF'
     },
     button: {
-        width: 250,
-        height: 50,
+        width: 280,
+        height: 70,
         backgroundColor: '#330066',
         borderRadius: 30,
         justifyContent: 'center',
@@ -247,7 +250,7 @@ const style = StyleSheet.create({
         textAlign: 'center'
     },
     btn: {
-        width: 280,
+        width: 250,
         height: 50,
         borderRadius: 10,
         justifyContent: 'center',
@@ -256,6 +259,7 @@ const style = StyleSheet.create({
         borderStyle: 'solid',
         borderColor: '#FFF',
         marginVertical: 20,
+        marginHorizontal: 40
 
     },
 });

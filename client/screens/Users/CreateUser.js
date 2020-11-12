@@ -14,10 +14,10 @@ import { createUser } from '../../Store/actions/user'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from 'react-native-paper';
 
-const CreateUser = () => {
+const CreateUser = (props) => {
     const [newUser, setNewUser] = useState({
         name: '',
         email: '',
@@ -61,7 +61,7 @@ const CreateUser = () => {
             });
         }
     }
- // CAMBIO DE PRUEBA
+
     const handlerEmailChange = (value) => {
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         if (reg.test(value) === true) {
@@ -129,30 +129,25 @@ const CreateUser = () => {
         }
 
     }
-    const settearStado=(user)=>{
-        setState({
-            name: user.name,
-            email: user.email,
-            password: user.password
-        })
 
-    }
     const createNewUser =  () => {
-       
+       console.warn(state)
         if (state.name === '' ||
         state.password === '' ||
         state.email === '') {
             mostrarAlerta();
 
         } else {
-          
+            
             dispatch(createUser(state))
+            AsyncStorage.setItem('email', state.email)
             setState({
                 name: '',
                 email: '',
                 password: ''
             })
-
+            
+            props.navigation.navigate("InsertPin")
         }
 
     }
@@ -169,155 +164,154 @@ const CreateUser = () => {
 
     }
     return (
+        <ScrollView>
         <View style={styles.container}>
-            <ScrollView>
-                <View style={styles.header}>
+            <View style={styles.header}>
 
-                    <Text style={styles.text_header}>Register Now!</Text>
+                <Text style={styles.text_header}>Register Now!</Text>
 
-                </View>
-                <Animatable.View
-                    animation="fadeInUpBig"
-                    style={[styles.footer, {
-                        backgroundColor: colors.background
-                    }]}
-                >
-                    <Text style={[styles.text_footer, {
-                        color: colors.text
-                    }]}>Name</Text>
-                    <View style={styles.action}>
-                        <FontAwesome
-                            name="user-o"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Your Name"
-                            name="name"
-                            placeholderTextColor="#666666"
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlerTextChange(val)}
-                            onEndEditing={(e) => handlerValidUser(e.nativeEvent.text)}
-                        />
-                        {newUser.checktextInput ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                            : null}
-                    </View>
-                    {newUser.isValidUser ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
-                        </Animatable.View>
-                    }
-                    <Text style={[styles.text_footer, {
-                        color: colors.text,
-                        marginTop: 35
-                    }]}>Email</Text>
-                    <View style={styles.action}>
-                        <Feather
-                            name="mail"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Your Email"
-                            name="email"
-                            placeholderTextColor="#666666"
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlerEmailChange(val)}
-                        />
-                        {newUser.checkemailInput ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                            : null}
-                    </View>
-                    {newUser.isValidEmail ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Email Invalid.</Text>
-                        </Animatable.View>
-                    }
-
-
-                    <Text style={[styles.text_footer, {
-                        color: colors.text,
-                        marginTop: 35
-                    }]}>Password</Text>
-                    <View style={styles.action}>
-                        <Feather
-                            name="lock"
-                            color={colors.text}
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Your Password"
-                            placeholderTextColor="#666666"
-                            secureTextEntry={newUser.secureTextEntry ? true : false}
-                            style={[styles.textInput, {
-                                color: colors.text
-                            }]}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handlePassChange(val)}
-                        />
-                        <TouchableOpacity
-                            onPress={updatesecureTextEntry}
+            </View>
+            <Animatable.View
+                animation="fadeInUpBig"
+                style={[styles.footer, {
+                    backgroundColor: colors.background
+                }]}
+            >
+                <Text style={[styles.text_footer, {
+                    color: colors.text
+                }]}>Name</Text>
+                <View style={styles.action}>
+                    <FontAwesome
+                        name="user-o"
+                        color={colors.text}
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your Name"
+                        placeholderTextColor="#666666"
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handlerTextChange(val)}
+                        onEndEditing={(e) => handlerValidUser(e.nativeEvent.text)}
+                    />
+                    {newUser.checktextInput ?
+                        <Animatable.View
+                            animation="bounceIn"
                         >
-                            {newUser.secureTextEntry ?
-                                <Feather
-                                    name="eye-off"
-                                    color="grey"
-                                    size={20}
-                                />
-                                :
-                                <Feather
-                                    name="eye"
-                                    color="grey"
-                                    size={20}
-                                />
-                            }
-                        </TouchableOpacity>
-                    </View>
-                    {newUser.isValidPassword ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={styles.errorMsg}>Password must be 6 characters long.</Text>
+                            <Feather
+                                name="check-circle"
+                                color="green"
+                                size={20}
+                            />
                         </Animatable.View>
-                    }
+                        : null}
+                </View>
+                {newUser.isValidUser ? null :
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
+                    </Animatable.View>
+                }
+                <Text style={[styles.text_footer, {
+                    color: colors.text,
+                    marginTop: 35
+                }]}>Email</Text>
+                <View style={styles.action}>
+                    <Feather
+                        name="mail"
+                        color={colors.text}
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your Email"
+                        placeholderTextColor="#666666"
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handlerEmailChange(val)}
+                        // onEndEditing={(e) => handlerValidUser(e.nativeEvent.text)}
+                    />
+                    {newUser.checkemailInput ?
+                        <Animatable.View
+                            animation="bounceIn"
+                        >
+                            <Feather
+                                name="check-circle"
+                                color="green"
+                                size={20}
+                            />
+                        </Animatable.View>
+                        : null}
+                </View>
+                {newUser.isValidEmail ? null :
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>Email Invalid.</Text>
+                    </Animatable.View>
+                }
+
+
+                <Text style={[styles.text_footer, {
+                    color: colors.text,
+                    marginTop: 35
+                }]}>Password</Text>
+                <View style={styles.action}>
+                    <Feather
+                        name="lock"
+                        color={colors.text}
+                        size={20}
+                    />
+                    <TextInput
+                        placeholder="Your Password"
+                        placeholderTextColor="#666666"
+                        secureTextEntry={newUser.secureTextEntry ? true : false}
+                        style={[styles.textInput, {
+                            color: colors.text
+                        }]}
+                        autoCapitalize="none"
+                        onChangeText={(val) => handlePassChange(val)}
+                    />
+                    <TouchableOpacity
+                        onPress={updatesecureTextEntry}
+                    >
+                        {newUser.secureTextEntry ?
+                            <Feather
+                                name="eye-off"
+                                color="grey"
+                                size={20}
+                            />
+                            :
+                            <Feather
+                                name="eye"
+                                color="grey"
+                                size={20}
+                            />
+                        }
+                    </TouchableOpacity>
+                </View>
+                {newUser.isValidPassword ? null :
+                    <Animatable.View animation="fadeInLeft" duration={500}>
+                        <Text style={styles.errorMsg}>Password must be 6 characters long.</Text>
+                    </Animatable.View>
+                }
 
                 <View style={styles.button}>
-                        <TouchableOpacity
-                            style={styles.register}
-                            onPress={createNewUser}
-                        >
+                    <TouchableOpacity
+                    onPress={createNewUser}
+                        style={styles.register}
+                    >
 
-                            <Text style={[styles.textRegister, {
-                                color: '#fff'
-                            }]}>Register User</Text>
+                        <Text style={[styles.textRegister, {
+                            color: '#fff'
+                        }]}>Register User</Text>
 
-                </TouchableOpacity>
+                    </TouchableOpacity>
 
-                    </View>
-                </Animatable.View>
-            </ScrollView>
+                </View>
+            </Animatable.View>
         </View>
+        </ScrollView>
     )
 
 
