@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     View,
@@ -30,16 +30,13 @@ const typeDocs = [
 ]
 const CompleteDataUser = (props) => {
 
-
     const dispatch = useDispatch()
-    const emailUser=AsyncStorage.getItem('email')
-    console.log('email:',emailUser)
-  
     const [lastname, setLastname] = useState('')
     const [typeDoc, setTypeDoc] = useState('')
     const [numberDoc, setNumberDoc] = useState('')
     const [birthday, setBirthday] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
+    const [userLogged, setUserLogged] = useState('');
 
     //    CONFIGURACION DE DATA-PICKER
     const [fecha, setFecha] = useState('')
@@ -49,8 +46,6 @@ const CompleteDataUser = (props) => {
     const showDatePicker = () => {
        
         setDatePickerVisibility(true)
-
-
     };
 
     const hideDatePicker = () => {
@@ -61,13 +56,13 @@ const CompleteDataUser = (props) => {
         // console.warn("A date has been picked: ", date);
         const opciones = { year: 'numeric', month: 'long', day: "2-digit" }
         //Formatear la fecha a ingresar
-        var fechaNac = moment(date, 'DD-MM-YYYY');
+        var fechaNac = moment(date, 'YYYY-MM-DD');
 
         var years = moment().diff(fechaNac, 'years');
         console.log(years)
         if (years > 16) {
             setFecha(date.toLocaleDateString('es-ES', opciones))
-            setBirthday(fecha)
+            setBirthday(fechaNac)
             setIsmayor(true)
             // hideDatePicker();
           
@@ -82,8 +77,7 @@ const CompleteDataUser = (props) => {
 
     };
     const update=()=>{
-        // const email='maryaflorg@gmail.com'
-        // dispatch(updateUser(email,lastname,typeDoc,numberDoc,birthday, numberPhone))
+      
         props.navigation.navigate("RegisterAdress")
 
     }
@@ -94,6 +88,10 @@ const CompleteDataUser = (props) => {
         color: '#1e1e1e',
 
     }
+
+    // useEffect(()=>{
+     
+    // },[])
 
     return (
         <ScrollView style={style.container} >
@@ -108,12 +106,12 @@ const CompleteDataUser = (props) => {
 
 
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Lastname User"
+                <TextInput style={style.inputGroup} placeholder=" Lastname"
 
                     onChangeText={value => setLastname(value)} />
             </View>
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Phone User"
+                <TextInput style={style.inputGroup} placeholder=" Phone number"
                     keyboardType='numeric'
                     onChangeText={value => setNumberPhone(value)} />
             </View>
@@ -128,13 +126,13 @@ const CompleteDataUser = (props) => {
 
 
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Number Document"
+                <TextInput style={style.inputGroup} placeholder="Document number"
                     onChangeText={value => setNumberDoc(value)} />
             </View>
             <View>
 
                 <TouchableOpacity style={style.inputGroup} onPress={showDatePicker}>
-                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Select Brithday</Text>
+                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Birth date</Text>
                 </TouchableOpacity>
                 {/* <Button title="Show Date Picker" onPress={showDatePicker} color='white' />  */}
                 <DateTimePickerModal
@@ -159,7 +157,7 @@ const CompleteDataUser = (props) => {
 
                 <TouchableOpacity style={style.btn} onPress={update}>
                     <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
-                        Save User
+                        Save sUser
                         </Text>
                 </TouchableOpacity>
             </View>

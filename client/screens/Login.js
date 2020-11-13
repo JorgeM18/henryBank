@@ -1,38 +1,38 @@
 import React, {useState, useEffect}from 'react';
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import PassMeter from 'react-native-passmeter'
-
+import axios from 'axios';
 import { connect } from "react-redux";
 import {loginUser} from './../Store/actions/user'
 
+const localhost='192.168.0.5:3000'
 const MAX_LEN = 15;
 const MIN_LEN = 6;
 const PASS_LABELS = ["Too Short", "Weak", "Normal", "Strong", "Secure"];
 const deviceWindow = Dimensions.get('window')
 
- function Login ({loginUser, user},props) {
-   
+ function Login (props) {
+
+    const {loginUser, user} = props
    const  [state, setState] = useState({
         email:"",
         password:""
   }   )
 
-useEffect(() => {
-
-    if (user.user){
-        if(user.isAuthenticated){
-            console.log('esta autenticado')
-            //aca va el redireccionamiento a posicion consolidada
-            // props.navigation.navigate("CompleteDataUser")
-
-        } else {
-           Alert.alert(
-               'Error',
-              'Usuario o contraseña erroneo'
-             )
-        }
-    }
-}, [user])
+const login = () => {
+    axios.post(`http://${localhost}/api/user/login`, state)
+        .then((res)=>{
+            if (res.data){
+                props.navigation.navigate('UserProfile')
+            }
+        })
+        .catch(()=>{
+            Alert.alert(
+                'Error',
+                'Usuario o contraseña erroneo'
+            )
+        })
+}
 
 const handleSubmit = () => {
     loginUser(state)

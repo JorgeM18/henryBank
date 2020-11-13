@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const hbs = require('nodemailer-express-handlebars');
 const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
+var juice = require('juice');
 
 const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 10;
@@ -30,7 +31,10 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
   try {
         // var error;
         // var success;
-        const pinCode = Math.floor(Math.random() * 999999);
+        var pinCode = Math.floor(Math.random() * 999999)
+        while(pinCode.toString().length !== 6) {              // me aseguro que el pin sea siempre de 6 digitos (algunas veces salian de 5)
+          pinCode = Math.floor(Math.random() * 999999)  
+        }
         const user =  await User.findOne({
             where: {
                 email: ctx.params.email,
@@ -48,6 +52,13 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
                 passwordResetPIN: pinCode,
                 resetPinExpires: Date.now() + 600000,   //10 minutos para resetear la contra
             });
+
+
+            // juice("../../views/passwordReset.html", function(err, html) {
+            //   console.log(html);
+            // });
+
+            // const inlineHtml = juice.inlineContent(emailHtml, emailCss, { preserveMediaQueries: true });
             
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -58,12 +69,12 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             });
 
             const options = {
-              viewEngine: {
-                partialsDir: __dirname + "/views/partials",
-                layoutsDir: './views/layouts', //ESTO ANDA MUY RARO. SOLO ME DEJA BUSCAR SI LA CARPETA VIEWS ESTA EN /API Y BUSCA COMO SI ESTUVIERA PARADO AHI (PONGO ../../ Y SALE DOS PARA ATRAS DE API. PONGO ./ Y LO ENCUENTRA) QCYOOO
-                extname: ".hbs"
+                viewEngine: {
+                  partialsDir: __dirname + "/views/partials",
+                  layoutsDir: './views/layouts', //ESTO ANDA MUY RARO. SOLO ME DEJA BUSCAR SI LA CARPETA VIEWS ESTA EN /API Y BUSCA COMO SI ESTUVIERA PARADO AHI (PONGO ../../ Y SALE DOS PARA ATRAS DE API. PONGO ./ Y LO ENCUENTRA) QCYOOO
+                  extname: ".html"
               },
-              extName: ".hbs",
+              extName: ".html",
               viewPath: "views"
             };
         
@@ -74,7 +85,7 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             const mailOptions = {
               from: 'gohenrybank2020@gmail.com',
               to: `${user.email}`,
-              subject: 'Recupere su cuenta',
+              subject: 'Recupere su cuenta de Go HBank',
                 template: "passwordReset",
                 context: pinObject
         

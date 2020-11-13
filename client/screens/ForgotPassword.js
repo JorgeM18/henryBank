@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text } from 'react-native';
 
-export default class ForgotPassword extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
-            email: "",
-        }
-    }
-    render(){
+export default function ForgotPassword (props) {
+    
+const[email, setEmail] = useState('');
+
+
         return(
             // <View>
             // <SafeAreaView style={styles.container}>
@@ -23,16 +20,16 @@ export default class ForgotPassword extends React.Component{
             style={styles.inputText}
             placeholder = "Email..."
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {text => this.setState({email:text})}/>
+            onChangeText = {text => setEmail(text)}/>
             </View>
-            <TouchableOpacity style={styles.send_emailBtn}>
+            <TouchableOpacity style={styles.send_emailBtn} onPress={props.navigation.navigate("CreateUser")}>
             <Text style={styles.textButton}>Send Email</Text>
             </TouchableOpacity>
 
             </View>
         )
     }
-}
+
 
 const styles = StyleSheet.create({
 

@@ -7,8 +7,6 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import {logout} from '../../Store/actions/user'
 
 
-
-
 const ProfileUser = (props) => {
     const dispatch=useDispatch()
 

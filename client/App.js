@@ -8,8 +8,10 @@ import store from './Store/store'
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
+import UserProfile from './screens/Users/UserProfile';
 import Login from './screens/Login'
 import ForgotPassword from './screens/ForgotPassword'
+// import PasswordPin from './screens/PasswordPin'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
@@ -29,6 +31,8 @@ function MyStack() {
       }}>
       {/* este nos va a permitir crear las pantallas */}
 
+      
+      
       <Stack.Screen name="Home" component={Home}
         options={{
           headerTitle: '',
@@ -53,6 +57,12 @@ function MyStack() {
         options={{
           headerTitle: '',
         }}
+      />
+      <Stack.Screen name="UserProfile"
+        component={UserProfile}
+        options={{
+          title: '',
+        }} 
       />
       {/* <Stack.Screen name= "Faq" component={Faq}/> */}
       <Stack.Screen name="Login" component={Login}

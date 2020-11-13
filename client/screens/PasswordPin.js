@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react';
 import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text } from 'react-native';
-import {validarPin} from '../Store/actions/user'
 
-function InsertPin(props){
-    const [pin, setPin]= useState('');
-    // const [aux, setAux]=useState(false)
-    const dispatch=useDispatch()
-    const verificarPin=useSelector(store=>store.user.pin)
-//   console.warn(verificarPin)
-    const validar=()=>{
-        dispatch(validarPin(pin))
-        
-        props.navigation.navigate("CompleteDataUser")
-                 
+export default class PasswordPin extends React.Component{
+    constructor(props){
+        super(props);
+        this.state={
+            pin: "",
+        }
     }
- 
+    render(){
         return(
-          
+            // <View>
+            // <SafeAreaView style={styles.container}>
+            // <Text style ={styles.text}>Forgot Password?</Text>
+            // <FormButton/>
+            // </SafeAreaView>
+            // </View>
             <View style = {styles.container}>
             <Image source={require('./images/Logo-04.png')} style= {styles.logo}/>
             <View style= {styles.text}>
             <TextInput
             style={styles.inputText}
-            placeholder = "Insert PIN"
+            placeholder = "pin..."
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {Npin => setPin(Npin)}/>
+            onChangeText = {text => this.setState({pin:text})}/>
             </View>
-            <TouchableOpacity style={styles.send_emailBtn} onPress={()=>validar()}>
-            <Text style={styles.textButton}>Validate Pin</Text>
+            <TouchableOpacity style={styles.send_pinBtn} onPress={() => props.navigation.navigate("CreateUser")}>
+            <Text style={styles.textButton}>My pin</Text>
             </TouchableOpacity>
 
             </View>
         )
-    
+    }
 }
-
-export default InsertPin;
 
 const styles = StyleSheet.create({
 
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
 
-    send_emailBtn:{
+    send_pinBtn:{
         width: "80%",
         backgroundColor: "#f19953",
         borderRadius: 25,

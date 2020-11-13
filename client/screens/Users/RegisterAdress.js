@@ -1,11 +1,18 @@
 import React, {useState, useEffect} from 'react'
 import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert} from 'react-native'
+import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location'
 import {colors} from '../../utils/colors'
+import { addAddress } from '../../Store/actions/user'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
+<<<<<<< HEAD
  const RegisterAdress=(props)=> {
+=======
+
+export default function RegisterAdress(props) {
+>>>>>>> 9dbd20815018f10853b5acdb712b5a8f597fd79e
     const [state, setState] = useState({
-        telefono: '',
         calle: '',
         numero: '',
         localidad: '',
@@ -21,13 +28,30 @@ import {colors} from '../../utils/colors'
         })
         
     }
+    const dispatch = useDispatch();
     const handleSubmit = () => {
         if (state.telefono && state.calle && state.localidad && state.numero && state.provincia && state.pais) {
             checkAddress()
-            Alert.alert(
-                'Mis Datos',
-                JSON.stringify(state)  /// dato a enviar a la base de datos
-              )
+            
+            AsyncStorage.getItem('email')
+                .then(email => {
+                    console.log(state)
+                    const payload = {
+                        ...state,
+                        email: email
+                    }
+                    console.log('PAYLOAD')
+                    console.log(payload);
+                    dispatch(addAddress(payload))
+                })
+                Alert.alert(
+                    'Info', 
+                    'Debe Iniciar Sesion', 
+                    [{
+                        text: 'OK',
+                        onPress: ()=>{ props.navigation.navigate('Login')} 
+                    }]
+                )
         } else {
             setErrorMessage('Debe ingresar todos los campos')
             Alert.alert('error',errorMessage)
@@ -114,7 +138,7 @@ import {colors} from '../../utils/colors'
         <View style={styles.container}>
             <View>
                 <Text style={styles.domicilio}>
-                    Alta de Cliente
+                    Datos del domicilio
                 </Text>
                 <TextInput 
                     style={styles.input}
