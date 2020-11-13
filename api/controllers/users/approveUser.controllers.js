@@ -11,7 +11,7 @@ const validateUserPin = async (ctx) => {
     })
 
       if (user == null) {
-        console.error('password reset link is invalid or has expired');
+        console.error('Invalid user pin');
         throw new MoleculerError("Invalid user pin", 404, "SERVICE_NOT_FOUND", {pin:false})
       } else if (user != null) {
         return{ 
@@ -30,6 +30,7 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
      const data = await User.update({
         name: name,
         lastname: lastname,
+        pin: null,
         documenttype: typeDoc,
         documentnum: parseInt(numberDoc),
         phone: parseInt(numberPhone),

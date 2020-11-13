@@ -52,6 +52,9 @@ module.exports = (sequelize) => {
         type: DataTypes.BOOLEAN,
         allowNull: true
     },
+    country: {
+      type: DataTypes.STRING,
+    },
     province:{
       type: DataTypes.STRING,
       allowNull: true

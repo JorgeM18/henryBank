@@ -11,6 +11,7 @@ import Faq from './src/componentes/Faq'
 import UserProfile from './screens/Users/UserProfile';
 import Login from './screens/Login'
 import ForgotPassword from './screens/ForgotPassword'
+// import PasswordPin from './screens/PasswordPin'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
@@ -30,6 +31,8 @@ function MyStack() {
       }}>
       {/* este nos va a permitir crear las pantallas */}
 
+      
+      
       <Stack.Screen name="Home" component={Home}
         options={{
           headerTitle: '',
