@@ -82,8 +82,9 @@ const CompleteDataUser = (props) => {
 
     };
     const update=()=>{
+        console.log('heyyy')
         dispatch(updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone))
-        props.navigation.navigate("RegistreAdress")
+        props.navigation.navigate("RegisterAdress")
 
     }
 
@@ -158,7 +159,7 @@ const CompleteDataUser = (props) => {
 
                 <TouchableOpacity style={style.btn} onPress={update}>
                     <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
-                        Save User
+                        Save sUser
                         </Text>
                 </TouchableOpacity>
             </View>
