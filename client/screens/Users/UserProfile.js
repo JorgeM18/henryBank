@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {useDispatch} from 'react-redux'
 import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
@@ -7,11 +7,14 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import {logout} from '../../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+import { Avatar, Accessory, ListItem  } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
 
 
 const ProfileUser = (props) => {
     const dispatch=useDispatch()
+
+    const [image, setImage] = useState(null);
 
     const logHome = () => {
         AsyncStorage.clear();
@@ -31,6 +34,37 @@ const ProfileUser = (props) => {
         
         )
     }
+
+
+    useEffect(() => {
+        (async () => {
+          if (Platform.OS !== 'web') {
+            const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+            if (status !== 'granted') {
+              alert('Sorry, we need camera roll permissions to make this work!');
+            }
+          } 
+        })();
+      }, []);
+    
+      const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
+    
+        console.log(result);
+    
+        if (!result.cancelled) {
+          setImage(result.uri);
+        }
+      };
+
+      console.log(image)
+
+
 
     
    
@@ -55,10 +89,20 @@ const ProfileUser = (props) => {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View>
                             <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola name</Text>
-                            <Image
-                                source={require('../images/favicon.png')}
-                                style={style.Image}
-                            />
+                                <Avatar
+                                        size='xlarge'
+                                        rounded
+                                        style={style.Image}
+                                        activeOpacity={0.7}
+                                        containerStyle={{flex: 2, marginLeft: 20, marginTop: 115}}
+                                        onPress={pickImage  }
+                                        source={{
+                                            uri:
+                                            'https://www.lavanguardia.com/r/GODO/LV/p7/WebSite/2020/06/29/Recortada/img_psola_20200629-193701_imagenes_lv_terceros_intro-1591207215-kccD-U482028786326yNI-992x558@LaVanguardia-Web.jpg',
+                                        }}
+                                        >
+                                        <Accessory />
+                                </Avatar>
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
@@ -243,8 +287,9 @@ const style = StyleSheet.create({
         fontWeight: 'bold'
     },
     Image: {
-        width: 100,
-        height: 100,
+        width: 85,
+        height: 85,
+        marginLeft: 5
         // borderRadius: 40
     },
     button1: {

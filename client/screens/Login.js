@@ -5,7 +5,7 @@ import axios from 'axios';
 import { connect } from "react-redux";
 import {loginUser} from './../Store/actions/user'
 
-const localhost='192.168.0.5:3000'
+const localhost='192.168.0.4:3000' 
 const MAX_LEN = 15;
 const MIN_LEN = 6;
 const PASS_LABELS = ["Too Short", "Weak", "Normal", "Strong", "Secure"];

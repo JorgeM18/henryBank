@@ -18,6 +18,7 @@
     "bootnative": "^1.1.12",
     "chart.js": "^2.9.4",
     "expo": "~39.0.2",
+    "expo-image-picker": "~9.1.1",
     "expo-status-bar": "~1.0.2",
     "graph.js": "^1.21.1",
     "react": "16.13.1",

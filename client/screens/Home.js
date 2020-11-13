@@ -6,9 +6,11 @@ import Octicons from 'react-native-vector-icons/Octicons';
 
 const Home = (props) => {
 
+  
     return (
         <View style={style.container}>
         
+       
      
             <View style={style.box1}></View>
             <View style={style.box2}>
@@ -46,7 +48,7 @@ const Home = (props) => {
                         <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{marginHorizontal: '7%'}} onPress={()=>{props.navigation.navigate("ForgotPassword")}}>
-                        <Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
+                        <Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forgot your password?</Text></TouchableOpacity>
 
                 </View>
 
