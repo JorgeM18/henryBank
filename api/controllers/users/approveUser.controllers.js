@@ -22,7 +22,7 @@ const validateUserPin = async (ctx) => {
 }
 
 const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
-    const { email, name, lastname, typeDoc, numberDoc, birthday, numberPhone } = ctx.params
+    const { email, name, lastname, typeDoc, numberDoc, birthday, numberPhone, image } = ctx.params
     console.log('PARAMETROS')
     console.log(ctx.params)
     try{
@@ -30,6 +30,7 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
      const data = await User.update({
         name: name,
         lastname: lastname,
+        image: image,
         pin: null,
         documenttype: typeDoc,
         documentnum: parseInt(numberDoc),
