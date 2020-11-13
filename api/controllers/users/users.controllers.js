@@ -136,9 +136,33 @@ const editData = async (ctx) => {                         // editar num telefono
 
 }
 
+const editUser = async (ctx) =>{
+  try {
+    const user = await User.update(
+      ctx.params,
+      {
+        where: { email: ctx.params.email }
+      })
+      const json = {
+          message: 'success',
+          content: user
+      }
+      if(user[0]){
+        return json;
+        } else {
+          throw new Error
+        }
+}
+catch(err) {
+  console.log(err)
+  throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+}
+}
+
 
 module.exports = {
     createUser, 
     getMyData, 
-    editData
+    editData,
+    editUser
 }

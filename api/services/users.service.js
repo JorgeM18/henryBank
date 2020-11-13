@@ -2,7 +2,7 @@
 
 //const getCard = require('../controllers/getCard') // Se trae el controller (lo que va a hacer la accion cuando se ejecute) desde la carpeta "controllers" 
 //const addCard = require('../controllers/addCard')
-const { createUser, getMyData, editData } = require('../controllers/users/users.controllers');
+const { createUser, getMyData, editData, editUser } = require('../controllers/users/users.controllers');
 const { forgotPassword, validatePasswordPin, updatePassword } = require('../controllers/users/resetPassword.controllers');
 const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
 // const createUser = require('../controllers/users/users.controllers')
@@ -130,6 +130,13 @@ module.exports = {
 				path: '/updatePassword'
 			},
 			handler: updatePassword
+		},
+		editUser:{
+			rest: {
+				method: 'PUT',
+				path: '/editUser'
+			},
+			handler: editUser
 		}
 
     },
