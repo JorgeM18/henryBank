@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     View,
@@ -30,16 +30,13 @@ const typeDocs = [
 ]
 const CompleteDataUser = (props) => {
 
-
     const dispatch = useDispatch()
-    const emailUser=AsyncStorage.getItem('email')
-    console.log('email:',emailUser)
-  
     const [lastname, setLastname] = useState('')
     const [typeDoc, setTypeDoc] = useState('')
     const [numberDoc, setNumberDoc] = useState('')
     const [birthday, setBirthday] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
+    const [userLogged, setUserLogged] = useState('');
 
     //    CONFIGURACION DE DATA-PICKER
     const [fecha, setFecha] = useState('')
@@ -49,8 +46,6 @@ const CompleteDataUser = (props) => {
     const showDatePicker = () => {
        
         setDatePickerVisibility(true)
-
-
     };
 
     const hideDatePicker = () => {
@@ -61,13 +56,13 @@ const CompleteDataUser = (props) => {
         // console.warn("A date has been picked: ", date);
         const opciones = { year: 'numeric', month: 'long', day: "2-digit" }
         //Formatear la fecha a ingresar
-        var fechaNac = moment(date, 'DD-MM-YYYY');
+        var fechaNac = moment(date, 'YYYY-MM-DD');
 
         var years = moment().diff(fechaNac, 'years');
         console.log(years)
         if (years > 16) {
             setFecha(date.toLocaleDateString('es-ES', opciones))
-            setBirthday(fecha)
+            setBirthday(fechaNac)
             setIsmayor(true)
             // hideDatePicker();
           
@@ -82,8 +77,11 @@ const CompleteDataUser = (props) => {
 
     };
     const update=()=>{
-        console.log('heyyy')
-        dispatch(updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone))
+        AsyncStorage.getItem('email')
+        .then(email => {
+            console.log(email);
+            dispatch(updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone, email))
+        })
         props.navigation.navigate("RegisterAdress")
 
     }
@@ -94,6 +92,10 @@ const CompleteDataUser = (props) => {
         color: '#1e1e1e',
 
     }
+
+    // useEffect(()=>{
+     
+    // },[])
 
     return (
         <ScrollView style={style.container} >
