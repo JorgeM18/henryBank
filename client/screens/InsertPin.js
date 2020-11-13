@@ -11,12 +11,9 @@ function InsertPin(props){
   console.warn(verificarPin)
     const validar=()=>{
         dispatch(validarPin(pin))
-        if(verificarPin){
-            props.navigation.navigate("CompleteDataUser")
-
-        }
         
-          
+        props.navigation.navigate("CompleteDataUser")
+                 
     }
  
         return(

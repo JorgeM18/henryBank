@@ -3,7 +3,7 @@ import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Ale
 import * as Location from 'expo-location'
 import {colors} from '../../utils/colors'
 
-export default function RegisterAdress() {
+ const RegisterAdress=(props)=> {
     const [state, setState] = useState({
         telefono: '',
         calle: '',
@@ -169,7 +169,7 @@ export default function RegisterAdress() {
         </View>
     )
 }
-
+export default RegisterAdress;
 const styles = StyleSheet.create({
     container: {
         flex: 1,

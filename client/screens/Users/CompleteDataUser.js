@@ -82,8 +82,9 @@ const CompleteDataUser = (props) => {
 
     };
     const update=()=>{
-        dispatch(updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone))
-        props.navigation.navigate("RegistreAdress")
+        // const email='maryaflorg@gmail.com'
+        // dispatch(updateUser(email,lastname,typeDoc,numberDoc,birthday, numberPhone))
+        props.navigation.navigate("RegisterAdress")
 
     }
 

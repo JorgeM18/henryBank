@@ -36,6 +36,7 @@ useEffect(() => {
 
 const handleSubmit = () => {
     loginUser(state)
+    props.navigation.navigate('UserProfile')
 }
    
     return(

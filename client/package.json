@@ -20,6 +20,7 @@
     "expo": "~39.0.2",
     "expo-status-bar": "~1.0.2",
     "graph.js": "^1.21.1",
+    "moment": "^2.29.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-faq-component": "^1.2.1",

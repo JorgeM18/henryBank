@@ -131,6 +131,7 @@ const CreateUser = (props) => {
     }
 
     const createNewUser =  () => {
+     
        console.warn(state)
         if (state.name === '' ||
         state.password === '' ||
@@ -140,7 +141,7 @@ const CreateUser = (props) => {
         } else {
             
             dispatch(createUser(state))
-            AsyncStorage.setItem('email', state.email)
+            // AsyncStorage.setItem('email', JSON.stringify(state.email))
             setState({
                 name: '',
                 email: '',

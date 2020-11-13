@@ -54,15 +54,19 @@ export const loginUser = (user) => (dispatch) => {
   };
 
   //VELIDAR PIN
-  export function validarPin(pin){
+  export function validarPin(pin, props){
     return function(dispatch){
         return axios.post(`http://${localhost}/api/user/validateUserPin`, {'pin': pin } )
         .then(resp=>{
-          console.warn(resp)
+          console.warn(resp.data.message)
             dispatch({
                 type: 'VALID_PIN',
                 pin:resp.data.pin
             })
+            if(resp.data.message==='success'){
+
+              props.navigation.navigate("CompleteDataUser")
+            }else console.warn('Pin Invalid!')
         })
     }
 
@@ -70,8 +74,9 @@ export const loginUser = (user) => (dispatch) => {
 
 //COMPLETAR DATOS DEL USUARIO
 
-export function updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone){
-  const usuario={lastname,typeDoc,numberDoc,birthday, numberPhone}
+export function updateUser(email,lastname,typeDoc,numberDoc,birthday, numberPhone){
+  const usuario={email,lastname,typeDoc,numberDoc,birthday, numberPhone}
+  console.log(usuario)
     return function(dispatch){
         return axios.put(`http://${localhost}/api/user/approveUser`, usuario)
         .then(resp=>{
