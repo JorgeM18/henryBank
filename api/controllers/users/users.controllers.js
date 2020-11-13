@@ -18,7 +18,12 @@ const {
 
 
 const createUser =  async (ctx)=>{              // crea un usuario y envia el mail de validacion
-  var pin = Math.floor(Math.random() * 999999);
+
+var pin = Math.floor(Math.random() * 999999)
+while(pin.toString().length !== 6) {              // me aseguro que el pin sea siempre de 6 digitos (algunas veces salian de 5)
+  pin = Math.floor(Math.random() * 999999)  
+}
+
     ctx.params.pin = pin
     console.log(ctx.params)
   try{

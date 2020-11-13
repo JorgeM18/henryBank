@@ -11,7 +11,7 @@ const validateUserPin = async (ctx) => {
     })
 
       if (user == null) {
-        console.error('password reset link is invalid or has expired');
+        console.error('Invalid user pin');
         throw new MoleculerError("Invalid user pin", 404, "SERVICE_NOT_FOUND", {pin:false})
       } else if (user != null) {
         return{ 
@@ -23,7 +23,7 @@ const validateUserPin = async (ctx) => {
 
 const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos los datos 
     const { email, name, lastname, pin, phone, birth, image, province, city, address, addressnum } = ctx.params
-    
+    console.log(ctx.params)
     try{
 
      const data = await User.update({
@@ -37,7 +37,7 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
         city: city,
         address: address,
         addressnum: addressnum,
-        approved: true}, { where: { email: email } 
+        approved: true}, { where: { name: lastname } 
       })
 
         if(data[0] === 1){

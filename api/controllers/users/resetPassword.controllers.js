@@ -31,7 +31,10 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
   try {
         // var error;
         // var success;
-        const pinCode = Math.floor(Math.random() * 999999);
+        var pinCode = Math.floor(Math.random() * 999999)
+        while(pinCode.toString().length !== 6) {              // me aseguro que el pin sea siempre de 6 digitos (algunas veces salian de 5)
+          pinCode = Math.floor(Math.random() * 999999)  
+        }
         const user =  await User.findOne({
             where: {
                 email: ctx.params.email,
