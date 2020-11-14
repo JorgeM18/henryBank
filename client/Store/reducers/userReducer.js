@@ -34,7 +34,12 @@ export default (state = initialState, action) => {
             }
         case 'REGISTER_FAIL':
         case 'LOGIN_FAIL':
+            return {
+                ...state,
+                isAuthenticated: false,
+            }
         case 'LOGOUT_SUCCESS':
+            AsyncStorage.clear();
         case 'AUTH_ERROR':
             AsyncStorage.removeItem("token");
             return {
@@ -51,11 +56,10 @@ export default (state = initialState, action) => {
         case 'EDIT_USER':
             return {
                 ...state,
-                user: state.user.map(user => user.id === action.user.id ? {
-                    ...user,
-                    ...action.user
-                } : user)
+               user:action.user
             }
+        case 'GET_USER':
+            return {user:action.user};
         default:
             return state
 

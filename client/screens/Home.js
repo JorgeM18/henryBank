@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import Octicons from 'react-native-vector-icons/Octicons';
 
 
-
 const Home = (props) => {
 
     return (

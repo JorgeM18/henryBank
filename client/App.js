@@ -13,9 +13,13 @@ import ForgotPassword from './screens/ForgotPassword'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
+import UserProfile from './screens/Users/UserProfile'
+
+
 const Stack = createStackNavigator()
 
 function MyStack() {
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -39,10 +43,17 @@ function MyStack() {
         options={{
           title: '',
         }} />
+        <Stack.Screen name="UserProfile"
+        component={UserProfile}
+        options={{
+          title: '',
+        }} />
         <Stack.Screen name="InsertPin" component={InsertPin}
         options={{
           headerTitle: '',
-        }}
+          headerLeft: null
+         }}
+        
       />
       <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
         options={{
@@ -61,6 +72,7 @@ function MyStack() {
           headerStyle: {
             backgroundColor: '#1e1e1e',
           },
+          headerLeft: null
         }} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
