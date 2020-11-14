@@ -1,4 +1,6 @@
+import React from 'react';
 import axios from 'axios'
+import {Alert} from 'react-native'
 
 export const ADD_USER='ADD_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -18,7 +20,7 @@ export function createUser(user){
             })
         })
         .catch((error)=>{
-            console.warn(error)
+            // console.warn(error)
 
         })
 
@@ -37,6 +39,8 @@ export const loginUser = (user) => (dispatch) => {
     return axios
       .post(`http://${localhost}/api/user/login`, userEnv)
       .then((res) => {
+        console.log('ENTRÉ AL ACTION')
+        console.log(res.data)
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
       })
       .catch((error) => {
@@ -50,19 +54,36 @@ export const loginUser = (user) => (dispatch) => {
   };
 
   export const logout = () => {
-    return dispatch({ type: LOGOUT_SUCCESS })
+    return dispatch({ type: 'LOGOUT_SUCCESS' })
   };
 
   //VELIDAR PIN
-  export function validarPin(pin){
+export function validarPin(pin, props){
     return function(dispatch){
         return axios.post(`http://${localhost}/api/user/validateUserPin`, {'pin': pin } )
         .then(resp=>{
-          console.warn(resp)
+          // console.warn(resp.data.message)
+          console.log(resp)
             dispatch({
                 type: 'VALID_PIN',
                 pin:resp.data.pin
             })
+            if(resp.data.message==='success'){
+
+              props.navigation.navigate("CompleteDataUser")
+            }
+        })
+        .catch(error=>{
+          if(error){
+            Alert.alert(
+              'Error', 
+              'Invalid PIN',
+              [{
+                  text: 'OK', 
+                  onPress:()=>{props.navigation.navigate("InsertPin")}
+              }]
+          )
+          }
         })
     }
 
@@ -70,16 +91,42 @@ export const loginUser = (user) => (dispatch) => {
 
 //COMPLETAR DATOS DEL USUARIO
 
-export function updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone){
-  const usuario={lastname,typeDoc,numberDoc,birthday, numberPhone}
+export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props){
+  const usuario={lastname, typeDoc, numberDoc, birthday, numberPhone, email, image}
+  // console.log('USUARIO RECIVIDO', usuario)
+
     return function(dispatch){
         return axios.put(`http://${localhost}/api/user/approveUser`, usuario)
         .then(resp=>{
-          console.warn(resp)
+          // console.warn(resp)
             dispatch({
                 type:'EDIT_USER',
                 user:resp.data
             })
+            console.log('REPUESTA',resp)
+            if(resp.data.message==='success'){           
+
+              props.navigation.navigate("RegisterAdress")
+            }
+        })
+        .catch(error=>{
+          console.log(error)
         })
     }
+}
+
+export function addAddress(payload){
+  console.log(payload)
+  return function(dispatch){
+      return axios.put(`http://${localhost}/api/user/cuentaGo`, payload )
+      .then(resp=>{
+        console.log('ENTRÉ AL ACTION')
+        console.log(resp.data)
+          dispatch({
+              type: 'GET_USER',
+              user:resp.data
+          })
+      })
+  }
+
 }

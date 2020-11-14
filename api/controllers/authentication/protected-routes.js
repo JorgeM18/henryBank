@@ -3,6 +3,4 @@
 module.exports = protectedRoutes = [
    
     "user.getMyData",
-    "user.editData",
-   
 ]
