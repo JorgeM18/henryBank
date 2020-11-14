@@ -19,8 +19,9 @@ function InsertPin(props){
           
             <View style = {styles.container}>
             <Image source={require('./images/Logo-04.png')} style= {styles.logo}/>
+            <Text style={styles.text_header}>Insert  PIN!</Text>
             <View style= {styles.text}>
-            <Text style={styles.text_header}>Register Now!</Text>
+    
             <TextInput
             style={styles.inputText}
             placeholder = ""
@@ -50,7 +51,8 @@ const styles = StyleSheet.create({
     text_header: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 25,
+        marginVertical:20
     },
     logo:{
         width: 150,
@@ -75,7 +77,8 @@ const styles = StyleSheet.create({
 
     textButton:{
         color: "white",
-        marginTop: 15
+        fontSize:20,
+        marginVertical:10
     },
 
     send_emailBtn:{
@@ -84,7 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         height: 50,
         alignItems: "center",
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 10
    
     },

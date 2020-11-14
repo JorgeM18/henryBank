@@ -51,9 +51,8 @@ function MyStack() {
         <Stack.Screen name="InsertPin" component={InsertPin}
         options={{
           headerTitle: '',
-          headerStyle: {
-            backgroundColor: '#1e1e1e',
-          },}}
+          headerLeft: null
+         }}
         
       />
       <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
