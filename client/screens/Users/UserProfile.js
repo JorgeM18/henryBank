@@ -5,22 +5,42 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {logout} from '../../Store/actions/user'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 
 const ProfileUser = (props) => {
     const dispatch=useDispatch()
 
-    const Logout=()=>{
+    const logHome = () => {
+        AsyncStorage.clear();
+        // dispatch(logout())
+        props.navigation.navigate('Home');
+        return;
+    }
+
+    const Logout= () =>{
         Alert.alert(
             'Logout', //titulo
-            'Esta seguro de cerrar sesion', //Mensaje
+            'Are you sure to log out?', //Mensaje
             [{
-                text: 'OK' //Arreglo de botones
-            }]
+                text: 'OK', //Arreglo de botones
+                onPress: ()=> {logHome()},
+                
+            },
+            {
+                text:'Cancel',
+                style:'cancel',
+                onPress: ()=> {props.navigation.navigate('UserProfile')},
+            }
+        ],
+        
+        
         )
-        dispatch(logout())
-        props.navigate.navigation('Home')
     }
+
+    
    
     return (
      

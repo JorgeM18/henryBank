@@ -72,6 +72,7 @@ function MyStack() {
           headerStyle: {
             backgroundColor: '#1e1e1e',
           },
+          headerLeft: null
         }} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />

@@ -152,9 +152,9 @@ const CompleteDataUser = (props) => {
         AsyncStorage.getItem('email')
             .then(email => {
                 console.log(email);
-                dispatch(updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image))
+                dispatch(updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props))
             })
-        // props.navigation.navigate("RegisterAdress")
+   
 
     }
 

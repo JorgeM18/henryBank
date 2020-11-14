@@ -91,9 +91,9 @@ export function validarPin(pin, props){
 
 //COMPLETAR DATOS DEL USUARIO
 
-export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image){
+export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props){
   const usuario={lastname, typeDoc, numberDoc, birthday, numberPhone, email, image}
-  console.log('USUARIO RECIVIDO', usuario)
+  // console.log('USUARIO RECIVIDO', usuario)
 
     return function(dispatch){
         return axios.put(`http://${localhost}/api/user/approveUser`, usuario)
@@ -103,6 +103,14 @@ export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, 
                 type:'EDIT_USER',
                 user:resp.data
             })
+            console.log('REPUESTA',resp)
+            if(resp.data.message==='success'){           
+
+              props.navigation.navigate("RegisterAdress")
+            }
+        })
+        .catch(error=>{
+          console.log(error)
         })
     }
 }
