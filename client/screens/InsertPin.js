@@ -10,22 +10,22 @@ function InsertPin(props){
     const verificarPin=useSelector(store=>store.user.pin)
 //   console.warn(verificarPin)
     const validar=()=>{
-        dispatch(validarPin(pin))
-        if(verificarPin){
-            props.navigation.navigate("CompleteDataUser")
-
-        }
-     
+        dispatch(validarPin(pin, props))
+        setPin('')          
     }
+
  
         return(
           
             <View style = {styles.container}>
             <Image source={require('./images/Logo-04.png')} style= {styles.logo}/>
+            <Text style={styles.text_header}>Insert  PIN!</Text>
             <View style= {styles.text}>
+    
             <TextInput
             style={styles.inputText}
-            placeholder = "Insert PIN"
+            placeholder = ""
+            keyboardType='numeric'
             placeholderTextColor = "#3B8EA5"
             onChangeText = {Npin => setPin(Npin)}/>
             </View>
@@ -48,7 +48,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-
+    text_header: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginVertical:20
+    },
     logo:{
         width: 150,
         height: 200,  
@@ -72,7 +77,8 @@ const styles = StyleSheet.create({
 
     textButton:{
         color: "white",
-        marginTop: 15
+        fontSize:20,
+        marginVertical:10
     },
 
     send_emailBtn:{
@@ -81,7 +87,7 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         height: 50,
         alignItems: "center",
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 10
    
     },

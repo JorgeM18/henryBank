@@ -56,10 +56,7 @@ export default (state = initialState, action) => {
         case 'EDIT_USER':
             return {
                 ...state,
-                user: state.user.map(user => user.id === action.user.id ? {
-                    ...user,
-                    ...action.user
-                } : user)
+               user:action.user
             }
         case 'GET_USER':
             return {user:action.user};
