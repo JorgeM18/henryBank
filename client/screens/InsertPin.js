@@ -10,20 +10,21 @@ function InsertPin(props){
     const verificarPin=useSelector(store=>store.user.pin)
 //   console.warn(verificarPin)
     const validar=()=>{
-        dispatch(validarPin(pin))
-        
-        props.navigation.navigate("CompleteDataUser")
-                 
+        dispatch(validarPin(pin, props))
+        setPin('')          
     }
+
  
         return(
           
             <View style = {styles.container}>
             <Image source={require('./images/Logo-04.png')} style= {styles.logo}/>
             <View style= {styles.text}>
+            <Text style={styles.text_header}>Register Now!</Text>
             <TextInput
             style={styles.inputText}
-            placeholder = "Insert PIN"
+            placeholder = ""
+            keyboardType='numeric'
             placeholderTextColor = "#3B8EA5"
             onChangeText = {Npin => setPin(Npin)}/>
             </View>
@@ -46,7 +47,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-
+    text_header: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 30
+    },
     logo:{
         width: 150,
         height: 200,  

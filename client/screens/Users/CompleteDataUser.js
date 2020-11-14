@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import {
     View,
     TextInput,
@@ -15,11 +15,12 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import moment from "moment";
+import firebase from '../../utils/Firebase'
 import * as Animatable from 'react-native-animatable';
-import {updateUser} from '../../Store/actions/user'
+import * as Permissions from 'expo-permissions'
+import * as ImagePicker from 'expo-image-picker';
+import { updateUser } from '../../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
-
 
 const typeDocs = [
 
@@ -30,13 +31,14 @@ const typeDocs = [
 ]
 const CompleteDataUser = (props) => {
 
+
     const dispatch = useDispatch()
     const [lastname, setLastname] = useState('')
     const [typeDoc, setTypeDoc] = useState('')
     const [numberDoc, setNumberDoc] = useState('')
     const [birthday, setBirthday] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
-    const [userLogged, setUserLogged] = useState('');
+    const [image, setImage] = useState('')
 
     //    CONFIGURACION DE DATA-PICKER
     const [fecha, setFecha] = useState('')
@@ -44,7 +46,7 @@ const CompleteDataUser = (props) => {
     const [isMayor, setIsmayor] = useState(true)
 
     const showDatePicker = () => {
-       
+
         setDatePickerVisibility(true)
     };
 
@@ -53,34 +55,27 @@ const CompleteDataUser = (props) => {
     };
 
     const handleConfirm = (date) => {
-        // console.warn("A date has been picked: ", date);
+
         const opciones = { year: 'numeric', month: 'long', day: "2-digit" }
-        //Formatear la fecha a ingresar
+
         var fechaNac = moment(date, 'YYYY-MM-DD');
 
         var years = moment().diff(fechaNac, 'years');
-        console.log(years)
+
         if (years > 16) {
             setFecha(date.toLocaleDateString('es-ES', opciones))
             setBirthday(fechaNac)
             setIsmayor(true)
-            // hideDatePicker();
-          
+            console.log(birthday)
 
         } else {
             setIsmayor(false)
             setFecha(date.toLocaleDateString('es-ES', opciones))
-           
+
         }
         hideDatePicker();
 
-
     };
-    const update=()=>{
-      
-        props.navigation.navigate("RegisterAdress")
-
-    }
 
     const placeholderTypeDoc = {
         label: 'Select a Type Document',
@@ -88,10 +83,81 @@ const CompleteDataUser = (props) => {
         color: '#1e1e1e',
 
     }
+    //UPLOAD IMAGE
+    const uploadImage = (uri) => {
+        return new Promise((resolve, reject) => {
+            let xhr = new XMLHttpRequest();
+            xhr.onerror = reject;
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    resolve(xhr.response)
+                }
+            };
+            xhr.open('GET', uri);
+            xhr.responseType = 'blob';
+            xhr.send();
+        });
+    };
 
-    // useEffect(()=>{
-     
-    // },[])
+    //CARGAR IMAGEN
+
+    const openGallery = async () => {
+        const resultPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+        if (resultPermission) {
+            let imageSelected = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3]
+            });
+            if (imageSelected.cancelled === false) {
+
+                const imageUri = imageSelected.uri;
+                uploadImage(imageUri)
+                    .then(resolve => {
+                        // console.log(JSON.stringify(resolve))
+                        const nameImg = (JSON.stringify(resolve._data.name))
+                        const id = nameImg.replace(/\"/g, "")
+                        const fecha = moment(new Date()).format("YYYY-MM-DD")
+                        // images/${id}&${fecha}
+                        let ref = firebase.storage().ref().child(`images/${id}&${fecha}`);
+                        ref.put(resolve)
+                            .then(resolve => {
+                                console.log('Success',resolve)
+                                firebase.storage().ref(`images/${id}&${fecha}`).getDownloadURL()
+                                    .then((response) => {
+                                        console.log('URL:',response)
+                                        setImage(response)
+
+                                    })
+
+                        })
+                        .catch(error => {
+                            console.log('Failed', error)
+                        });
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+
+
+            }
+
+
+        }
+
+
+    };
+
+    const update = () => {
+        console.log(lastname, typeDoc, numberDoc, birthday, numberPhone, image)
+        AsyncStorage.getItem('email')
+            .then(email => {
+                console.log(email);
+                dispatch(updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image))
+            })
+        // props.navigation.navigate("RegisterAdress")
+
+    }
+
 
     return (
         <ScrollView style={style.container} >
@@ -103,15 +169,17 @@ const CompleteDataUser = (props) => {
 
             </View>
 
-
-
             <View >
                 <TextInput style={style.inputGroup} placeholder=" Lastname"
 
                     onChangeText={value => setLastname(value)} />
             </View>
             <View >
-                <TextInput style={style.inputGroup} placeholder=" Phone number"
+                <TouchableOpacity style={style.inputGroup} onPress={openGallery}><Text>Select an Image</Text></TouchableOpacity>
+
+            </View>
+            <View >
+                <TextInput style={style.inputGroup} placeholder=" Phone Number"
                     keyboardType='numeric'
                     onChangeText={value => setNumberPhone(value)} />
             </View>
@@ -126,15 +194,14 @@ const CompleteDataUser = (props) => {
 
 
             <View >
-                <TextInput style={style.inputGroup} placeholder="Document number"
+                <TextInput style={style.inputGroup} placeholder="Document Number"
                     onChangeText={value => setNumberDoc(value)} />
             </View>
             <View>
 
                 <TouchableOpacity style={style.inputGroup} onPress={showDatePicker}>
-                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Birth date</Text>
+                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Select a Birth Date</Text>
                 </TouchableOpacity>
-                {/* <Button title="Show Date Picker" onPress={showDatePicker} color='white' />  */}
                 <DateTimePickerModal
                     isVisible={isDatePickerVisible}
                     mode="date"
@@ -148,16 +215,17 @@ const CompleteDataUser = (props) => {
                 {
                     isMayor ? null :
                         <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={style.errorMsg}>You must be of legas age</Text>
+                            <Text style={style.errorMsg}>You must be of legal age</Text>
                         </Animatable.View>
                 }
 
             </View>
+        
             <View >
 
                 <TouchableOpacity style={style.btn} onPress={update}>
                     <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
-                        Save sUser
+                        Save User
                         </Text>
                 </TouchableOpacity>
             </View>
@@ -178,15 +246,11 @@ const style = StyleSheet.create({
         paddingVertical: 10
     },
     header: {
-        // padding: 20,
         flex: 1,
         flexDirection: 'column',
         height: 90,
         alignItems: 'center',
         justifyContent: 'center'
-    },
-    box2: {
-
     },
     errorMsg: {
         color: '#FF0000',
@@ -208,7 +272,8 @@ const style = StyleSheet.create({
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#f2f2f2',
-        paddingBottom: 5
+        paddingBottom: 5,
+        borderRadius: 3
 
     },
     picker: {

@@ -131,8 +131,7 @@ const CreateUser = (props) => {
     }
 
     const createNewUser =  () => {
-     
-       console.warn(state)
+    
         if (state.name === '' ||
         state.password === '' ||
         state.email === '') {
@@ -141,15 +140,25 @@ const CreateUser = (props) => {
         } else {
             
             dispatch(createUser(state))
-            // AsyncStorage.setItem('email', JSON.stringify(state.email))
+            AsyncStorage.setItem('email', state.email)
             setState({
                 name: '',
                 email: '',
                 password: ''
             })
+            Alert.alert(
+                'GO Bank',
+                'Plaese confirm your Email!',
+                [{
+                    text: 'OK',
+                    onPress: ()=>{props.navigation.navigate("InsertPin")}
+                }]
+
+            )
             
-            props.navigation.navigate("InsertPin")
+           
         }
+        
 
     }
 

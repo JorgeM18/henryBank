@@ -44,7 +44,7 @@ const ProfileUser = (props) => {
                         <View>
                             <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola name</Text>
                             <Image
-                                source={require('../img/favicon.png')}
+                                source={require('../images/favicon.png')}
                                 style={style.Image}
                             />
 
