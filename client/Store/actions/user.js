@@ -1,16 +1,17 @@
 import axios from 'axios'
+import {URL} from '@env';
 
 export const ADD_USER='ADD_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_FAIL = 'LOGIN_FAIL'
-const localhost='192.168.0.4:3000'
+
 
 //ACTIONS CREATE: CREAR UN USUARIO 
 export function createUser(user){
-    // console.log(user)
+   
     return function(dispatch){
-      
-        return axios.post(`http://${localhost}/api/user/createUser`, user)
+        console.log(URL)
+        return axios.post(`http://${URL}/api/user/createUser`, user)
         .then((resp)=>{
             dispatch({
                 type: ADD_USER,
