@@ -48,7 +48,8 @@
     "socket.io-client": "^2.3.1"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
+    "@babel/core": "~7.9.0",
+    "react-native-dotenv": "^2.4.2"
   },
   "android": {
     "permissions": [
