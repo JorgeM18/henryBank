@@ -35,18 +35,8 @@ const login = () => {
 }
 
 const handleSubmit = () => {
-    
-        login()
-       
-        // } else {
-        //    Alert.alert(
-        //        'Error',
-        //       'Usuario o contraseña erroneo'
-        //      )
-        // }
-    
-    // loginUser(state)
-    
+    loginUser(state)
+    props.navigation.navigate('UserProfile')
 }
    
     return(

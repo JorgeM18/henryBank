@@ -1,10 +1,11 @@
+import React from 'react';
 import axios from 'axios'
 import {URL} from '@env';
+import {Alert} from 'react-native'
 
 export const ADD_USER='ADD_USER'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const LOGIN_FAIL = 'LOGIN_FAIL'
-
 
 //ACTIONS CREATE: CREAR UN USUARIO 
 export function createUser(user){
@@ -57,15 +58,32 @@ export const loginUser = (user) => (dispatch) => {
   };
 
   //VELIDAR PIN
-  export function validarPin(pin){
+export function validarPin(pin, props){
     return function(dispatch){
         return axios.post(`http://${localhost}/api/user/validateUserPin`, {'pin': pin } )
         .then(resp=>{
-          // console.warn(resp)
+          // console.warn(resp.data.message)
+          console.log(resp)
             dispatch({
                 type: 'VALID_PIN',
                 pin:resp.data.pin
             })
+            if(resp.data.message==='success'){
+
+              props.navigation.navigate("CompleteDataUser")
+            }
+        })
+        .catch(error=>{
+          if(error){
+            Alert.alert(
+              'Error', 
+              'Invalid PIN',
+              [{
+                  text: 'OK', 
+                  onPress:()=>{props.navigation.navigate("InsertPin")}
+              }]
+          )
+          }
         })
     }
 
@@ -73,8 +91,10 @@ export const loginUser = (user) => (dispatch) => {
 
 //COMPLETAR DATOS DEL USUARIO
 
-export function updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone, email){
-  const usuario={lastname,typeDoc,numberDoc,birthday, numberPhone, email}
+export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props){
+  const usuario={lastname, typeDoc, numberDoc, birthday, numberPhone, email, image}
+  // console.log('USUARIO RECIVIDO', usuario)
+
     return function(dispatch){
         return axios.put(`http://${localhost}/api/user/approveUser`, usuario)
         .then(resp=>{
@@ -83,6 +103,14 @@ export function updateUser(lastname,typeDoc,numberDoc,birthday, numberPhone, ema
                 type:'EDIT_USER',
                 user:resp.data
             })
+            console.log('REPUESTA',resp)
+            if(resp.data.message==='success'){           
+
+              props.navigation.navigate("RegisterAdress")
+            }
+        })
+        .catch(error=>{
+          console.log(error)
         })
     }
 }
