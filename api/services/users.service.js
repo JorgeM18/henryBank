@@ -2,12 +2,12 @@
 
 //const getCard = require('../controllers/getCard') // Se trae el controller (lo que va a hacer la accion cuando se ejecute) desde la carpeta "controllers" 
 //const addCard = require('../controllers/addCard')
-const { createUser, getMyData, editData } = require('../controllers/users/users.controllers');
-const { forgotPassword, resetPassword, updatePassword } = require('../controllers/users/resetPassword.controllers');
-const approveUser = require('../controllers/users/approveUser.controllers');
+const { createUser, getMyData, editData, editUser } = require('../controllers/users/users.controllers');
+const { forgotPassword, validatePasswordPin, updatePassword } = require('../controllers/users/resetPassword.controllers');
+const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
 // const createUser = require('../controllers/users/users.controllers')
 const login = require('../controllers/authentication/login.controllers');
-
+const logout = require('../controllers/authentication/logout.controller');
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -44,6 +44,16 @@ module.exports = {
 				},
 			handler:login	
 		},
+		logout:{
+			rest:{
+				method:"POST",
+				path:"/logout"
+			},
+			params:{
+				token:"string"
+			},
+			handler:logout
+		},
 
         createUser:{
             rest:{ 
@@ -69,27 +79,32 @@ module.exports = {
 		editData: {
 			rest: {
 				method: 'PUT',
-				path:'/:id'
+				path:'/cuentaGo'
 			},
 			handler: editData
 		},
 		
+		validateUserPin: {
+			rest: {
+				method: 'POST',
+				path: '/validateUserPin'
+			},
+			handler: validateUserPin
+		},
+
 		 approveUser:{
             rest:{ 
                 method:"PUT",
                 path:"/approveUser" 
             },
-            params:{
-                name:"string",
-                lastname:"string",
-                pin:"string",
-                phone:"string",
-                birth:"string",
-                image:"string",
-            },
-            async handler(ctx){ 
-                 return `dando de alta a ${ctx.params.name}`
-            },
+            // params:{
+            //     name:"string",
+            //     lastname:"string",
+            //     pin:"number",
+            //     phone:"number",
+            //     birth:"string",
+            //     image:"string",
+            // },
             handler: approveUser
 		},
 		
@@ -101,21 +116,27 @@ module.exports = {
 			handler: forgotPassword
 		}, 
 
-		resetPassword: {
+		validatePasswordPin: {
 			rest: {
-				method: 'GET',
-				path: '/resetPassword'
+				method: 'POST',
+				path: '/validatePasswordPin'
 			},
-			handler: resetPassword
+			handler: validatePasswordPin
 		}, 
 
 		updatePassword: {
 			rest: {
 				method: 'PUT',
-				path: '/updaterPassword'
+				path: '/updatePassword'
 			},
 			handler: updatePassword
-	
+		},
+		editUser:{
+			rest: {
+				method: 'PUT',
+				path: '/editUser'
+			},
+			handler: editUser
 		}
 
     },

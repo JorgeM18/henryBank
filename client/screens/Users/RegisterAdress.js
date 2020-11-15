@@ -1,9 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert} from 'react-native'
+import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location'
 import {colors} from '../../utils/colors'
+import { addAddress } from '../../Store/actions/user'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function RegisterAdress() {
+
+export default function RegisterAdress(props) {
     const [state, setState] = useState({
         calle: '',
         numero: '',
@@ -20,12 +24,30 @@ export default function RegisterAdress() {
         })
         
     }
+    const dispatch = useDispatch();
     const handleSubmit = () => {
-        if (state.calle && state.localidad && state.numero && state.provincia && state.pais) {
-            Alert.alert(
-                'Mi Domicilio',
-                JSON.stringify(state)
-              )
+        if (state.telefono && state.calle && state.localidad && state.numero && state.provincia && state.pais) {
+            checkAddress()
+            
+            AsyncStorage.getItem('email')
+                .then(email => {
+                    console.log(state)
+                    const payload = {
+                        ...state,
+                        email: email
+                    }
+                    console.log('PAYLOAD')
+                    console.log(payload);
+                    dispatch(addAddress(payload))
+                })
+                Alert.alert(
+                    'Info', 
+                    'Debe Iniciar Sesion', 
+                    [{
+                        text: 'OK',
+                        onPress: ()=>{ props.navigation.navigate('Login')} 
+                    }]
+                )
         } else {
             setErrorMessage('Debe ingresar todos los campos')
             Alert.alert('error',errorMessage)
@@ -35,6 +57,35 @@ export default function RegisterAdress() {
     useEffect(() =>{
         load()
       }, [])
+
+      async function checkAddress () {
+          console.log('state', state)
+          try {
+              if (state.pais !== 'Argentina') return
+                const consultaDomicilio = `https://apis.datos.gob.ar/georef/api/direcciones?direccion=${state.calle} nro ${state.numero}&localidad=${state.localidad}&provincia=${state.provincia}`
+                console.log('direccion', consultaDomicilio)
+              const response = await fetch(consultaDomicilio)
+              const result = await response.json()
+              const {parametros: {
+                  direccion: {
+                      altura: {valor},
+                     calles: [calles],
+                  },
+                  localidad: localidad,
+                  provincia: provincia
+              } } = result
+              setState({... state,
+                calle: calles,
+                numero: valor,
+                localidad: localidad,
+                provincia: provincia,
+                pais: Argentina,
+            })
+          }
+          catch (error) {
+            setErrorMessage(error.message)
+          }
+      }
     
       async function load() {
         try {
@@ -83,8 +134,15 @@ export default function RegisterAdress() {
         <View style={styles.container}>
             <View>
                 <Text style={styles.domicilio}>
-                    Domicilio
+                    Datos del domicilio
                 </Text>
+                <TextInput 
+                    style={styles.input}
+                    placeholder='Telefono'
+                    name='telefono'
+                    defaultValue={state.telefono}
+                    onChangeText={(e) => handleChange('telefono', e)}
+                />
                 <TextInput 
                     style={styles.input}
                     placeholder='Calle'
@@ -135,28 +193,33 @@ export default function RegisterAdress() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.BACKGROUND_COLOR,
-        color: colors.PRIMARY_COLOR,
+        backgroundColor: '#FFF',
+        color: colors.BACKGROUND_COLOR,
         marginTop: 30,
         paddingLeft: 20,
         paddingRight: 20,
     },
     domicilio: {
+        borderColor: colors.BACKGROUND_COLOR,
+        backgroundColor: colors.BACKGROUND_COLOR,
         textAlign:'center',
         fontSize: 18,
-        color: colors.SECONDARY_COLOR,
+        marginBottom: 10,
+        padding: 10,
+        color: '#FFF',
     },
     input: {
         height: 40,
-        borderColor: colors.SECONDARY_COLOR,
-        color: colors.PRIMARY_COLOR,
-        borderBottomWidth: 2,
+        borderColor: colors.BACKGROUND_COLOR,
+        color: colors.BACKGROUND_COLOR,
+        borderWidth: 1,
+        padding: 10,
         marginBottom: 20
     },
     button: {
         alignSelf: 'center',
         textAlign: 'center',
-        backgroundColor: colors.SECONDARY_COLOR,
+        backgroundColor: colors.BACKGROUND_COLOR,
         marginTop: 30,
         paddingTop: 15,
         paddingBottom: 20,
@@ -165,6 +228,6 @@ const styles = StyleSheet.create({
     },
     textButton: {
         textAlign: 'center',
-        color: colors.BACKGROUND_COLOR
+        color: '#fff'
     }
 })

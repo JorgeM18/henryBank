@@ -1,25 +1,80 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native'
-import {createStackNavigator} from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
+import { createStackNavigator } from '@react-navigation/stack'
 import { Provider } from 'react-redux'
 import store from './Store/store'
 
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
+import UserProfile from './screens/Users/UserProfile';
 import Login from './screens/Login'
-const Stack= createStackNavigator()
+import ForgotPassword from './screens/ForgotPassword'
+// import PasswordPin from './screens/PasswordPin'
+import CompleteDataUser from './screens/Users/CompleteDataUser'
+import InsertPin from './screens/InsertPin'
+import RegisterAdress from './screens/Users/RegisterAdress'
+const Stack = createStackNavigator()
 
-function MyStack(){
-  return(
-    <Stack.Navigator>
+function MyStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#1e1e1e',
+
+        },
+        headerTintColor: '#fff',
+        headerTitleAlign: 'center',
+        headerTitleStyle: 'bold'
+      }}>
       {/* este nos va a permitir crear las pantallas */}
 
-     <Stack.Screen name="Home" component={Home}/>
-     <Stack.Screen name= "CreateUser" component={CreateUser}/>
-     <Stack.Screen name= "Faq" component={Faq}/>
-     <Stack.Screen name= "Login" component={Login}/>
+      
+      
+      <Stack.Screen name="Home" component={Home}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen name="CreateUser"
+        component={CreateUser}
+        options={{
+          title: '',
+        }} />
+        <Stack.Screen name="InsertPin" component={InsertPin}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
+        options={{
+          headerTitle: ''
+        }}
+      />
+       <Stack.Screen name="RegisterAdress" component={RegisterAdress}
+        options={{
+          headerTitle: '',
+        }}
+      />
+      <Stack.Screen name="UserProfile"
+        component={UserProfile}
+        options={{
+          title: '',
+        }} 
+      />
+      {/* <Stack.Screen name= "Faq" component={Faq}/> */}
+      <Stack.Screen name="Login" component={Login}
+        options={{
+          headerTitle: '',
+          headerStyle: {
+            backgroundColor: '#1e1e1e',
+          },
+        }} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword}
+      />
+     
     </Stack.Navigator>
   )
 }
@@ -27,12 +82,12 @@ function MyStack(){
 export default function App() {
   return (
     <Provider store={store}>
-    <NavigationContainer>
-    {/* <MyStack/> */}
-    <MyStack/>
-  </NavigationContainer>
-  </Provider>
-   
+      <NavigationContainer>
+        {/* <MyStack/> */}
+        <MyStack />
+      </NavigationContainer>
+    </Provider>
+
   );
 }
 

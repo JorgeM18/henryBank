@@ -1,5 +1,5 @@
 require("dotenv").config();
-const {User} = require('../../db.js');
+const {User, Blacklist} = require('../../db.js');
 const { MoleculerError } = require("moleculer").Errors;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -26,7 +26,7 @@ module.exports = async (ctx)=>{
 
         data.password = undefined;
         data.pin = undefined;
-
+        await Blacklist.create({token})
         return { 
             message:"success", 
             data,

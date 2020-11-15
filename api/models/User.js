@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
         allowNull: true
     },
     documentnum:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.BIGINT,
       allowNull: true,
       unique: true
     },
@@ -51,6 +51,9 @@ module.exports = (sequelize) => {
     approved:{
         type: DataTypes.BOOLEAN,
         allowNull: true
+    },
+    country: {
+      type: DataTypes.STRING,
     },
     province:{
       type: DataTypes.STRING,
@@ -68,8 +71,8 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: true
     }, 
-    resetPasswordToken: DataTypes.STRING,
-    resetPasswordExpires: DataTypes.DATE
+    passwordResetPIN: DataTypes.INTEGER,
+    resetPinExpires: DataTypes.DATE
   });
 }; 
   
