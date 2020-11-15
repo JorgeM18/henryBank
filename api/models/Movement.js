@@ -4,6 +4,10 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 
    sequelize.define('movement', {
+    numTransaction:{
+      type: DataTypes.BIGINT,
+      allowNull: false
+    },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -14,10 +18,6 @@ module.exports = (sequelize) => {
     },
     description: {
       type: DataTypes.TEXT
-    },
-    account_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
     },
     movement_type: {
       type: DataTypes.STRING,
