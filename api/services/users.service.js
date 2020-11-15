@@ -98,12 +98,12 @@ module.exports = {
                 path:"/approveUser" 
             },
             // params:{
-            //     name:"string",
+            //     // name:"string",
             //     lastname:"string",
-            //     pin:"number",
+            //     // pin:"number",
             //     phone:"number",
             //     birth:"string",
-            //     image:"string",
+            //     // image:"string",
             // },
             handler: approveUser
 		},

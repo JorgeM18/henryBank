@@ -131,7 +131,6 @@ const CreateUser = (props) => {
     }
 
     const createNewUser =  () => {
-    //    console.warn(state)
         if (state.name === '' ||
         state.password === '' ||
         state.email === '') {
@@ -146,9 +145,19 @@ const CreateUser = (props) => {
                 email: '',
                 password: ''
             })
+            Alert.alert(
+                'GO Bank',
+                'Plaese confirm your Email!',
+                [{
+                    text: 'OK',
+                    onPress: ()=>{props.navigation.navigate("InsertPin")}
+                }]
+
+            )
             
-            props.navigation.navigate("InsertPin")
+           
         }
+     
 
     }
 

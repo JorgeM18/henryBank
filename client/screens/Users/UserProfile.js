@@ -23,11 +23,19 @@ const ProfileUser = (props) => {
     const Logout= () =>{
         Alert.alert(
             'Logout', //titulo
-            'Esta seguro de cerrar sesion', //Mensaje
+            'Are you sure to log out?', //Mensaje
             [{
                 text: 'OK', //Arreglo de botones
-                onPress: ()=> {logHome()}
-            }],
+                onPress: ()=> {logHome()},
+                
+            },
+            {
+                text:'Cancel',
+                style:'cancel',
+                onPress: ()=> {props.navigation.navigate('UserProfile')},
+            }
+        ],
+        
         
         )
     }
