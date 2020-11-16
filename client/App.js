@@ -14,6 +14,7 @@ import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
+import MyData from './screens/MyData'
 
 
 const Stack = createStackNavigator()
@@ -77,6 +78,7 @@ function MyStack() {
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
      
+     <Stack.Screen name="MyData" component={MyData}/>
     </Stack.Navigator>
   )
 }
