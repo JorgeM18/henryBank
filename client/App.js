@@ -14,6 +14,7 @@ import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
+import MyProducts from './screens/Users/MyProducts';
 
 
 const Stack = createStackNavigator()
@@ -74,6 +75,9 @@ function MyStack() {
           },
           headerLeft: null
         }} />
+        <Stack.Screen name="MyProducts" component={MyProducts}
+        
+      />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
      
