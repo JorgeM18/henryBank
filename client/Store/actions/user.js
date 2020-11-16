@@ -37,7 +37,7 @@ export const loginUser = (user) => (dispatch) => {
     };
   
     return axios
-      .post(`http://${localhost}/api/user/login`, userEnv)
+      .post(`http://${URL}/api/user/login`, userEnv)
       .then((res) => {
         console.log('ENTRÉ AL ACTION')
         console.log(res.data)
@@ -60,7 +60,7 @@ export const loginUser = (user) => (dispatch) => {
   //VELIDAR PIN
 export function validarPin(pin, props){
     return function(dispatch){
-        return axios.post(`http://${localhost}/api/user/validateUserPin`, {'pin': pin } )
+        return axios.post(`http://${URL}/api/user/validateUserPin`, {'pin': pin } )
         .then(resp=>{
           // console.warn(resp.data.message)
           console.log(resp)
@@ -96,7 +96,7 @@ export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, 
   // console.log('USUARIO RECIVIDO', usuario)
 
     return function(dispatch){
-        return axios.put(`http://${localhost}/api/user/approveUser`, usuario)
+        return axios.put(`http://${URL}/api/user/approveUser`, usuario)
         .then(resp=>{
           // console.warn(resp)
             dispatch({
@@ -118,7 +118,7 @@ export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, 
 export function addAddress(payload){
   console.log(payload)
   return function(dispatch){
-      return axios.put(`http://${localhost}/api/user/cuentaGo`, payload )
+      return axios.put(`http://${URL}/api/user/cuentaGo`, payload )
       .then(resp=>{
         console.log('ENTRÉ AL ACTION')
         console.log(resp.data)

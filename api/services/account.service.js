@@ -1,6 +1,7 @@
 "use strict";
 
 const { account } = require('../controllers/accounts/accounts.controllers')
+const { balanceAndImage } = require('../controllers/accounts/miPosicion.controllers')
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -31,7 +32,14 @@ module.exports = {
                 path:"/new" 
             },
             handler:account
-        }
+		},
+		balance: {
+			rest: {
+				method: 'GET',
+				path: '/mybalance'
+			},
+			handler: balanceAndImage
+		}
     },
 
 	/**

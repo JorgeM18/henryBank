@@ -8,6 +8,9 @@ const hbs = require('nodemailer-express-handlebars');
 const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
 var juice = require('juice');
+const fs = require('fs');
+const path = require('path');
+
 
 const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 10;
@@ -19,6 +22,16 @@ const {
 
 
 const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingresada
+
+  const emailHtml = fs.readFileSync(path.join(__dirname + '../../../views/passwordReset.html')).toString()
+  const emailCss = fs.readFileSync(path.join(__dirname + '../../../views/changePassTemp.css')).toString()
+  const inlineHtml = juice.inlineContent(emailHtml, emailCss, { preserveMediaQueries: true });
+
+  fs.writeFile(path.join(__dirname + '../../../views/juicePassword.html'), inlineHtml, function (err) {
+    if (err) throw err;   
+                console.log('Results Received');
+  }); 
+  
     // var error;
     // var success; 
         if (ctx.params.email === '') {
@@ -54,12 +67,7 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
             });
 
 
-            // juice("../../views/passwordReset.html", function(err, html) {
-            //   console.log(html);
-            // });
-
-            // const inlineHtml = juice.inlineContent(emailHtml, emailCss, { preserveMediaQueries: true });
-            
+        
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
@@ -86,7 +94,7 @@ const forgotPassword = async (ctx) => {    // envia el mail a la direccion ingre
               from: 'gohenrybank2020@gmail.com',
               to: `${user.email}`,
               subject: 'Recupere su cuenta de Go HBank',
-                template: "passwordReset",
+                template: "juicePassword",
                 context: pinObject
         
             };
