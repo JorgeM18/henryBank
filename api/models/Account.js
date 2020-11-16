@@ -14,12 +14,9 @@ module.exports = (sequelize) => {
       unique: true,
     },
     cbu:{
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        validate: {
-            isNumeric: true 
-        }  
+        unique: true 
     },
     pin:{
         type: DataTypes.INTEGER,
