@@ -1,5 +1,6 @@
 "use strict";
 
+const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
 const {transaction} = require('../controllers/accounts/movement.controllers')
 
 /**
@@ -36,7 +37,14 @@ module.exports = {
                 amount:"number",
             },
             handler:transaction
-        }
+		},
+		incomeOutcome: {
+			rest: {
+				method: 'GET',
+				path: '/incomeOutcome'
+			},
+			handler: incomeOutcome
+		}
     },
 
 	/**
