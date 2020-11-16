@@ -40,6 +40,10 @@ const ProfileUser = (props) => {
         )
     }
 
+    const goProducts = () =>{
+        props.navigation.navigate('MyProducts')
+    }
+
     
    
     return (
@@ -143,7 +147,7 @@ const ProfileUser = (props) => {
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button1}>
+                    <TouchableOpacity style={style.button1} onPress={()=>goProducts()}>
                     <Feather
                          style={style.icon}
                         name="credit-card"
