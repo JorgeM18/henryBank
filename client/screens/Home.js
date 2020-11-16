@@ -41,7 +41,7 @@ const Home = (props) => {
                 </View>
                 <View>
                     <TouchableOpacity style={style.login}
-                        onPress={() => props.navigation.navigate("Login")}>
+                        onPress={() => props.navigation.navigate("MyData")}>
                         <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{marginHorizontal: '7%'}} onPress={()=>{props.navigation.navigate("ForgotPassword")}}>
