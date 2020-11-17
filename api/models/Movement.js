@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
 
    sequelize.define('movement', {
     numTransaction:{
-      type: DataTypes.BIGINT,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     state: {
@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     description: {

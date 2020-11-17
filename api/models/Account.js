@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
 
   sequelize.define('account', {
     balance:{
-      type: DataTypes.BIGINT,
+      type: DataTypes.FLOAT,
       allowNull: false,
       default: 0,
     },
