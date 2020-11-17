@@ -1,6 +1,6 @@
 "use strict";
 
-const {transaction} = require('../controllers/accounts/movement.controllers')
+const {transaction, paypalDeposits, confirmPaypal} = require('../controllers/accounts/movement.controllers')
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -36,7 +36,32 @@ module.exports = {
                 amount:"number",
             },
             handler:transaction
-        }
+		},
+		paypal:{
+			rest:{ 
+                method:"GET",
+                path:"/paypal" 
+			},
+			handler:paypalDeposits
+		},
+		paypalConfirm:{
+			rest:{ 
+                method:"GET",
+                path:"/paypal/confirm" 
+			},
+			handler:confirmPaypal
+		},
+		///Aqui es simpleme de prueba para que tiren un mensaje si fue rechazado el deposito con paypal
+		cancelPaypal:{
+			rest:{ 
+                method:"GET",
+                path:"/paypal/cancel" 
+			},
+			async handler(ctx){
+				return "Su Deposito no se pudo realizar vuelva a intentarlo"
+			}
+		}
+		//------------------------------------------------------------------------------------------
     },
 
 	/**
