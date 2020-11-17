@@ -12,9 +12,9 @@ const Payment = () => {
     const [paymentStatus, setPaymentStatus] = useState('')
 
     const cartInfo = {
-        id: '5eruyt35eggr76476236523t3',
+        id: '001',
         description: 'Recarga xxx',
-        amount: 1
+        amount: 100
     }
 
     const onCheckStatus = async (paymentResponse) => {
@@ -39,22 +39,22 @@ const Payment = () => {
             if(stripeResponse){
 
                 // const { paid } = stripeResponse.data;
-                const paid = false
+                const paid = true
                 if(paid === true){
-                    setPaymentStatus('Payment Success')
+                    setPaymentStatus('Pago Aprobado')
                 }else{
-                    setPaymentStatus('Payment failed due to some issue')
+                    setPaymentStatus('El Pago no pudo realizarse')
                 }
 
             }else{
-                setPaymentStatus(' Payment failed due to some issue')
+                setPaymentStatus('El Pago no pudo realizarse')
             }
 
             
         } catch (error) {
             
             console.log(error)
-            setPaymentStatus(' Payment failed due to some issue')
+            setPaymentStatus('El Pago no pudo realizarse')
 
         }
  
@@ -66,9 +66,9 @@ const Payment = () => {
         if(!makePayment){
 
             return <View style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 300, marginTop: 50}}>
-                    <Text style={{ fontSize: 25, margin: 10}}> Make Payment </Text>
-                    <Text style={{ fontSize: 16, margin: 10}}> Product Description: {cartInfo.description} </Text>
-                    <Text style={{ fontSize: 16, margin: 10}}> Payable Amount: {cartInfo.amount} </Text>
+                    <Text style={{ fontSize: 25, margin: 10}}> Recarga </Text>
+                    <Text style={{ fontSize: 16, margin: 10}}> Descripcion: {cartInfo.description} </Text>
+                    <Text style={{ fontSize: 16, margin: 10}}> Monto de la recarga: {cartInfo.amount} </Text>
 
                     <TouchableOpacity style={{ height: 60, width: 300, backgroundColor: colors.BACKGROUND_COLOR, borderRadius: 30, justifyContent: 'center', alignItems: 'center'
                         }}
@@ -77,7 +77,7 @@ const Payment = () => {
                         }}
                         >
                         <Text style={{ color: '#FFF', fontSize: 20}}>
-                            Proceed To Pay
+                            Recarga
                         </Text>
 
                     </TouchableOpacity>
@@ -113,9 +113,6 @@ return (<View style={styles.container}>
 
 const styles = StyleSheet.create({
 container: { flex: 1, paddingTop: 100},
-navigation: { flex: 2, backgroundColor: 'red' },
-body: { flex: 10, justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow' },
-footer: { flex: 1, backgroundColor: 'cyan' }
 })
 
  export default Payment 

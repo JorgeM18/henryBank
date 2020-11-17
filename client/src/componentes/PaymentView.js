@@ -4,10 +4,10 @@ import { WebView } from 'react-native-webview'
 import {colors} from '../../utils/colors'
 
 const STRIPE_PK = 'pk_test_51HnlqfEKRq8mvB76qSD4J42RjJaEKq5iMIjMMFgqhoOeMHOeAB5kbKH7SflJ8iWhSVmib5Dhu4627uWv8K4z8I59006ImGJ8g2'
+const nombreUsuario='Nombre del Usuario'
 
 
 const PaymentView = (props) => { 
-    console.log('entro', props)
 
     const { amount, product} = props
 
@@ -49,7 +49,8 @@ const PaymentView = (props) => {
                     justify-content: space-around;
                 }
                 .card-name{
-                    padding: 20;
+                    padding: 30;
+                    padding-left: 10px;
                     color: '#FFF';
                     font-weight: 500;
                     font-size: '25px';
@@ -98,8 +99,8 @@ const PaymentView = (props) => {
                 <div class="container-fluid">
                     <div class="row">
                         <div class="products-info">
-                            Product Info: ${product}
-                            Amount: ${amount}
+                            Informacion del movimiento: ${product}
+                            Monto: ${amount}
                         </div>
                     </div>
                     <div class="row">
@@ -108,22 +109,22 @@ const PaymentView = (props) => {
             
                         <form>
                             <div class="card-holder">
-                                    <input type="text" placeholder="Card Holder Name" id="card-name" class="card-name" />
+                                    <input type="text" placeholder='${nombreUsuario}' id="card-name" class="card-name" />
                                     <div id="card-element" class="card-element">
                                         <div class="form-group">
-                                            <label for="card_number">Carn Number</label>
+                                            <label for="card_number">Numero de la Tarjeta</label>
                                             <input type="text" class="form-control" id="card_number" data-stripe="number">
                                         </div>
                                         <div class="form-row">
                                             <label>
-                                                <span>Card number</span>
+                                                <span>Numero de la Tarjeta</span>
                                                 <input type="text" size="18" data-stripe="number">
                                             </label>
                                         </div> 
                                     
                                         <div class="form-row">
                                         <label>
-                                            <span>Expiration (MM/YY)</span>
+                                            <span>Expiración: (MM/YY)</span>
                                             <input type="text" size="2" data-stripe="exp_month">
                                         </label>
                                         <span> / </span>
@@ -149,7 +150,7 @@ const PaymentView = (props) => {
                                 </div>
                             
                                 <div class="pay-btn">
-                                    <input type="submit" class="btn btn-info btn-lg" value="Pay Now" />
+                                    <input type="submit" class="btn btn-dark btn-lg" value="Enviar" />
                                 </div>
                 
                         </form>
