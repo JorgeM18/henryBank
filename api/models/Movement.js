@@ -22,6 +22,9 @@ module.exports = (sequelize) => {
     movement_type: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    commerce: {
+      type: DataTypes.STRING
     }
   });
 };

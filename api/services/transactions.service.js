@@ -1,7 +1,8 @@
 "use strict";
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
-const {transaction} = require('../controllers/accounts/movement.controllers')
+const {transaction} = require('../controllers/accounts/movement.controllers');
+const { cash } = require('../controllers/accounts/cash.controllers')
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -44,6 +45,13 @@ module.exports = {
 				path: '/incomeOutcome'
 			},
 			handler: incomeOutcome
+		},
+		cash: {
+			rest: {
+				method: 'POST',
+				path: '/cash'
+			},
+			handler: cash
 		}
     },
 
