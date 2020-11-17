@@ -6,9 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import {logout} from '../../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
+import * as Contacts from 'expo-contacts';
+import { useEffect } from 'react';
 
 const ProfileUser = (props) => {
     const dispatch=useDispatch()
@@ -35,17 +34,39 @@ const ProfileUser = (props) => {
                 onPress: ()=> {props.navigation.navigate('UserProfile')},
             }
         ],
-        
-        
         )
     }
 
-    
-   
+    useEffect(() => {
+        //me traigo los contactos con expo contacts
+        (async () => {
+          const { status } = await Contacts.requestPermissionsAsync();
+          if (status === 'granted') {
+            const { data } = await Contacts.getContactsAsync({
+              fields: [Contacts.Fields.PhoneNumbers],
+            });
+            //compruebo que haya data y la filtro, generando un array de contactos prolijo
+            if (data.length > 0) {
+              const contacts = data;
+              console.log(contacts)
+              
+              let newContacts = []
+              for (let i = 0; i < contacts.length; i++){
+                let add = {name: contacts[i]["name"], phones: contacts[i]["phoneNumbers"]}
+                newContacts.push(add)
+              }
+             //falta contectar con el back y reflejarlo en la pantalla ContactList
+            }
+          }
+        })();
+      }, []);
+
+    const goProducts = () =>{
+        props.navigation.navigate('MyProducts')
+    }
+
     return (
-     
-              <View style={style.container}>
-                    
+        <View style={style.container}>        
             <View style={style.banner}>
                 <View style={{alignItems:'flex-end', marginHorizontal:'3%'}}>
                     <TouchableOpacity onPress={()=>Logout()}>
@@ -143,7 +164,7 @@ const ProfileUser = (props) => {
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button1}>
+                    <TouchableOpacity style={style.button1} onPress={()=>goProducts()}>
                     <Feather
                          style={style.icon}
                         name="credit-card"

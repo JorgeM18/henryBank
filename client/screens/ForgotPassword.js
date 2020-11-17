@@ -22,7 +22,7 @@ const[email, setEmail] = useState('');
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setEmail(text)}/>
             </View>
-            <TouchableOpacity style={styles.send_emailBtn} onPress={props.navigation.navigate("CreateUser")}>
+            <TouchableOpacity style={styles.send_emailBtn} onPress={()=>props.navigation.navigate("InsertPin")}>
             <Text style={styles.textButton}>Send Email</Text>
             </TouchableOpacity>
 

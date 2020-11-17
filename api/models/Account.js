@@ -4,7 +4,7 @@ module.exports = (sequelize) => {
 
   sequelize.define('account', {
     balance:{
-      type: DataTypes.BIGINT,
+      type: DataTypes.FLOAT,
       allowNull: false,
       default: 0,
     },
@@ -14,12 +14,9 @@ module.exports = (sequelize) => {
       unique: true,
     },
     cbu:{
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        validate: {
-            isNumeric: true 
-        }  
+        unique: true 
     },
     pin:{
         type: DataTypes.INTEGER,
