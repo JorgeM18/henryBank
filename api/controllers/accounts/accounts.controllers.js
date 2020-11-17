@@ -19,7 +19,7 @@ const account = async (ctx) =>{
     try{
 
         const data = await Account.create({
-            balance:0,
+            balance:500,
             alias:alias,
             cbu:cbuCode,
             pin:pin,

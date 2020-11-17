@@ -1,6 +1,10 @@
 "use strict";
 
+
+
+const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
 const {transaction, paypalDeposits, confirmPaypal} = require('../controllers/accounts/movement.controllers')
+
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -37,7 +41,7 @@ module.exports = {
             },
             handler:transaction
 		},
-		paypal:{
+  	paypal:{
 			rest:{ 
                 method:"GET",
                 path:"/paypal" 
@@ -60,8 +64,16 @@ module.exports = {
 			async handler(ctx){
 				return "Su Deposito no se pudo realizar vuelva a intentarlo"
 			}
-		}
+		},
 		//------------------------------------------------------------------------------------------
+		incomeOutcome: {
+			rest: {
+				method: 'GET',
+				path: '/incomeOutcome'
+			},
+			handler: incomeOutcome
+		}
+
     },
 
 	/**
