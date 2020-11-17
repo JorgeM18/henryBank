@@ -25,6 +25,7 @@
     "moleculer-repl": "^0.6.4"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "handlebars": "^4.7.6",
@@ -39,6 +40,7 @@
     "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
+    "paypal-rest-sdk": "^1.8.1",
     "pg": "^8.4.2",
     "sequelize": "^6.3.5"
   },

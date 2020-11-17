@@ -55,11 +55,15 @@ const ProfileUser = (props) => {
                 let add = {name: contacts[i]["name"], phones: contacts[i]["phoneNumbers"]}
                 newContacts.push(add)
               }
-              
+             //falta contectar con el back y reflejarlo en la pantalla ContactList
             }
           }
         })();
       }, []);
+
+    const goProducts = () =>{
+        props.navigation.navigate('MyProducts')
+    }
 
     return (
         <View style={style.container}>        
@@ -160,7 +164,7 @@ const ProfileUser = (props) => {
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button1}>
+                    <TouchableOpacity style={style.button1} onPress={()=>goProducts()}>
                     <Feather
                          style={style.icon}
                         name="credit-card"

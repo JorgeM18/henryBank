@@ -120,9 +120,10 @@ const getMyData = async (ctx) => {  // obtener informacion del usuario segun id
 
 const editData = async (ctx) => {                         // editar num telefono y domicilio de un usuario segun id
     console.log(ctx.params)   
-    const { provincia, pais, calle, numero, email, localidad} = ctx.params;
+    const { provincia, pais, calle, numero, email, localidad, phone } = ctx.params;
     try {
         const user = await User.update({
+            phone: phone,
             province: provincia,
             city: localidad,
             address: calle,
