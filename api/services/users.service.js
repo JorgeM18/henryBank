@@ -1,11 +1,10 @@
 "use strict";
+// IMPORTS
 
-//const getCard = require('../controllers/getCard') // Se trae el controller (lo que va a hacer la accion cuando se ejecute) desde la carpeta "controllers" 
-//const addCard = require('../controllers/addCard')
-const { createUser, getMyData, editData, editUser } = require('../controllers/users/users.controllers');
+// ACTIONS
+const { createUser, getMyData, editData, editUser, getContacts, addContact, editContact, addToFavorite, blockContact, searchContacts } = require('../controllers/users/users.controllers');
 const { forgotPassword, validatePasswordPin, updatePassword } = require('../controllers/users/resetPassword.controllers');
 const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
-// const createUser = require('../controllers/users/users.controllers')
 const login = require('../controllers/authentication/login.controllers');
 const logout = require('../controllers/authentication/logout.controller');
 /**
@@ -13,25 +12,18 @@ const logout = require('../controllers/authentication/logout.controller');
  */
 
 module.exports = {
-	name: "user", // <-- seria el nombre de la ruta quiere decir que aqui seria http://localhost:3000/api/user
+	name: "user", // <--  http://localhost:3000/api/user
 
-	/**
-	 * Settings
-	 */
-	settings: {
-		
-	},
+	//////////////// SETTINGS ////////////////
+	settings: {},
 
-	/**
-	 * Dependencies
-	 */
+	//////////////// DEPENDENCIES ////////////////
 	dependencies: [],
 
-	/**
-	 * Actions
-	 */
-    actions: { // Aqui van las acciones que tendria la ruta "api/user" 
+	//////////////// ACTIONS ////////////////
+    actions: { // <-- http://localhost:3000/api/user/${ruta_action}
 
+		// LOGIN/LOGOUT
 		login:{
 			rest:{ 
 					method:"POST",
@@ -55,6 +47,7 @@ module.exports = {
 			handler:logout
 		},
 
+		// USER
         createUser:{
             rest:{ 
                 method:"POST",
@@ -67,7 +60,15 @@ module.exports = {
             // },
             handler: createUser
 		},
+		editUser:{
+			rest: {
+				method: 'PUT',
+				path: '/editUser'
+			},
+			handler: editUser
+		},
 
+		// DATA
 		getMyData: {
 			rest: {
 				method: 'GET', 
@@ -75,7 +76,6 @@ module.exports = {
 			},
 			handler: getMyData
 		},
-
 		editData: {
 			rest: {
 				method: 'PUT',
@@ -84,6 +84,7 @@ module.exports = {
 			handler: editData
 		},
 		
+		// PIN VALIDATIONS
 		validateUserPin: {
 			rest: {
 				method: 'POST',
@@ -91,7 +92,6 @@ module.exports = {
 			},
 			handler: validateUserPin
 		},
-
 		 approveUser:{
             rest:{ 
                 method:"PUT",
@@ -108,6 +108,7 @@ module.exports = {
             handler: approveUser
 		},
 		
+		// PASSWORD
 		forgotPassword: {
 			rest: {
 				method: 'POST',
@@ -115,7 +116,6 @@ module.exports = {
 			},
 			handler: forgotPassword
 		}, 
-
 		validatePasswordPin: {
 			rest: {
 				method: 'POST',
@@ -123,7 +123,6 @@ module.exports = {
 			},
 			handler: validatePasswordPin
 		}, 
-
 		updatePassword: {
 			rest: {
 				method: 'PUT',
@@ -131,48 +130,63 @@ module.exports = {
 			},
 			handler: updatePassword
 		},
-		editUser:{
+
+		//CONTACTS
+		getContacts: {
+			rest: {
+				method: 'GET',
+				path: '/contacts'
+			},
+			handler: getContacts
+		},
+		addContact: {
+			rest: {
+				method: 'POST',
+				path: '/addContact'
+			},
+			handler: addContact
+		},
+		editContact: {
 			rest: {
 				method: 'PUT',
-				path: '/editUser'
+				path: '/editContact'
 			},
-			handler: editUser
-		}
+			handler: editContact
+		},
+		addTofavorite: {
+			rest: {
+				method: 'PUT',
+				path: '/addToFavorite'
+			},
+			handler: addToFavorite
+		},
+		blockContact: {
+			rest: {
+				method: 'PUT',
+				path: '/blockContact'
+			},
+			handler: blockContact
+		},
+		searchContacts: {
+			rest: {
+				method: 'GET',
+				path: '/searchContacts/'
+			},
+			handler: searchContacts
+		},
 
     },
 
-	/**
-	 * Events
-	 */
-	events: {
+	//////////////// EVENTS ////////////////
+	events: {},
 
-	},
+	//////////////// METHODS ////////////////
 
-	/**
-	 * Methods
-	 */
-	methods: {
+	methods: {},
 
-	},
+	//////////////// LIFECYCLES ////////////////
 
-	/**
-	 * Service created lifecycle event handler
-	 */
-	created() {
-
-	},
-
-	/**
-	 * Service started lifecycle event handler
-	 */
-	async started() {
-
-	},
-
-	/**
-	 * Service stopped lifecycle event handler
-	 */
-	async stopped() {
-
-	}
+	created() {},
+	async started() {},
+	async stopped() {}
 };

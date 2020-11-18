@@ -4,8 +4,9 @@ import {URL} from '@env';
 import {Alert} from 'react-native'
 
 export const ADD_USER='ADD_USER'
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
-const LOGIN_FAIL = 'LOGIN_FAIL'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAIL = 'LOGIN_FAIL'
+export const POST_CONTACTS = 'POST_CONTACTS'
 
 //ACTIONS CREATE: CREAR UN USUARIO 
 export function createUser(user){
@@ -69,7 +70,6 @@ export function validarPin(pin, props){
                 pin:resp.data.pin
             })
             if(resp.data.message==='success'){
-
               props.navigation.navigate("CompleteDataUser")
             }
         })
