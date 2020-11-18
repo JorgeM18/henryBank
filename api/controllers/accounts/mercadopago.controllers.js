@@ -4,9 +4,12 @@ const { Errors } = require('moleculer-web');
 const {User, Account, Movement} = require('../../db.js');
 const { Sequelize, Model } = require("sequelize");
 require('dotenv').config();
-const open = require('open');
+const { default: Axios } = require("axios");
+// const open = require('open');
+
 const {
-  ACCESS_TOKEN_MERCADOPAGO
+  ACCESS_TOKEN_MERCADOPAGO,
+  URL
 } = process.env;
 
 
@@ -23,47 +26,64 @@ const {
 
 
 mercadopago.configure({
-    access_token: ACCESS_TOKEN_MERCADOPAGO //token de la cuenta "GoBank" (la primera de las de arriba)
+    access_token: ACCESS_TOKEN_MERCADOPAGO   //token de la cuenta "GoBank" (la primera de las de arriba)
 });
 
 const mercadoPago = async (ctx) => {
 
-  const { amount, id } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero lo hice asi 
+  const { amount, id } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero qcyo lo hice asi 
 
-    var preference = {}
+    var preference = {
+      back_urls: {
+        success: `http://${URL}/api/transactions/mercadopagoconfirm`,
+        failure: `http://${URL}/api/transactions/failure`
+      },
+      binary_mode: true,
+      // auto_return: 'approved'
+    }
     
-    var item = {
+    var item =  {
+      id: '1234',
       title: 'Recarga',
+      description: 'Inspired by the classic foldable art of origami',
+      category_id: 'home',
       quantity: 1,
       currency_id: 'ARS',
       unit_price: amount
     }
     
+
     var payer = {
-      email: "demo@mail.com"
+      name: "Charles",
+      surname: "Luevano",
+      email: "charles@hotmail.com",
+      date_created: "2015-06-02T12:58:41.425-04:00",
+      phone: {
+        area_code: "",
+        number: 949128866
+      },
+      
+      identification: {
+        type: "DNI",
+        number: "12345678"
+      },
+      
+      address: {
+        street_name: "Cuesta Miguel Armendáriz",
+        street_number: 1004,
+        zip_code: "11020"
+      }
     }
-    
+
     preference.items = [item]
     preference.payer = payer
     
     var res = await mercadopago.preferences.create(preference);
-
+    console.log(res)
     console.log(res.body.init_point, 'MP-' + res.body.id)
     // return res;
     
-    //hacer q se abra el link res.body.init_point en el browser. FALTA ESTO
-
-  //   const op = async () => {
   
-  //     await open('https://sindresorhus.com');
-   
-  // };
-
- 
-  
-   
- 
-
 
   try {
 
@@ -82,25 +102,32 @@ const mercadoPago = async (ctx) => {
         accountId: account.id
       })
 
-      var oldBalance = account.balance
-      await account.update({
-        balance: oldBalance + amount
-      })
-
+      //ESTO EFECTUARLO MAS ADELANTE CUANDO TERMINE EL PAGO EN EL BROWSER SI SALE EXITOSO
+      // var oldBalance = account.balance
+      // await account.update({
+      //   balance: oldBalance + amount
+      // })
       // await account.update({balance: Sequelize.literal(`balance + ${amount}`)})
 
       const json = {
         message: 'success',
         content: {
+            link: res.body.init_point,
             movement: mov,
-            newBalance: account.balance
+            idPago: res.body.id
+            // newBalance: account.balance
         }
     }
+
+    
+
 
       if(!account || !mov) {
         throw new Error
       } else {
-        await open(res.body.init_point, {app: 'chrome'});
+        // await open(res.body.init_point, {app: 'chrome'});  //esto abre en el browser de la pc no en el telefono? probar
+        // window.open("https://www.google.com/" , '_system')
+
         return json
       }
 
@@ -110,7 +137,109 @@ const mercadoPago = async (ctx) => {
         
   }
 
+  const mercadoPagoConfirm = async (ctx) => {
+    console.log(ctx.params, 'esto')
+    const { payment_id, status } = ctx.params
+    const id = ctx.params.preference_id
 
-module.exports = {
-  mercadoPago
-}
+  //   const data = await Axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`,{
+  //     headers:{
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer ' + ACCESS_TOKEN_MERCADOPAGO
+  //     } 
+  // })
+
+  // const approved = await Axios.get('http://localhost:3000/api/transactions/mercadopago/success')
+  // console.log(approved)
+  // const data = await Axios.get(`https://api.mercadopago.com/v1/payments/${payment_id}`,{
+  //     headers:{
+  //         'Content-Type': 'application/json',
+  //         'Authorization': 'Bearer ' + ACCESS_TOKEN_MERCADOPAGO
+  //     }
+  // })
+  // .then(res=> {
+  //   console.log(res, 'y?')
+  // }).catch(err=> {
+  //   console.log(err, 'q malll')
+  //   throw new Error
+  // })
+
+        if(status !== 'approved' ) {   // mientras no funcione el obtener pago voy solo con el search pago a no devuelve un status
+          throw new Error
+        } else {
+        
+          var mov = await Movement.findOne({
+              where: {
+                numTransaction: 'MP-' + id
+              }
+          })
+
+          var account = await Account.findOne({
+            where: {
+              id: mov.accountId
+            }
+          })
+          var oldBalance = account.balance
+          console.log(mov.state, 'jejejejejeje')
+          if(mov.state !== 'complete'){
+            await mov.update({state:"complete"})
+            await account.update({balance: oldBalance + mov.amount})
+            return {
+              message:"success",
+              content:{
+                  state:'Deposit success',
+                  complete:true
+              }
+          }
+          }
+
+        }
+  }
+
+
+  const mercadoPagoFailure = async (ctx) => {
+
+      console.log(ctx.params,'holi')
+      const { status } = ctx.params
+      const id = ctx.params.preference_id
+
+      if(status !== 'rejected' ) {   // mientras no funcione el obtener pago voy solo con el search pago a no devuelve un status
+        throw new Error
+      } else {
+        // update al movement.state a complete
+        // update al account.balance a oldamount+newamount
+        var mov = await Movement.findOne({
+            where: {
+              numTransaction: 'MP-' + id
+            }
+        })
+    
+        
+        
+        console.log(mov.state)
+        if(mov.state !== 'cancelled'){
+          await mov.update({state:"cancelled"})
+          
+          return {
+            message:"payment cancelled",
+            content:{
+                state:'Deposit canceled',
+                complete:true
+            }
+        }
+        }
+    
+      }
+
+  }
+  
+  
+
+
+        module.exports = {
+          mercadoPago,
+          mercadoPagoConfirm,
+          mercadoPagoFailure
+        }
+
+

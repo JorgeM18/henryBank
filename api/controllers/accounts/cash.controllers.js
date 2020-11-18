@@ -30,7 +30,7 @@ const cash = async (ctx) => {
                 userId: id
             }
         })
-        console.log(account)
+
         const mov = await Movement.create({
         numTransaction: numMov,
         state: 'complete',

@@ -4,7 +4,7 @@
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
 const { cash } = require('../controllers/accounts/cash.controllers');
-const { mercadoPago } = require('../controllers/accounts/mercadopago.controllers');
+const { mercadoPago, mercadoPagoConfirm, mercadoPagoFailure } = require('../controllers/accounts/mercadopago.controllers');
 const {transaction, paypalDeposits, confirmPaypal} = require('../controllers/accounts/movement.controllers')
 
 
@@ -88,6 +88,20 @@ module.exports = {
 				path: '/mercadopago'
 			},
 			handler: mercadoPago
+		},
+		mercadoPagoConfirm: {
+			rest: {
+				method: 'GET',
+				path: '/mercadopagoconfirm'
+			},
+			handler: mercadoPagoConfirm 
+		},
+		mercadoPagoFailure: {
+			rest: {
+				method: 'GET',
+				path: '/failure'
+			},
+			handler: mercadoPagoFailure
 		}
 
     },
