@@ -2,7 +2,9 @@
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
 const {transaction} = require('../controllers/accounts/movement.controllers');
-const { cash } = require('../controllers/accounts/cash.controllers')
+const { cash } = require('../controllers/accounts/cash.controllers');
+const { mercadoPago } = require('../controllers/accounts/mercadopago.controllers');
+
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -52,6 +54,13 @@ module.exports = {
 				path: '/cash'
 			},
 			handler: cash
+		},
+		mercadoPago: {
+			rest: {
+				method: 'POST',
+				path: '/mercadopago'
+			},
+			handler: mercadoPago
 		}
     },
 

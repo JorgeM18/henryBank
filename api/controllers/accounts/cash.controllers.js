@@ -21,7 +21,7 @@ const numTransaction = async () =>{
 }
 
 const cash = async (ctx) => {
-    const {id, amount, commerce } = ctx.params
+    const {id, amount, commerce } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero lo hice asi 
     const numTransaction = await numTransaction();
     try {
 
@@ -35,7 +35,8 @@ const cash = async (ctx) => {
         state: 'complete',
         amount,
         commerce,
-        movement_type: 'cash',
+        description: 'cash',
+        movement_type: 'deposits',
         accountId: account.id
     })
     const json = {
