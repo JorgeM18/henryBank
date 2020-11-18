@@ -4,20 +4,20 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 
    sequelize.define('movement', {
+    numTransaction:{
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     amount: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     description: {
       type: DataTypes.TEXT
-    },
-    account_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
     },
     movement_type: {
       type: DataTypes.STRING,

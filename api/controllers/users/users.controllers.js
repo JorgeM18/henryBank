@@ -7,7 +7,9 @@ const bcrypt = require('bcrypt');
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 // const { Sequelize } = require('sequelize');
-// var fs = require('fs');
+const fs = require('fs');
+const path = require('path');
+var juice = require('juice');
 const hbs = require('nodemailer-express-handlebars');
 // const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 12;
@@ -19,6 +21,17 @@ const {
 
 
 const createUser =  async (ctx)=>{              // crea un usuario y envia el mail de validacion
+
+
+const emailHtml = fs.readFileSync(path.join(__dirname + '../../../views/crateUserMail.html')).toString()
+const emailCss = fs.readFileSync(path.join(__dirname + '../../../views/createUserMail.css')).toString()
+const inlineHtml = juice.inlineContent(emailHtml, emailCss, { preserveMediaQueries: true });
+
+fs.writeFile(path.join(__dirname + '../../../views/juiceCreateUser.html'), inlineHtml, function (err) {
+      if (err) throw err;   
+      console.log('Results Received');
+}); 
+
 
 var pin = Math.floor(Math.random() * 999999)
 while(pin.toString().length !== 6) {              // me aseguro que el pin sea siempre de 6 digitos (algunas veces salian de 5)
@@ -58,7 +71,7 @@ while(pin.toString().length !== 6) {              // me aseguro que el pin sea s
       from: 'gohenrybank2020@gmail.com',
       to: `${user.email}`,
       subject: 'Gracias por ingresar! Confirme su cuenta',
-        template: "crateUserMail",
+        template: "juiceCreateUser",
         context: pinObject
 
     };
@@ -108,9 +121,10 @@ const getMyData = async (ctx) => {  // obtener informacion del usuario segun id
 
 const editData = async (ctx) => {                         // editar num telefono y domicilio de un usuario segun id
     console.log(ctx.params)   
-    const { provincia, pais, calle, numero, email, localidad} = ctx.params;
+    const { provincia, pais, calle, numero, email, localidad, phone } = ctx.params;
     try {
         const user = await User.update({
+            phone: phone,
             province: provincia,
             city: localidad,
             address: calle,

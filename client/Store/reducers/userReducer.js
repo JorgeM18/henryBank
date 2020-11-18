@@ -6,7 +6,8 @@ const initialState = {
     token: null,
     isAuthenticated: false,
     user: null,
-    pin: false
+    pin: false,
+    contacts: []
 }
 
 export default (state = initialState, action) => {
