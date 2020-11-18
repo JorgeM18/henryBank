@@ -191,18 +191,25 @@ const getContacts = async (ctx) => {
 }
 
 const addContact = async (ctx) => {
-  const { userId, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
+  const { userId, alias, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
   try{
     const user = await User.findOne({where: {id: userId}});
     const contact = await User.findOne({where: {phone: contactPhone}});
-    if (!user || !contact) throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
-
-    await user.addContacts(contact, {through: {alias: contact.name, phone: contact.phone}});
+    
+    if (!user) throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+    if (contact) {await user.addContacts(contact, {through: {alias: alias, phone: contact.phone}});
     const userContact = await Contact.findOne({where: {userId: user.id, phone: contact.phone}});
     return {
       message: 'success',
       content: userContact
-    }
+    }}
+
+   // await user.addContacts(contact, {through: {alias: alias, phone: contact.phone}});
+  //   const userContact = await Contact.findOne({where: {userId: user.id, phone: contact.phone}});
+  //   return {
+  //     message: 'success',
+  //     content: userContact
+  //   }
   } 
   catch(err) {
     console.log(err);
