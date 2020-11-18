@@ -1,6 +1,6 @@
 "use strict";
 
-const { account } = require('../controllers/accounts/accounts.controllers')
+const { account, getAccount } = require('../controllers/accounts/accounts.controllers')
 const { balanceAndImage } = require('../controllers/accounts/miPosicion.controllers')
 
 /**
@@ -26,6 +26,13 @@ module.exports = {
 	 * Actions
 	 */
 	actions: {
+		getAccount:{
+			rest:{ 
+                method:"GET",
+                path:"/" 
+			},
+			handler:getAccount
+		},
         newAccount:{
             rest:{ 
                 method:"POST",
@@ -39,7 +46,7 @@ module.exports = {
 				path: '/mybalance'
 			},
 			handler: balanceAndImage
-		}
+		},
     },
 
 	/**

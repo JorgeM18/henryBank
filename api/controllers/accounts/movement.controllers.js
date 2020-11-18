@@ -186,9 +186,10 @@ const confirmPaypal = async (ctx) =>{
         const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${TOKEN_PAYPAL}`
+                'Authorization': `Bearer A21AAJ-VZvqsjZm3uUQh60c-X7bTeEWePaDOz0cO0AZ5iuSXeiFzmwYBCM7Jk2h2nFZhMvcxxlJnJKYuQbww-9SOA5H8HjUhg`
             }
         })
+        
         console.log(data)
         if(!data || !data.payer.status){
             throw new Error;
