@@ -7,6 +7,7 @@ const {User, Account, Movement} = require('../../db.js')
 //paypal
 const paypal = require('paypal-rest-sdk');
 const { default: Axios } = require("axios");
+const { whatsappSend } = require("../whatsapp/whats.config.js");
 const {CLIENT_ID, CLIENT_SECRET, TOKEN_PAYPAL } = process.env;
 paypal.configure({
     'mode': 'sandbox', //sandbox or live 
@@ -14,7 +15,7 @@ paypal.configure({
     'client_secret': CLIENT_SECRET // provide your client secret here 
   });
 
-
+const formatAR = new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS", minimumFractionDigits:2})
 //aqui se genera el numero de transaccion para tener una referencia
 const numTransaction = async () =>{
 
@@ -83,6 +84,9 @@ const transaction = async (ctx) =>{
             accountId: user.id
         })
         
+        let moutARS = formatAR.format(amount)
+        await whatsappSend(`+${phoneUser}`,`Acabas de realizar un deposito a *${user.alias}* con un monto de *${moutARS}*`)
+        await whatsappSend(`+${phoneContact}`,`Acabas de recibir un deposito de *${user.alias}* con un monto de *${moutARS}*`)
 
        return{
            message:"success",
@@ -106,6 +110,7 @@ const transaction = async (ctx) =>{
         }
 
     }catch(err){
+        console.log(err)
         throw new MoleculerError("supera el monto maximo", 404, "SERVICE_NOT_FOUND",{err:"err"})
     }
 }
@@ -196,10 +201,16 @@ const confirmPaypal = async (ctx) =>{
         }
 
         if(data.payer.status === "VERIFIED"){
-            amount = await Movement.findOne({where:{numTransaction:paymentId}})
+           const amount = await Movement.findOne({where:{numTransaction:paymentId}})
+           const {phone, accounts} = await User.findOne({include:[{
+            model:Account,
+            where:{userId:amount.accountId}
+            }]})
             if(amount.state !== "complete"){
                 await Movement.update({state:"complete"},{where:{numTransaction:paymentId}})
                 await Account.update({balance: Sequelize.literal(`balance + ${amount.amount}`)},{where:{id:amount.accountId}})
+                let moutARS = formatAR.format(amount.amount)
+                await whatsappSend(`+${phone}`,`*${accounts[0].alias}* Acabas de recibir una recarga desde *Paypal* con un monto de *${moutARS}*`)
                 return {
                     message:"success",
                     content:{
