@@ -53,6 +53,6 @@ const approveUser = async (ctx) => { // Recibe el ctx (contexto) que son todos l
 }
 
 module.exports = {
-        validateUserPin,
+    validateUserPin,
     approveUser
 }

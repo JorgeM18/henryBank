@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios'
 import {URL} from '@env';
-import {Alert} from 'react-native'
+import {Alert, processColor} from 'react-native'
 
 export const ADD_USER='ADD_USER'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -70,7 +70,6 @@ export function validarPin(pin, props){
                 pin:resp.data.pin
             })
             if(resp.data.message==='success'){
-
               props.navigation.navigate("CompleteDataUser")
             }
         })
