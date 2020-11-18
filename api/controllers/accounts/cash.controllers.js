@@ -7,7 +7,7 @@ const {User, Account, Movement} = require('../../db.js');
 //aqui se genera el numero de transaccion para tener una referencia
 const numTransaction = async () =>{
 
-    var num = Math.floor(Math.random() * 999999)
+    var num = Math.floor(Math.random() * 999999).toString()
 
     const dato = await Movement.findOne({
         where:{numTransaction:num}
@@ -21,8 +21,8 @@ const numTransaction = async () =>{
 }
 
 const cash = async (ctx) => {
+    const numMov = await numTransaction();
     const {id, amount, commerce } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero lo hice asi 
-    const numTransaction = await numTransaction();
     try {
 
         const account = await Account.findOne({
@@ -30,8 +30,9 @@ const cash = async (ctx) => {
                 userId: id
             }
         })
+        console.log(account)
         const mov = await Movement.create({
-        numTransaction,
+        numTransaction: numMov,
         state: 'complete',
         amount,
         commerce,
@@ -39,19 +40,28 @@ const cash = async (ctx) => {
         movement_type: 'deposits',
         accountId: account.id
     })
-    const json = {
-        message: 'success',
-        content: mov
-    }
-    if(account && mov) {
-        return json;
-    } else {
-        throw new Error
-    }
 
-    } catch(err) {
-        throw new MoleculerError("something went wrong", 404, "SERVICE_NOT_FOUND")
-    }      
+        var oldBalance = account.balance
+        await account.update({
+          balance: oldBalance + amount
+        })
+
+        const json = {
+            message: 'success',
+            content: {
+                movement: mov,
+                newBalance: account.balance
+            }
+        }
+        if(account && mov) {
+            return json;
+        } else {
+            throw new Error
+        }
+
+        } catch(err) {
+            throw new MoleculerError("something went wrong", 404, "SERVICE_NOT_FOUND")
+        }      
 
 }
 

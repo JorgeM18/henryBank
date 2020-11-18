@@ -8,7 +8,7 @@ const {User, Account, Movement} = require('../../db.js')
 //aqui se genera el numero de transaccion para tener una referencia
 const numTransaction = async () =>{
 
-    var num = Math.floor(Math.random() * 999999)
+    var num = Math.floor(Math.random() * 999999).toString()
 
     const dato = await Movement.findOne({
         where:{numTransaction:num}

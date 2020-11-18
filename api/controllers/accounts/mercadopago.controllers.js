@@ -2,10 +2,13 @@ var mercadopago = require('mercadopago');
 const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
 const {User, Account, Movement} = require('../../db.js');
+const { Sequelize, Model } = require("sequelize");
 require('dotenv').config();
+const open = require('open');
 const {
   ACCESS_TOKEN_MERCADOPAGO
 } = process.env;
+
 
 // var GoBank = {"id":673980059,"nickname":"TESTHSDCXKZI","password":"qatest7335","site_status":"active","email":"test_user_24540020@testuser.com"}
 // var gonza  = {"id":673983123,"nickname":"TETE5740146","password":"qatest3470","site_status":"active","email":"test_user_80034649@testuser.com"}
@@ -45,10 +48,22 @@ const mercadoPago = async (ctx) => {
     
     var res = await mercadopago.preferences.create(preference);
 
-    console.log(res.body.init_point, res.body.id)
+    console.log(res.body.init_point, 'MP-' + res.body.id)
     // return res;
-
+    
     //hacer q se abra el link res.body.init_point en el browser. FALTA ESTO
+
+  //   const op = async () => {
+  
+  //     await open('https://sindresorhus.com');
+   
+  // };
+
+ 
+  
+   
+ 
+
 
   try {
 
@@ -67,14 +82,25 @@ const mercadoPago = async (ctx) => {
         accountId: account.id
       })
 
+      var oldBalance = account.balance
+      await account.update({
+        balance: oldBalance + amount
+      })
+
+      // await account.update({balance: Sequelize.literal(`balance + ${amount}`)})
+
       const json = {
         message: 'success',
-        content: mov
-      }
+        content: {
+            movement: mov,
+            newBalance: account.balance
+        }
+    }
 
       if(!account || !mov) {
         throw new Error
       } else {
+        await open(res.body.init_point, {app: 'chrome'});
         return json
       }
 
