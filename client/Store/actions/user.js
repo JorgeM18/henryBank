@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios'
 import {URL} from '@env';
-import {Alert, processColor} from 'react-native'
+import {Alert} from 'react-native'
 
 export const ADD_USER='ADD_USER'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
