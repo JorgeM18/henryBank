@@ -38,12 +38,13 @@ const ContactsList = (props) => {
   
 
   useEffect(() => {
-    
+    setLoading(true)
     axios.get(`http://${URL}/api/user/contacts/${userId}`)
     .then((resp) =>{
           console.log('Se pidieron los contactos')
           setLocalContacts(resp.data.content)
           setMemoryContacts(resp.data.content)
+          setLoading(false)
     });
     }, []);
 
