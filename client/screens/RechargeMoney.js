@@ -15,6 +15,7 @@ const typeRecharge = [
     { label: 'Credit Card', value: 'creditCard' },
     { label: 'Efectivo', value: 'QR' },
     { label: 'Paypal', value: 'paypal' },
+    { label: 'Mercado Pago', value: 'mercado' }
 
 ]
 
@@ -26,6 +27,7 @@ const RechargeMoney = (props) => {
     const [card, setCard] = useState(false)
     const [cash, setCash] = useState(false)
     const [paypal, setPaypal] = useState(false)
+    const [mercado, setMercado] = useState(false)
     const [visible, setVisible] = useState(false)
     const [monto, setMonto] = useState('');
     const [qrvalue, setQrvalue] = useState('');
@@ -39,7 +41,29 @@ const RechargeMoney = (props) => {
     const handlerClick = (value) => {
         console.log('Monto', value)
         setQrvalue(value)
-        // setMonto('')
+        if (monto) {
+            axios.post(`http://${URL}/api/transactions/cash`, {
+
+                id: user.data.id,
+                amount: parseInt(monto),
+                qrvalue
+            })
+                .then(resp => {
+                    console.log('saldo', resp)
+                    if (resp) {
+                        Alert.alert(
+                            'Success', //titulo
+                            'Hurray! your money was added to your balance', //Mensaje
+                            [{
+                                text: 'OK', //Arreglo de botones
+                                onPress: () => { props.navigation.navigate('UserProfile') },
+
+                            }],
+                        )
+                    }
+                })
+        }
+
     }
     const onLoad = async () => {
         try {
@@ -59,7 +83,6 @@ const RechargeMoney = (props) => {
 
     }, [])
 
-    user === '' ? '' : console.log('USUARIO', user)
 
     const payselectRechargepal = (value) => {
         switch (value) {
@@ -67,16 +90,27 @@ const RechargeMoney = (props) => {
                 setCash(false)
                 setConfirm(false)
                 setPaypal(false)
+                setMercado(false)
                 return setCard(true);
             case 'QR':
                 setPaypal(false)
                 setCard(false)
                 setConfirm(false)
+                setMercado(false)
                 return setCash(true);
             case 'paypal':
                 setCard(false)
                 setCash(false)
+                setConfirm(false)
+                setMercado(false)
                 return setPaypal(true)
+            case 'mercado':
+                setCard(false)
+                setCash(false)
+                setConfirm(false)
+                setPaypal(false)
+                return setMercado(true)
+
             default:
                 return value;
 
@@ -170,7 +204,7 @@ const RechargeMoney = (props) => {
                         ) : null
                     }
                 </View>
-                <View>
+                {/* <View>
                     {
                         confirm ? (
                             <TouchableOpacity style={style.button}
@@ -180,7 +214,7 @@ const RechargeMoney = (props) => {
 
                         ) : null
                     }
-                </View>
+                </View> */}
 
                 <View>
                     <View>
@@ -194,7 +228,7 @@ const RechargeMoney = (props) => {
 
                                         <QRCode
                                             outerEyeStyle='square'
-                                            value={qrvalue ? `api/transactions/recharge/${user.data.id}?amount=${monto}` : 'NA'}
+                                            value={qrvalue ? `Gobank/transactions/recharge/${user.data.id}?amount=${monto}` : 'NA'}
                                             size={250}
                                             bgColor='#000'
                                             fgColor='#fff'

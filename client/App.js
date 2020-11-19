@@ -18,8 +18,10 @@ import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
 import RechargeMoney from './screens/RechargeMoney'
 import EnviarDinero from './screens/EnviarDinero'
+import ShowCreditCards from './screens/Users/ShowCreditCards'
+import CreditCardView from './screens/CreditCardView';
+import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
-
 
 const Stack = createStackNavigator()
 
@@ -87,19 +89,17 @@ function MyStack() {
         }} />
         <Stack.Screen name="RechargeMoney"
         component={RechargeMoney} />
-        <Stack.Screen name="MyProducts" component={MyProducts}
+        <Stack.Screen name="MyProducts" component={MyProducts}/>
         
-      />
-      <Stack.Screen name="ContactsList" component={ContactsList}
-        options={{
-          headerTitle: '',
-        }}
-      />
+      <Stack.Screen name="ContactsList" component={ContactsList}/>
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
      
      <Stack.Screen name="MyData" component={MyData}/>
-   
+    
+     <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
+     <Stack.Screen name="CreditCardView" component={CreditCardView}/>
+     <Stack.Screen name="CreditCard" component={CreditCard}/>
     </Stack.Navigator>
   )
 }
@@ -108,7 +108,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <MyStack/> */}
+        {/* <MyStack/> */}  
         <MyStack />
       </NavigationContainer>
     </Provider>

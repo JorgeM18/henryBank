@@ -8,7 +8,7 @@ const {User, Account, Movement} = require('../../db.js')
 const paypal = require('paypal-rest-sdk');
 const { default: Axios } = require("axios");
 const { whatsappSend } = require("../whatsapp/whats.config.js");
-const {CLIENT_ID, CLIENT_SECRET, TOKEN_PAYPAL } = process.env;
+const {CLIENT_ID, CLIENT_SECRET, TOKEN_PAYPAL, URL } = process.env;
 paypal.configure({
     'mode': 'sandbox', //sandbox or live 
     'client_id': CLIENT_ID, // please provide your client id here 
@@ -125,8 +125,8 @@ const paypalDeposits = async(ctx)=>{
           "payment_method": "paypal"
         },
         "redirect_urls": {
-          "return_url": "http://localhost:3000/api/transactions/paypal/confirm",
-          "cancel_url": "http://localhost:3000/api/transactions/paypal/cancel"
+          "return_url": `http://${URL}/api/transactions/paypal/confirm`,
+          "cancel_url": `http://${URL}/api/transactions/paypal/cancel`
         },
         "transactions": [{
             "item_list":{
@@ -186,12 +186,12 @@ const createPay = ( payment ) => {
 
 const confirmPaypal = async (ctx) =>{
     const {paymentId} = ctx.params
-    let amount;
+    const token = process.env.TOKEN_PAYPAL
     try{
         const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer A21AAJhDVWmm7cK_4cHVA3Yb6YtuuX5vs91m5Ebg7Erp090b0Pz5XuzzRmckB7h0Ki6Y8cCEaxvEbKj6EK1KSjKMpKJFre7oA'
+                'Authorization': "Bearer A21AAI3ELfYh855pj4YxQLYJKsOkWWrEj4Vg-m_gyy7qPDFCfwzbVlCN7WiQqOKS452Eq6aOy3qdvZMqMxb8so55yLJClqohg"
             }
         })
         

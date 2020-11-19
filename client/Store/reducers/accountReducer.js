@@ -8,9 +8,7 @@ export default (state= initialState, actions)=>{
     switch(actions.type){
         case GET_BALANCE:
             return{
-                ...state,
                 balance: actions.balance
-
             }
         default:
             return state

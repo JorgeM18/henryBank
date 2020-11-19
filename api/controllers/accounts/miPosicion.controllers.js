@@ -58,13 +58,13 @@ const incomeOutcome = async (ctx) => {  // devuelve el income y outcome de la cu
         
         var income = 0;
         for(var i = 0; i < account.movements.length; i++){
-            if(account.movements[i].movement_type==='receiver') {
+            if(account.movements[i].movement_type==='receiver' || account.movements[i].movement_type==='deposits') { //incluir deposits?
                 income = income + account.movements[i].amount
             }
         }
         var outcome = 0;
         for(var i = 0; i < account.movements.length; i++){
-            if(account.movements[i].movement_type==='sender') {
+            if(account.movements[i].movement_type==='sender') { // habria q agregar q reste cuando hace extracciones
                 outcome = outcome - account.movements[i].amount
             }
         }

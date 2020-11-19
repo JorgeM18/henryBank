@@ -66,6 +66,7 @@ const handleSubmit = () => {
             <TextInput
             style={styles.inputViewSafe}
             placeholder = "Email..."
+            keyboardType='email-address'
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 email:text})}/>

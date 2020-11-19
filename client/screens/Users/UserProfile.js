@@ -28,19 +28,7 @@ const ProfileUser = (props) => {
         }
 
     }
-    //REVISAR
-    // useEffect(() => {
-    //     onLoad()
-    //     user === '' ? '' : dispatch(getBalance(user.data.id))
-    //     // setTimeout(()=>{
-    //     //     user === '' ? '' : dispatch(getBalance(user.data.id))
 
-    //     // },3000)
-        
-    //     //    onLoad()
-
-    // }, [])
-    console.log('BALAnCE', balance)
     const logHome = () => {
         AsyncStorage.clear();
         // dispatch(logout())
