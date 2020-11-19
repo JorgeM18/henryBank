@@ -1,9 +1,12 @@
 import React, {useState, useEffect}from 'react';
+import {useDispatch} from 'react-redux'
 import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
 import PassMeter from 'react-native-passmeter'
 import axios from 'axios';
 import { connect } from "react-redux";
 import {loginUser} from './../Store/actions/user'
+import { URL } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const localhost='192.168.0.5:3000'
 const MAX_LEN = 15;
@@ -14,29 +17,39 @@ const deviceWindow = Dimensions.get('window')
  function Login (props) {
 
     const {loginUser, user} = props
+    const dispatch=useDispatch();
    const  [state, setState] = useState({
         email:"",
         password:""
   }   )
 
-const login = () => {
-    axios.post(`http://${localhost}/api/user/login`, state)
+const login = (props) => {
+    // dispatch(loginUser(state))
+    axios.post(`http://${URL}/api/user/login`, state)
         .then((res)=>{
-            if (res.data){
-                props.navigation.navigate('UserProfile')
+            // console.log(res.data)
+            AsyncStorage.setItem('token', JSON.stringify(res.data.token), err => {
+                if (err) console.log('ERROR en AsyncStorage', err);
+            })
+            AsyncStorage.setItem('usuario', JSON.stringify(res.data), err => {
+                if (err) console.log('ERROR en AsyncStorage', err);
+            })
+            if (res.data.message==='success'){
+                props.navigation.navigate("UserProfile")
             }
         })
-        .catch(()=>{
-            Alert.alert(
-                'Error',
-                'Usuario o contraseña erroneo'
-            )
-        })
+        // .catch(()=>{
+        //     Alert.alert(
+        //         'Error',
+        //         'Usuario o contraseña erroneo'
+        //     )
+        // })
 }
 
 const handleSubmit = () => {
-    loginUser(state)
-    props.navigation.navigate('UserProfile')
+    login(props)
+    // dispatch(loginUser(state, props))
+    // props.navigation.navigate('UserProfile')
 }
    
     return(

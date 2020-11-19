@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
+import {useDispatch, useSelector} from 'react-redux'
 import {View, TextInput, StyleSheet, Dimensions, TouchableOpacity, Text, Image} from 'react-native';
+import {getDataUser} from '../Store/actions/user'
+
+
 
 
 const deviceWindow = Dimensions.get('window')
 function MyData (){
+    const dispatch=useDispatch()
+    // AsyncStorage.getItem('usuario').then(resp=>console.log('usuario',resp.data)) 
+    const user=useSelector(store=>store.user)
+    const us=user.user.data
+    console.log('usuario', us)
+    useEffect(()=>{
+        dispatch(getDataUser(1))
+    },[])
+   
     const [state, setState] = useState({
+        id:'',
         name:"",
         lastname: "",
         typeDocument:"",
@@ -12,47 +26,47 @@ function MyData (){
         phone: "",
         adress :""
     })
-
+  
     return(
         <View style={styles.container}>
-            <Image source ={require('./images/favicon.png')} style={styles.logo}/>
+            <Image source ={{uri:us.image}} style={styles.logo}/>
                 <TextInput
             style={styles.inputViewSafe}
-            placeholder = "name..."
+            defaultValue={us.name}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 name:text})}/>
                   <TextInput
             style={styles.inputViewSafe}
-            placeholder = "lastname..."
+            defaultValue={us.lastname}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 lastname:text})}/>
                  <TextInput
             style={styles.inputViewSafe}
-            placeholder = "typeDocument..."
+            defaultValue={us.documenttype}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 typeDocument:text})}/>
                  <TextInput
             style={styles.inputViewSafe}
-            placeholder = "numberDocument..."
+            defaultValue={us.documentnum}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 numberDocument:text})}/>
                  <TextInput
             style={styles.inputViewSafe}
-            placeholder = "phone..."
+            defaultValue={us.phone}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 phone:text})}/>
                  <TextInput
             style={styles.inputViewSafe}
-            placeholder = "adress..."
+            defaultValue={us.address +' '+ us.addressnum}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 adress:text})}/>
-                <TouchableOpacity style={styles.editBtn}>
+                <TouchableOpacity style={styles.editBtn} >
                     <Text style={styles.editTextBtn} >Edit My Data</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>

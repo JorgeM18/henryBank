@@ -7,7 +7,8 @@ const Op = Sequelize.Op;
 
 
 
-const balanceAndImage = async (ctx) => {    // devuelve el balance de la cuenta y la foto (para pantalla de miposicion)
+const balanceAndImage = async (ctx) => { 
+      // devuelve el balance de la cuenta y la foto (para pantalla de miposicion)
     try {
         const account = await Account.findOne({ 
             where: {
