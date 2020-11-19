@@ -14,6 +14,7 @@ export function getBalance(id){
         }
        })
         .then((resp)=>{
+            console.log('respuesta', resp)
             dispatch({
                 type:GET_BALANCE,
                 balance:resp.data.content

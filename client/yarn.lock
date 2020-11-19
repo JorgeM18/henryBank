@@ -3165,6 +3165,13 @@ expo-constants@~9.2.0:
     fbjs "1.0.0"
     uuid "^3.3.2"
 
+expo-contacts@~8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/expo-contacts/-/expo-contacts-8.5.0.tgz#ed8436e8832ee6f06a9226cb64f532ea8624a3de"
+  integrity sha512-jkfTbXYOzsUpy+RWBgTEMcSpRnRUe/Bd9D6AQ7GEQgBoTViDQphDYMdhv7l1HXsTiuDOOD5dBBVKOMXLLn9lPQ==
+  dependencies:
+    uuid "^3.4.0"
+
 expo-error-recovery@~1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-1.3.0.tgz#8f4ba957c766e4b9279493eee042d37a562fb3ea"

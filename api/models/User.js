@@ -28,7 +28,7 @@ module.exports = (sequelize) => {
         }
     }, 
     phone:{
-        type: DataTypes.BIGINT,
+        type: DataTypes.STRING,
         allowNull: true
       },
     documenttype:{

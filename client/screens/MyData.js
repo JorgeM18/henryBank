@@ -9,13 +9,28 @@ import {getDataUser} from '../Store/actions/user'
 const deviceWindow = Dimensions.get('window')
 function MyData (){
     const dispatch=useDispatch()
+    const [us, setUs]=useState('')
     // AsyncStorage.getItem('usuario').then(resp=>console.log('usuario',resp.data)) 
-    const user=useSelector(store=>store.user)
-    const us=user.user.data
-    console.log('usuario', us)
-    useEffect(()=>{
-        dispatch(getDataUser(1))
-    },[])
+    const onLoad = async () => {
+        try {
+            var usuario = await AsyncStorage.getItem('usuario')
+            setUs((JSON.parse(usuario)))
+          
+
+        } catch (error) {
+            console.log(error)
+
+
+        }
+
+    }
+    //REVISAR
+    useEffect(() => {
+        onLoad()
+        us === '' ? '' : dispatch(getDataUser(us.data.id))
+        //    onLoad()
+
+    }, [])
    
     const [state, setState] = useState({
         id:'',

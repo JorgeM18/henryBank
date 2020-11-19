@@ -14,10 +14,11 @@ import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
-import MyProducts from './screens/Users/MyProducts';
+import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
 import RechargeMoney from './screens/RechargeMoney'
 import EnviarDinero from './screens/EnviarDinero'
+import ContactsList from './screens/Users/ContactsList'
 
 
 const Stack = createStackNavigator()
@@ -35,17 +36,8 @@ function MyStack() {
         headerTitleAlign: 'center',
         headerTitleStyle: 'bold'
       }}>
-         <Stack.Screen name="EnviarDinero" component={EnviarDinero}
-        options={{
-          headerTitle: '',
-        }}
-      />
+    
       {/* este nos va a permitir crear las pantallas */}
-      {/* <Stack.Screen name="UserProfile"
-        component={UserProfile}
-        options={{
-          title: '',
-        }} /> */}
 
       <Stack.Screen name="Home" component={Home}
         options={{
@@ -79,11 +71,11 @@ function MyStack() {
           headerTitle: '',
         }}
       />
-       {/* <Stack.Screen name="EnviarDinero" component={EnviarDinero}
+       <Stack.Screen name="EnviarDinero" component={EnviarDinero}
         options={{
           headerTitle: '',
         }}
-      /> */}
+      />
       {/* <Stack.Screen name= "Faq" component={Faq}/> */}
       <Stack.Screen name="Login" component={Login}
         options={{
@@ -97,6 +89,11 @@ function MyStack() {
         component={RechargeMoney} />
         <Stack.Screen name="MyProducts" component={MyProducts}
         
+      />
+      <Stack.Screen name="ContactsList" component={ContactsList}
+        options={{
+          headerTitle: '',
+        }}
       />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />

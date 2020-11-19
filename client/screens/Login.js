@@ -1,6 +1,6 @@
 import React, {useState, useEffect}from 'react';
 import {useDispatch} from 'react-redux'
-import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from 'react-native';
+import {Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator} from 'react-native';
 import PassMeter from 'react-native-passmeter'
 import axios from 'axios';
 import { connect } from "react-redux";
@@ -23,11 +23,11 @@ const deviceWindow = Dimensions.get('window')
         password:""
   }   )
 
-const login = (props) => {
+const login = () => {
     // dispatch(loginUser(state))
     axios.post(`http://${URL}/api/user/login`, state)
         .then((res)=>{
-            // console.log(res.data)
+            console.log('login',res.data)
             AsyncStorage.setItem('token', JSON.stringify(res.data.token), err => {
                 if (err) console.log('ERROR en AsyncStorage', err);
             })
@@ -35,6 +35,11 @@ const login = (props) => {
                 if (err) console.log('ERROR en AsyncStorage', err);
             })
             if (res.data.message==='success'){
+                <ActivityIndicator size="large" color="#00ff00" />
+                setTimeout(()=>{
+                    props.navigation.navigate("UserProfile")
+
+                },1000)
                 props.navigation.navigate("UserProfile")
             }
         })
@@ -47,7 +52,7 @@ const login = (props) => {
 }
 
 const handleSubmit = () => {
-    login(props)
+    login()
     // dispatch(loginUser(state, props))
     // props.navigation.navigate('UserProfile')
 }

@@ -7,6 +7,8 @@ import Foundation from 'react-native-vector-icons/Foundation';
 import { logout, getDataUser } from '../../Store/actions/user'
 import { getBalance } from '../../Store/actions/account'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Contacts from 'expo-contacts'
+import {postContacts} from '../../Store/actions/contact'
 
 
 const ProfileUser = (props) => {
@@ -22,16 +24,23 @@ const ProfileUser = (props) => {
         } catch (error) {
             console.log(error)
 
+
         }
 
     }
-    useEffect(() => {
-        onLoad()
-        user === '' ? '' : dispatch(getBalance(user.data.id))
-        //    onLoad()
+    //REVISAR
+    // useEffect(() => {
+    //     onLoad()
+    //     user === '' ? '' : dispatch(getBalance(user.data.id))
+    //     // setTimeout(()=>{
+    //     //     user === '' ? '' : dispatch(getBalance(user.data.id))
 
-    }, [])
-    console.log('BALACE', balance.balance.balance)
+    //     // },3000)
+        
+    //     //    onLoad()
+
+    // }, [])
+    console.log('BALAnCE', balance)
     const logHome = () => {
         AsyncStorage.clear();
         // dispatch(logout())
@@ -53,22 +62,47 @@ const ProfileUser = (props) => {
                 style: 'cancel',
                 onPress: () => { props.navigation.navigate('UserProfile') },
             }
-            ],
-
-
+        ],
         )
     }
 
-    const goProducts = () => {
-        props.navigation.navigate('MyProducts')
-    }
+    // const user = useSelector(state => state.user)
 
+    useEffect(() => {
+        onLoad()
+        user === '' ? '' : dispatch(getBalance(user.data.id))
+        //me traigo los contactos con expo contacts
+        (async () => {
+          const { status } = await Contacts.requestPermissionsAsync();
+          if (status === 'granted') {
+            const { data } = await Contacts.getContactsAsync({
+              fields: [Contacts.Fields.PhoneNumbers],
+            });
+        
+            //me guardo el id del usuario logueado para usar de referencia
+            //const userId = user.user['content'][1][0].id 
+            const userId = user.data.id
+            //compruebo que haya data y la filtro, generando un array de contactos prolijo
+            if (data.length > 0) {
+              const contacts = data;
+              //console.log(contacts)
 
+              let newContacts = []
+              for (let i = 0; i < contacts.length; i++){
+                  if(contacts[i]["phoneNumbers"]){
+                    let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                    newContacts.push(add)
+                    //console.log(add)
+                  } 
+              }
+             dispatch(postContacts(newContacts))
+            }
+          }
+        })();
+      }, []);
 
     return (
-
-        <View style={style.container}>
-
+        <View style={style.container}>        
             <View style={style.banner}>
                 <View style={{ alignItems: 'flex-end', marginHorizontal: '3%' }}>
                     <TouchableOpacity onPress={() => Logout()}>
@@ -153,7 +187,7 @@ const ProfileUser = (props) => {
                 </View>
                 <View style={{}}>
 
-                    <TouchableOpacity style={style.button1}>
+                    <TouchableOpacity style={style.button1} onPress={()=>{props.navigation.navigate('MyData')}}>
                         <Feather
                             style={style.icon}
                             name="globe"
@@ -166,7 +200,7 @@ const ProfileUser = (props) => {
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button1} onPress={() => goProducts()}>
+                    <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
                         <Feather
                             style={style.icon}
                             name="credit-card"

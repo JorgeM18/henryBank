@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {useDispatch} from 'react-redux'
+import { useDispatch } from 'react-redux'
 import {
   StyleSheet,
   Text,
@@ -8,73 +8,117 @@ import {
   TouchableOpacity,
   Alert,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  FlatList
 } from "react-native";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
-import {URL} from '@env'
-import {getContacs} from '../Store/actions/contact'
+import { URL } from '@env'
+import { getContacs } from '../Store/actions/contact'
+import { ScrollView } from "react-native-gesture-handler";
 
-
+const contactosHardcodeados = [
+  { alias: 'Bruno Gallardo', phone: '+542974155305', status: 'favorite' },
+  { alias: 'Cesar Contreras', phone: '+5429746545', status: 'contact' },
+  { alias: 'Gonzalo Sundblad', phone: '+546876513566', status: 'contact' },
+  { alias: 'Ex Tóxico', phone: '+54222155305', status: 'blocked' },
+  { alias: 'Flor G', phone: '+540114155305', status: 'contact' },
+  { alias: 'Carlos Bono', phone: '+54297411105', status: 'contact' },
+  { alias: 'Mamá', phone: '+54297445835', status: 'favorite' },
+  { alias: 'Papá', phone: '+542234634', status: 'favorite' },
+  { alias: 'Mica Salguero', phone: '+542974155', status: 'contact' }
+]
 
 
 const EnviarDinero = (props) => {
   const [monto, setMonto] = useState("");
-  const [msj, setMsj]=useState('');
-  const [contact, setContact]=useState('')
+  const [msj, setMsj] = useState('');
+  const [contact, setContact] = useState('')
+  const [user, setUser] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
-  const dispatch=useDispatch()
-  const searchContact = () => {
-    Alert.alert("Select");
-  };
-  const sendMoney=(monto, mensaje)=>{
-    // axios.post(`http://${URL}/api/transactions/send`)
-    // .then((resp)=>{
-    //   console.log(resp)
-
-    // })
+  const dispatch = useDispatch()
+  const sendMoney = (monto, mensaje) => {
+    const phoneContac = contact !== '' ? contact.phone : ''
+    const phoneUser = user ? user.data.phone : ''
+    axios.post(`http://${URL}/api/transactions/send`, { phoneUser, phoneContac, monto, msj })
+      .then((resp) => {
+        console.log(resp)
+      })
 
   }
-  useEffect(()=>{
-    if(modalVisible)
-    dispatch(getContacs())
+  const onLoad = async () => {
+    try {
+      var usuario = await AsyncStorage.getItem('usuario')
+      setUser((JSON.parse(usuario)))
+    } catch (error) {
+      console.log(error)
+
+
+    }
+
+  }
+  useEffect(() => {
+    onLoad()
+    // if(modalVisible)
+    // dispatch(getContacs())
   })
+  console.log('contacto', contact)
   return (
     <View style={styles.contenedorPrincipal}>
       <View style={styles.container}>
         <View style={styles.contact}>
           <TouchableOpacity
-             onPress={() => {
+            onPress={() => {
               setModalVisible(true);
             }}
           >
-            <Text>Contact</Text>
+            <Text> Select Contact</Text>
           </TouchableOpacity>
+          {/* <Text>{contact !==''?contact.}</Text> */}
         </View>
         <View>
-        <Modal
-        animationType="slide"
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={{flex:1, marginTop:30}}>
-          <View>
-            <Text style={styles.modalText}>My Contacs</Text>
+          <Modal
+            animationType="slide"
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+            }}
+          >
+            <ScrollView>
+              <View style={{ flex: 1, marginTop: 30 }}>
+                <View>
+                  <Text style={styles.modalText}>My Contacs</Text>
+                  <FlatList
+                    data={contactosHardcodeados}
+                    inverted
+                    keyExtractor={item => item.key}
+                    renderItem={({ item }) => {
+                      return (
+                        <TouchableHighlight
+                          onPress={() => {
+                            setContact(item)
+                            setModalVisible(!modalVisible);
+                          }}
+                        >
+                          <View style={styles.panelItemContainer} >
+                            <View style={{ flexDirection: 'row', alingItems: 'center' }}>
+                              <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Name:</Text>
+                              <Text style={{ fontSize: 15 }} >{item.alias}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', alingItems: 'center', marginLeft: 10 }}>
+                              <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Phone:</Text>
+                              <Text style={{ fontSize: 15 }}>{item.phone}</Text>
+                            </View>
+                          </View>
+                        </TouchableHighlight>
+                      )
 
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
+                    }} />
+                </View>
+              </View>
+            </ScrollView>
+          </Modal>
         </View>
         <View>
           <View style={styles.dinero}>
@@ -93,22 +137,18 @@ const EnviarDinero = (props) => {
               placeholder={"Write your message ..."}
               placeholderTextColor="#C7C7CD"
               multiline
-              onChangeText={value=>setMsj(value)}
+              onChangeText={value => setMsj(value)}
             />
           </View>
           <View style={styles.inputAmount}>
-            <Button
-            // onPress={()=>sendMoney(monto, msj)}
-              buttonStyle={{
-                backgroundColor: "green",
-                width: 200,
-                alignSelf: "center",
-                borderRadius: 10,
-              }}
-              icon={<Icon name="money" size={15} color="white" />}
-              iconRight
-              title="TRANSFER    "
-            />
+            <TouchableOpacity style={styles.button}
+              onPress={() => sendMoney(monto, msj)} activeOpacity={0.7}>
+              <View style={{ flexDirection: 'row', alingItems: 'center' }}>
+              <Text style={{ fontSize: 19, color: '#FFF', marginHorizontal: '15%' }}>TRANSFER</Text>
+              <Icon name="money" size={20} color="white" style={{justifyContent:'flex-end'}} />
+              </View>
+            </TouchableOpacity>
+
           </View>
         </View>
       </View>
@@ -133,6 +173,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignSelf: "center",
     // marginTop: -145,
+  },
+  panelItemContainer: {
+    borderWidth: 0.7,
+    borderColor: '#666',
+    padding: 16,
+    borderRadius: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    marginHorizontal: '3%'
   },
   cont: {
     color: "#1e1e1e",
@@ -184,8 +234,25 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    fontSize:15
+    fontSize: 15
+  },
+  button: {
+    width: 200,
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    backgroundColor: '#1e1e1e',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#FFF',
+    marginHorizontal: '10%',
+    marginVertical: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 3,
+      height: 12,
+    }
   }
-});
+  });
 
 export default EnviarDinero;
