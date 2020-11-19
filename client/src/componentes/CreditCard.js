@@ -3,8 +3,11 @@ import { StyleSheet, View, Switch, TouchableOpacity, Text, Alert } from "react-n
 import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
 import {colors} from './../../utils/colors'
 
+import { connect } from "react-redux";
+import {vincularTarjeta} from './../../Store/actions/transaction'
 
-const CreditCard = () => {
+
+const CreditCard = ({vincularTarjeta, navigation}) => {
   const [state, setState] = useState({ useLiteCreditCardInput: false })
   const [valor, setValor] = useState('')
 
@@ -13,9 +16,14 @@ const CreditCard = () => {
    }
  const _onFocus = (field) => console.log("focusing", field);
  const  _setUseLiteCreditCardInput = (useLiteCreditCardInput) => setState({ useLiteCreditCardInput: true });
+
  const validarTarjeta = () => {
    if(valor.valid) {
-    Alert.alert('Datos de la tarjeta', JSON.stringify(valor, null, " ") )
+    // Alert.alert('Datos de la tarjeta', JSON.stringify(valor, null, " ") );
+    vincularTarjeta(valor)
+    // navigation.navigate('ShowCreditCards')
+    console.log('nav', navigation)
+    
    } else {
     Alert.alert('Debe completar todos los campos requeridos')
    }
@@ -47,6 +55,8 @@ const CreditCard = () => {
 
               requiresName
               requiresCVC
+              cardImageFront={require('./../../screens/images/card-front3.png')}
+              cardImageBack={require('./../../screens/images/card-back2.png')}
 
 
               labelStyle={s.label}
@@ -106,4 +116,16 @@ const CreditCard = () => {
   });
 
 
-  export default CreditCard
+  const mapStateToProps = (state) => {
+    return {
+      user: state.user
+    };
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      vincularTarjeta: (tarjeta) => dispatch(vincularTarjeta(tarjeta)),
+    };
+  };
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(CreditCard);
