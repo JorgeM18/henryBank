@@ -13,19 +13,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-const MyProducts = () => {
+const MyProducts = (props) => {
     
 const handleAccount = () => {
     Alert.alert('redirecciona a mi cuenta')
 }
 
-const handleCard = () => {
-    Alert.alert('redirecciona a tarjeta')
-}
 const handleContacts = () => {
     Alert.alert('redirecciona a contactos')
 }
-   
+
+const handleShowCreditCards = () => {
+    console.log('navigation', props.navigation.push)
+   props.navigation.navigate('ShowCreditCards')
+}
+
+
     return (
      
         <View style={style.container}>
@@ -58,7 +61,7 @@ const handleContacts = () => {
 
             <View style={style.box2}>
                 <View style={style.subbox1} >
-                        <TouchableOpacity style={style.button1} onPress={(e) => handleAccount()}>
+                        <TouchableOpacity style={style.button1} onPress={(e) => handleAccount}>
                                 <FontAwesome5
                                     style={style.icon}
                                     name="id-badge"
@@ -72,7 +75,7 @@ const handleContacts = () => {
 
             <View style={style.box2}>
                 <View style={style.subbox1}>
-                        <TouchableOpacity style={style.button1} onPress={(e) => handleCard()}>
+                        <TouchableOpacity style={style.button1} onPress={handleShowCreditCards}>
                                 <Foundation
                                     style={style.icon}
                                     name="credit-card"
@@ -80,7 +83,7 @@ const handleContacts = () => {
                                     size={30}
                                 />
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mi tarjeta</Text>
+                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mis tarjetas</Text>
                 </View>
             </View>
 

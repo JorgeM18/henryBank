@@ -16,8 +16,10 @@ import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
 import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
+import ShowCreditCards from './screens/Users/ShowCreditCards'
+import CreditCardView from './screens/CreditCardView';
+import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
-
 
 const Stack = createStackNavigator()
 
@@ -78,10 +80,8 @@ function MyStack() {
           },
           headerLeft: null
         }} />
-        <Stack.Screen name="MyProducts" component={MyProducts}
-        
-      />
-       <Stack.Screen name="ContactsList" component={ContactsList}
+    
+      <Stack.Screen name="ContactsList" component={ContactsList}
         options={{
           headerTitle: '',
         }}
@@ -90,6 +90,10 @@ function MyStack() {
       />
      
      <Stack.Screen name="MyData" component={MyData}/>
+     <Stack.Screen name="MyProducts" component={MyProducts}/>
+     <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
+     <Stack.Screen name="CreditCardView" component={CreditCardView}/>
+     <Stack.Screen name="CreditCard" component={CreditCard}/>
     </Stack.Navigator>
   )
 }
@@ -98,7 +102,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <MyStack/> */}
+        {/* <MyStack/> */}  
         <MyStack />
       </NavigationContainer>
     </Provider>
