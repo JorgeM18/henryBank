@@ -1,9 +1,11 @@
 import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
 import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer'
+import transactionReducers from './reducers/transactionReducers'
 
 const rootReducer=combineReducers({
-    user:userReducer
+    user:userReducer,
+    transaction: transactionReducers
 })
 const initialState = {};
 
