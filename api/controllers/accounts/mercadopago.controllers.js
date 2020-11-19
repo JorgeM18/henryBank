@@ -5,8 +5,9 @@ const {User, Account, Movement} = require('../../db.js');
 const { Sequelize, Model } = require("sequelize");
 require('dotenv').config();
 const { default: Axios } = require("axios");
+const { whatsappSend } = require('../whatsapp/whats.config.js');
 // const open = require('open');
-
+const formatAR = new Intl.NumberFormat("es-AR",{style:"currency",currency:"ARS", minimumFractionDigits:2})
 const {
   ACCESS_TOKEN_MERCADOPAGO,
   URL
@@ -49,7 +50,7 @@ const mercadoPago = async (ctx) => {
       category_id: 'home',
       quantity: 1,
       currency_id: 'ARS',
-      unit_price: amount
+      unit_price: parseInt(amount)
     }
     
 
@@ -179,11 +180,18 @@ const mercadoPago = async (ctx) => {
               id: mov.accountId
             }
           })
+          const {phone, accounts} = await User.findOne({include:[{
+            model:Account,
+            where:{userId:mov.accountId}
+            }]})
           var oldBalance = account.balance
           console.log(mov.state, 'jejejejejeje')
           if(mov.state !== 'complete'){
             await mov.update({state:"complete"})
             await account.update({balance: oldBalance + mov.amount})
+            console.log("telefono!!",phone)
+            let moutARS = formatAR.format(mov.amount)
+            await whatsappSend(`+${phone}`,`*${accounts[0].alias}* Acabas de recibir una recarga desde *mercadoPago* con un monto de *${moutARS}*`)
             return {
               message:"success",
               content:{
