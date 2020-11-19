@@ -14,11 +14,12 @@ import CompleteDataUser from './screens/Users/CompleteDataUser'
 import InsertPin from './screens/InsertPin'
 import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
-import MyProducts from './screens/Users/MyProducts';
+import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
 import ShowCreditCards from './screens/Users/ShowCreditCards'
 import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
+import ContactsList from './screens/Users/ContactsList'
 
 const Stack = createStackNavigator()
 
@@ -36,7 +37,7 @@ function MyStack() {
         headerTitleStyle: 'bold'
       }}>
       {/* este nos va a permitir crear las pantallas */}
-
+      
       <Stack.Screen name="Home" component={Home}
         options={{
           headerTitle: '',
@@ -79,6 +80,11 @@ function MyStack() {
           headerLeft: null
         }} />
         
+      <Stack.Screen name="ContactsList" component={ContactsList}
+        options={{
+          headerTitle: '',
+        }}
+      />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
      

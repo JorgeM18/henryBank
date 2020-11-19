@@ -70,7 +70,6 @@ export function validarPin(pin, props){
                 pin:resp.data.pin
             })
             if(resp.data.message==='success'){
-
               props.navigation.navigate("CompleteDataUser")
             }
         })

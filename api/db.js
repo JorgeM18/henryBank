@@ -44,13 +44,14 @@ const {
     Account,
     Card, 
     Movement,
-    Blacklist
+    Blacklist,
+    Contact
  } = sequelize.models;
 
 //Aca vendrian las relaciones
-
+console.log(sequelize.models);
 // Tabal intermedia contacto muchos a muchos 
-User.belongsToMany(User, { through: "Contact", as: 'contact', foreignKey: 'userId' });
+User.belongsToMany(User, { as: 'Contacts', through: Contact, foreignKey: 'userId' });
 
 // usuario tiene muchas tarjetas y tarjeta pertenece a un usuario
 User.hasMany(Card);
