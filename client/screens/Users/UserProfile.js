@@ -1,13 +1,14 @@
 import React from 'react'
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
-import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Foundation from 'react-native-vector-icons/Foundation';
+import Feather from 'react-native-vector-icons/Feather'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import Foundation from 'react-native-vector-icons/Foundation'
 import {logout} from '../../Store/actions/user'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Contacts from 'expo-contacts';
-import { useEffect } from 'react';
+import {postContacts} from '../../Store/actions/contact'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Contacts from 'expo-contacts'
+import { useEffect } from 'react'
 
 const ProfileUser = (props) => {
     const dispatch=useDispatch()
@@ -37,6 +38,8 @@ const ProfileUser = (props) => {
         )
     }
 
+    const user = useSelector(state => state.user)
+
     useEffect(() => {
         //me traigo los contactos con expo contacts
         (async () => {
@@ -45,17 +48,24 @@ const ProfileUser = (props) => {
             const { data } = await Contacts.getContactsAsync({
               fields: [Contacts.Fields.PhoneNumbers],
             });
+        
+            //me guardo el id del usuario logueado para usar de referencia
+            //const userId = user.user['content'][1][0].id 
+            const userId = 1
             //compruebo que haya data y la filtro, generando un array de contactos prolijo
             if (data.length > 0) {
               const contacts = data;
-              console.log(contacts)
-              
+              //console.log(contacts)
+
               let newContacts = []
               for (let i = 0; i < contacts.length; i++){
-                let add = {name: contacts[i]["name"], phones: contacts[i]["phoneNumbers"]}
-                newContacts.push(add)
+                  if(contacts[i]["phoneNumbers"]){
+                    let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                    newContacts.push(add)
+                    //console.log(add)
+                  } 
               }
-             //falta contectar con el back y reflejarlo en la pantalla ContactList
+             dispatch(postContacts(newContacts))
             }
           }
         })();

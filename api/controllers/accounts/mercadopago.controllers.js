@@ -164,7 +164,7 @@ const mercadoPago = async (ctx) => {
   //   throw new Error
   // })
 
-        if(status !== 'approved' ) {   // mientras no funcione el obtener pago voy solo con el search pago a no devuelve un status
+        if(status !== 'approved' ) {   
           throw new Error
         } else {
         
@@ -203,9 +203,7 @@ const mercadoPago = async (ctx) => {
       const { status } = ctx.params
       const id = ctx.params.preference_id
 
-      if(status !== 'rejected' ) {   // mientras no funcione el obtener pago voy solo con el search pago a no devuelve un status
-        throw new Error
-      } else {
+  
         // update al movement.state a complete
         // update al account.balance a oldamount+newamount
         var mov = await Movement.findOne({
@@ -229,7 +227,6 @@ const mercadoPago = async (ctx) => {
         }
         }
     
-      }
 
   }
   
