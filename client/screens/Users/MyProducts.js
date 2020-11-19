@@ -24,7 +24,7 @@ const handleContacts = () => {
 }
 
 const handleShowCreditCards = () => {
-    console.log('navigation', props.navigation.push)
+   
    props.navigation.navigate('ShowCreditCards')
 }
 
@@ -89,7 +89,7 @@ const handleShowCreditCards = () => {
 
             <View style={style.box2}>
                 <View style={style.subbox1}>
-                        <TouchableOpacity style={style.button1} onPress={(e) => handleContacts()}>
+                        <TouchableOpacity style={style.button1} onPress={(e) => props.navigation.navigate('ContactsList')}>
                                 <Foundation
                                     style={style.icon}
                                     name="torsos-all"

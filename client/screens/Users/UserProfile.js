@@ -1,17 +1,33 @@
-import React from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
-import Feather from 'react-native-vector-icons/Feather'
-import Ionicons from 'react-native-vector-icons/Ionicons'
-import Foundation from 'react-native-vector-icons/Foundation'
-import {logout} from '../../Store/actions/user'
-import {postContacts} from '../../Store/actions/contact'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Foundation from 'react-native-vector-icons/Foundation';
+import { logout, getDataUser } from '../../Store/actions/user'
+import { getBalance } from '../../Store/actions/account'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts'
-import { useEffect } from 'react'
+import {postContacts} from '../../Store/actions/contact'
+
 
 const ProfileUser = (props) => {
-    const dispatch=useDispatch()
+    const dispatch = useDispatch()
+    const [user, setUser] = useState('')
+    const balance = useSelector(store => store.balance)
+    const onLoad = async () => {
+        try {
+            var usuario = await AsyncStorage.getItem('usuario')
+            setUser((JSON.parse(usuario)))
+            console.log(user)
+
+        } catch (error) {
+            console.log(error)
+
+
+        }
+
+    }
 
     const logHome = () => {
         AsyncStorage.clear();
@@ -20,19 +36,19 @@ const ProfileUser = (props) => {
         return;
     }
 
-    const Logout= () =>{
+    const Logout = () => {
         Alert.alert(
             'Logout', //titulo
-            'Are you sure to log out?', //Mensaje
+            'Are you sure about logging out?', //Mensaje
             [{
                 text: 'OK', //Arreglo de botones
-                onPress: ()=> {logHome()},
-                
+                onPress: () => { logHome() },
+
             },
             {
-                text:'Cancel',
-                style:'cancel',
-                onPress: ()=> {props.navigation.navigate('UserProfile')},
+                text: 'Cancel',
+                style: 'cancel',
+                onPress: () => { props.navigation.navigate('UserProfile') },
             }
         ],
         )
@@ -41,6 +57,8 @@ const ProfileUser = (props) => {
     const userRedux = useSelector(state => state.user)
 
     useEffect(() => {
+        onLoad()
+        user === '' ? '' : dispatch(getBalance(user.data.id))
         //me traigo los contactos con expo contacts
         (async () => {
           const { status } = await Contacts.requestPermissionsAsync();
@@ -50,10 +68,8 @@ const ProfileUser = (props) => {
             });
         
             //me guardo el id del usuario logueado para usar de referencia
-
-            const userIdprueba = userRedux && userRedux.user.id 
-            console.log(userIdprueba, "este deberia ser el usuario logueado")
-
+            //const userId = user.user['content'][1][0].id 
+            const userId = user.data.id
             //compruebo que haya data y la filtro, generando un array de contactos prolijo
             if (data.length > 0) {
               const contacts = data;
@@ -62,7 +78,7 @@ const ProfileUser = (props) => {
               let newContacts = []
               for (let i = 0; i < contacts.length; i++){
                   if(contacts[i]["phoneNumbers"]){
-                    let add = {userId: userIdprueba, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                    let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
                     newContacts.push(add)
                     //console.log(add)
                   } 
@@ -92,30 +108,30 @@ const ProfileUser = (props) => {
                         size={30}
                 />
                     </TouchableOpacity>
-                
-           
+
+
                 </View>
                 <View style={{ paddingHorizontal: 14 }}>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <View>
-                            <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola name</Text>
+                            <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola {user ? user.data.name : ''}</Text>
                             <Image
-                                source={require('../images/favicon.png')}
+                                source={user ? {uri:user.data.image} : require('../images/favicon.png')}
                                 style={style.Image}
                             />
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>$5,634.12</Text>
+                            <Text style={style.text}>${balance.balance.balance ? balance.balance.balance : 'Sin Saldo'}</Text>
                             <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>Balance de mi cuenta</Text>
                         </View>
 
                     </View>
                 </View>
             </View>
-            <View style={{justifyContent:'center', alignItems:'center', backgroundColor:'#FFF', flexDirection:'row'}}>
-                    <Text style={{fontSize:20, marginVertical:'3%'}}>General</Text></View>
+            <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row' }}>
+                <Text style={{ fontSize: 20, marginVertical: '3%' }}>General</Text></View>
             <View style={style.box2}>
                 <View style={style.subbox1}>
                     <Text>Income</Text>
@@ -123,30 +139,30 @@ const ProfileUser = (props) => {
 
                 </View>
                 <View style={style.subbox1}>
-                <Text >gastos</Text>
+                    <Text >gastos</Text>
                     <Text style={style.text1}>$24454</Text>
                 </View>
-                
+
             </View>
-            <View style={{justifyContent:'flex-end', alignItems:'center', backgroundColor:'#FFF', flexDirection:'row', paddingRight:70}}>
+            <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
                 <TouchableOpacity style={style.link}><Text >1 Día</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >7 Dias</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >30 Días</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >6 Meses</Text></TouchableOpacity>
-                
-           </View>
+
+            </View>
 
 
             <View style={style.box3}>
                 <View>
-                    <TouchableOpacity style={style.button1}>
-                    <Feather
+                    <TouchableOpacity style={style.button1} onPress={() => { user === '' ? '' : dispatch(getBalance(user.data.id)); console.log('balance', balance) }}>
+                        <Feather
                             style={style.icon}
                             name="send"
                             color="#FFF"
                             size={30}
                         />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical:'5%' }}>Transacciones</Text>
+                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Transacciones</Text>
                     </TouchableOpacity>
 
 
@@ -154,40 +170,40 @@ const ProfileUser = (props) => {
                 <View>
 
                     <TouchableOpacity style={style.button1}>
-                    <Feather
+                        <Feather
                             style={style.icon}
                             name="activity"
                             color="#FFF"
                             size={35}
                         />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '7%', marginVertical:'5%'}}>Estadisticas</Text>
+                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '7%', marginVertical: '5%' }}>Estadisticas</Text>
                     </TouchableOpacity>
 
 
                 </View>
                 <View style={{}}>
-                   
-                    <TouchableOpacity style={style.button1}>
-                    <Feather
-                         style={style.icon}
-                        name="globe"
-                        color="#FFF"
-                        size={30}
-                    />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '15%', marginVertical:'5%'}}>Mis Datos</Text>
+
+                    <TouchableOpacity style={style.button1} onPress={()=>{props.navigation.navigate('MyData')}}>
+                        <Feather
+                            style={style.icon}
+                            name="globe"
+                            color="#FFF"
+                            size={30}
+                        />
+                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '15%', marginVertical: '5%' }}>Mis Datos</Text>
                     </TouchableOpacity>
 
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button1} onPress={()=>goProducts()}>
-                    <Feather
-                         style={style.icon}
-                        name="credit-card"
-                        color="#FFF"
-                        size={30}
-                    />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical:'5%' }}>Mis Productos</Text>
+                    <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
+                        <Feather
+                            style={style.icon}
+                            name="credit-card"
+                            color="#FFF"
+                            size={30}
+                        />
+                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Mis Productos</Text>
                     </TouchableOpacity>
 
 
@@ -195,25 +211,28 @@ const ProfileUser = (props) => {
             </View>
             <View style={style.box4}>
                 <View>
-                    <TouchableOpacity style={style.button2}>
-                    <Feather
+                    <TouchableOpacity style={style.button2}
+                    onPress={()=>{props.navigation.navigate('RechargeMoney')}}>
+                        <Feather
                             name="arrow-down-circle"
                             color="#FFF"
                             size={20}
-                        />  
-                    
+                        />
+
                         <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Recargar Dinero</Text>
                     </TouchableOpacity>
 
 
                 </View>
                 <View>
-                    <TouchableOpacity style={style.button2}>
-                    <Feather
+                    <TouchableOpacity style={style.button2}
+                     onPress={()=>{props.navigation.navigate('EnviarDinero')}}
+                    >
+                        <Feather
                             name="arrow-up-circle"
                             color="#FFF"
                             size={20}
-                        />                     
+                        />
                         <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Enviar Dinero</Text>
                     </TouchableOpacity>
 
@@ -235,7 +254,7 @@ const style = StyleSheet.create({
     banner: {
         height: 250,
         flex: 2,//el componente crece de arriba hacia abajo con el espacio disponible
-       
+
     },
     box2: {
         flex: 2,
@@ -245,8 +264,8 @@ const style = StyleSheet.create({
         // flexDirection:'row',
         // alignItems:'center',
     },
-    link:{
-        marginHorizontal:'3%'
+    link: {
+        marginHorizontal: '3%'
     },
     box3: {
         flex: 2,
@@ -263,23 +282,23 @@ const style = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F4EDE2',
         // flexWrap: 'wrap',
-        alignItems:'center',
-        height:90,
-        justifyContent:'center',
-        marginHorizontal:'3%',
-        marginVertical:'5%',
-        borderWidth:1,
-        borderColor:'#CFC9C0',
-        borderRadius:8
+        alignItems: 'center',
+        height: 90,
+        justifyContent: 'center',
+        marginHorizontal: '3%',
+        marginVertical: '5%',
+        borderWidth: 1,
+        borderColor: '#CFC9C0',
+        borderRadius: 8
     },
     text1: {
         fontSize: 25,
         color: 'black',
-       
+
     },
-    icon:{
-        marginVertical:'10%', 
-        marginHorizontal:'22%'
+    icon: {
+        marginVertical: '10%',
+        marginHorizontal: '22%'
     },
     text: {
         fontSize: 35,
@@ -299,13 +318,13 @@ const style = StyleSheet.create({
         marginVertical: 20,
         backgroundColor: '#1e1e1e',
         justifyContent: 'flex-end',
-        borderRadius:8,
+        borderRadius: 8,
     },
     button2: {
         width: 130,
         height: 45,
         marginHorizontal: '10%',
-        color:'#FFF',
+        color: '#FFF',
         marginVertical: '5%',
         backgroundColor: '#1e1e1e',
         justifyContent: 'center',

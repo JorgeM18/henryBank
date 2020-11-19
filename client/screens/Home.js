@@ -36,7 +36,7 @@ const Home = (props) => {
                 <View style={{ paddingVertical: 20 }}>
                     <TouchableOpacity style={style.create}
                         onPress={() => props.navigation.navigate("CreateUser")} >
-                        <Text style={{ fontSize: 16, marginHorizontal: '20%' }}>Create User</Text>
+                        <Text style={{ fontSize: 16, marginHorizontal: '20%' }}>Register</Text>
                     </TouchableOpacity>
                 </View>
                 <View>

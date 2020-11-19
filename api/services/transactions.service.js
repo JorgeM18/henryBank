@@ -36,11 +36,11 @@ module.exports = {
                 method:"POST",
                 path:"/send" 
             },
-            params:{
-                phoneContact:"number",
-                phoneUser:"number",
-                amount:"number",
-            },
+            // params:{
+            //     phoneContact:"number",
+            //     phoneUser:"number",
+            //     amount:"number",
+            // },
             handler:transaction
 		},
   	paypal:{

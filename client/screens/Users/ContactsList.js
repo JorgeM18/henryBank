@@ -9,11 +9,14 @@ import {
   TextInput,
   SafeAreaView,
   FlatList,
+  TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-//import getContacts from '../../Store/actions/contact'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import getContacts from '../../Store/actions/contact'
 
 const ContactsList = (props) => {
+  const [user, setUser]=useState('')
 /*    const contactosHardcodeados = [
     {alias: 'Bruno Gallardo', phone: '+542974155305', status:'favorite'},
     {alias: 'Cesar Contreras', phone: '+5429746545', status:'contact'},
@@ -26,27 +29,51 @@ const ContactsList = (props) => {
     {alias: 'Mica Salguero', phone: '+542974155', status:'contact'}
 ] */ 
   const dispatch = useDispatch()
+  const onLoad =  () => {
 
-  const userId = useSelector(state => state.user.user["id"])
+         AsyncStorage.getItem('usuario')
+         .then((usuario)=>{
+          setUser((JSON.parse(usuario)))
+          console.log(user)
+         }) 
+}
+const userId =user!==''? user.data.id:''
+
+  // const userId = useSelector(state => state.user.user["id"])
   console.log("USUARIO REDUX CONTACT LIST", userId)
   //const contactsFromStore = useSelector(state => state.contacts)
-
+ const contactos=useSelector(store=>store.user.contacts)
+ console.log('CONTACTOS', contactos)
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false)
-  const [localContacts, setLocalContacts] = useState([])
-  const [memoryContacts, setMemoryContacts] = useState([])
+  const [localContacts, setLocalContacts] = useState('')
+  const [memoryContacts, setMemoryContacts] = useState('')
+  const contacts=()=>{
+    // <ActivityIndicator size='large' color='#2f363c'/>
+    setLoading(true)
+    if(userId){
+      axios.get(`http://${URL}/api/user/contacts/${userId}`)
+      .then((resp) =>{
+            console.log('Se pidieron los contactos')
+            setLocalContacts(resp.data.content)
+            setMemoryContacts(resp.data.content)
+            setLoading(false)
+      })
+      .catch((error)=>{console.log(error)})
+    }
+   
+  }
   
 
   useEffect(() => {
+    onLoad()  
+    // contacts()
+  //  userId ? dispatch(getContacts(userId)):''
+  // dispatch(getContacts(1))
     setLoading(true)
-    axios.get(`http://${URL}/api/user/contacts/${userId}`)
-    .then((resp) =>{
-          console.log('Se pidieron los contactos')
-          setLocalContacts(resp.data.content)
-          setMemoryContacts(resp.data.content)
-          setLoading(false)
-    });
+   
     }, []);
+  
 
  let renderItem = ({ item }) => (
     <View style={{ minHeight: 55, padding: 5 }}>
@@ -73,6 +100,7 @@ const ContactsList = (props) => {
   return (
     <View style={{ flex: 1}}>
       <SafeAreaView style={{backgroundColor: '#2f363c'}} />
+     
       <TextInput 
       placeholder="Search" 
       placeholderTextColor="#dddddd" 
@@ -85,6 +113,7 @@ const ContactsList = (props) => {
       onChangeText={(value) => searchContact(value)} 
       />
       <View style={{flex:1}}>
+      <TouchableOpacity onPress={()=>contacts()}><Text></Text></TouchableOpacity>
         {loading? (
           <View
             style={{

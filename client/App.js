@@ -16,6 +16,8 @@ import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
 import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
+import RechargeMoney from './screens/RechargeMoney'
+import EnviarDinero from './screens/EnviarDinero'
 import ShowCreditCards from './screens/Users/ShowCreditCards'
 import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
@@ -36,9 +38,8 @@ function MyStack() {
         headerTitleAlign: 'center',
         headerTitleStyle: 'bold'
       }}>
-      {/* este nos va a permitir crear las pantallas */}
     
-      
+      {/* este nos va a permitir crear las pantallas */}
       <Stack.Screen name="Home" component={Home}
         options={{
           headerTitle: '',
@@ -71,6 +72,11 @@ function MyStack() {
           headerTitle: '',
         }}
       />
+       <Stack.Screen name="EnviarDinero" component={EnviarDinero}
+        options={{
+          headerTitle: '',
+        }}
+      />
       {/* <Stack.Screen name= "Faq" component={Faq}/> */}
       <Stack.Screen name="Login" component={Login}
         options={{
@@ -80,17 +86,16 @@ function MyStack() {
           },
           headerLeft: null
         }} />
-    
-      <Stack.Screen name="ContactsList" component={ContactsList}
-        options={{
-          headerTitle: '',
-        }}
-      />
+        <Stack.Screen name="RechargeMoney"
+        component={RechargeMoney} />
+        <Stack.Screen name="MyProducts" component={MyProducts}/>
+        
+      <Stack.Screen name="ContactsList" component={ContactsList}/>
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
      
      <Stack.Screen name="MyData" component={MyData}/>
-     <Stack.Screen name="MyProducts" component={MyProducts}/>
+    
      <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
      <Stack.Screen name="CreditCardView" component={CreditCardView}/>
      <Stack.Screen name="CreditCard" component={CreditCard}/>

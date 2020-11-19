@@ -191,7 +191,7 @@ const confirmPaypal = async (ctx) =>{
         const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer A21AAJcLrHXi2k1QTFBLVqGMv70NIUz6er1gXGB-NvbuINtF89RhCwJ2eXPWWwR8hYu17OSPNo-60cB_A5eOB2oX63ZA9uBFQ"
+                'Authorization': "Bearer A21AAI3ELfYh855pj4YxQLYJKsOkWWrEj4Vg-m_gyy7qPDFCfwzbVlCN7WiQqOKS452Eq6aOy3qdvZMqMxb8so55yLJClqohg"
             }
         })
         

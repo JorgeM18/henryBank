@@ -24,18 +24,17 @@ export function postContacts(array){
             })
         }
 }
-
-/* export function getContacts(userId){
+export function getContacts(userId){
     console.log('Se hizo el dispatch de getContacts')
     return function(dispatch){
-        return axios.get(`http://${URL}/api/user/getContacts`, userId)
+        return axios.get(`http://${URL}/api/user/contacts/${userId}` )
         .then((resp) =>{
             console.log('ENTRO EN EL ACTION GET_CONTACTS')
             dispatch({
                 type: GET_CONTACTS,
-                contacts: resp.content
+                contacts: resp.data.content
             })
         })
     }
     }
- */
+ 
