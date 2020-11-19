@@ -37,6 +37,7 @@ function MyStack() {
         headerTitleStyle: 'bold'
       }}>
       {/* este nos va a permitir crear las pantallas */}
+    
       
       <Stack.Screen name="Home" component={Home}
         options={{
@@ -79,7 +80,7 @@ function MyStack() {
           },
           headerLeft: null
         }} />
-        
+    
       <Stack.Screen name="ContactsList" component={ContactsList}
         options={{
           headerTitle: '',

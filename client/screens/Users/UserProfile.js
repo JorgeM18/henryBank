@@ -38,7 +38,7 @@ const ProfileUser = (props) => {
         )
     }
 
-    const user = useSelector(state => state.user)
+    const userRedux = useSelector(state => state.user)
 
     useEffect(() => {
         //me traigo los contactos con expo contacts
@@ -50,8 +50,10 @@ const ProfileUser = (props) => {
             });
         
             //me guardo el id del usuario logueado para usar de referencia
-            //const userId = user.user['content'][1][0].id 
-            const userId = 1
+
+            const userIdprueba = userRedux && userRedux.user.id 
+            console.log(userIdprueba, "este deberia ser el usuario logueado")
+
             //compruebo que haya data y la filtro, generando un array de contactos prolijo
             if (data.length > 0) {
               const contacts = data;
@@ -60,7 +62,7 @@ const ProfileUser = (props) => {
               let newContacts = []
               for (let i = 0; i < contacts.length; i++){
                   if(contacts[i]["phoneNumbers"]){
-                    let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                    let add = {userId: userIdprueba, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
                     newContacts.push(add)
                     //console.log(add)
                   } 
@@ -74,10 +76,14 @@ const ProfileUser = (props) => {
     const goProducts = () =>{
         props.navigation.navigate('MyProducts')
     }
+    const goContacts = () =>{
+        props.navigation.navigate('ContactsList')
+    }
 
     return (
         <View style={style.container}>        
             <View style={style.banner}>
+
                 <View style={{alignItems:'flex-end', marginHorizontal:'3%'}}>
                     <TouchableOpacity onPress={()=>Logout()}>
                     <Foundation
