@@ -135,7 +135,7 @@ module.exports = {
 		getContacts: {
 			rest: {
 				method: 'GET',
-				path: '/contacts'
+				path: '/contacts/:userId'
 			},
 			handler: getContacts
 		},

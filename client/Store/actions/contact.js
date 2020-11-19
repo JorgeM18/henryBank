@@ -1,18 +1,18 @@
 import axios from 'axios'
 import {URL} from '@env';
-import {Alert} from 'react-native'
 
 export const POST_CONTACTS = 'POST_CONTACTS'
+export const GET_CONTACTS = 'GET_CONTACTS'
 
 //ACTIONS
 
 export function postContacts(array){
     return function(dispatch){
-        array.forEach(element => {
+        array.map(element => {
             return axios.post(`http://${URL}/api/user/addContact`, element)
         })
         .then((resp)=>{
-            console.log('ENTRO EL ACTION CONTACTS')
+            console.log('ENTRO EL ACTION POST_CONTACTS')
             dispatch({
             type: POST_CONTACTS,
             contact:resp.data
@@ -24,3 +24,18 @@ export function postContacts(array){
             })
         }
 }
+
+/* export function getContacts(userId){
+    console.log('Se hizo el dispatch de getContacts')
+    return function(dispatch){
+        return axios.get(`http://${URL}/api/user/getContacts`, userId)
+        .then((resp) =>{
+            console.log('ENTRO EN EL ACTION GET_CONTACTS')
+            dispatch({
+                type: GET_CONTACTS,
+                contacts: resp.content
+            })
+        })
+    }
+    }
+ */
