@@ -15,20 +15,9 @@ import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
 import { URL } from '@env'
-import { getContacs } from '../Store/actions/contact'
+// import { getContacs } from '../Store/actions/contact'
 import { ScrollView } from "react-native-gesture-handler";
-
-const contactosHardcodeados = [
-  { alias: 'Bruno Gallardo', phone: '+542974155305', status: 'favorite' },
-  { alias: 'Cesar Contreras', phone: '+5429746545', status: 'contact' },
-  { alias: 'Gonzalo Sundblad', phone: '+546876513566', status: 'contact' },
-  { alias: 'Ex Tóxico', phone: '+54222155305', status: 'blocked' },
-  { alias: 'Flor G', phone: '+540114155305', status: 'contact' },
-  { alias: 'Carlos Bono', phone: '+54297411105', status: 'contact' },
-  { alias: 'Mamá', phone: '+54297445835', status: 'favorite' },
-  { alias: 'Papá', phone: '+542234634', status: 'favorite' },
-  { alias: 'Mica Salguero', phone: '+542974155', status: 'contact' }
-]
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const EnviarDinero = (props) => {
@@ -37,13 +26,28 @@ const EnviarDinero = (props) => {
   const [contact, setContact] = useState('')
   const [user, setUser] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
+  const [contacList, setContactList]=useState('')
   const dispatch = useDispatch()
+  const userId =user!==''? user.data.id:''
   const sendMoney = (monto, mensaje) => {
-    const phoneContac = contact !== '' ? contact.phone : ''
+    const phoneContact = contact !== '' ? contact.phone : ''
     const phoneUser = user ? user.data.phone : ''
-    axios.post(`http://${URL}/api/transactions/send`, { phoneUser, phoneContac, monto, msj })
+    console.log('params',phoneUser, phoneContact, monto,msj)
+    axios.post(`http://${URL}/api/transactions/send`, { phoneUser, phoneContact, amount:monto, description:msj })
       .then((resp) => {
         console.log(resp)
+        if(resp){
+          Alert.alert(
+            'Success', 
+            'Transfer Complete', 
+            [{
+                text: 'OK', //Arreglo de botones
+                onPress: () => {  props.navigation.navigate('UserProfile') },
+
+            }
+        ],
+        )
+        }
       })
 
   }
@@ -62,14 +66,20 @@ const EnviarDinero = (props) => {
     onLoad()
     // if(modalVisible)
     // dispatch(getContacs())
-  })
-  console.log('contacto', contact)
+  },[])
+  const contacts=()=>{
+    axios.get(`http://${URL}/api/user/contacts/${userId}`)
+      .then((resp) =>{
+      setContactList(resp.data.content)})
+  }
+ 
   return (
     <View style={styles.contenedorPrincipal}>
       <View style={styles.container}>
         <View style={styles.contact}>
           <TouchableOpacity
             onPress={() => {
+              contacts()
               setModalVisible(true);
             }}
           >
@@ -90,7 +100,7 @@ const EnviarDinero = (props) => {
                 <View>
                   <Text style={styles.modalText}>My Contacs</Text>
                   <FlatList
-                    data={contactosHardcodeados}
+                    data={contacList}
                     inverted
                     keyExtractor={item => item.key}
                     renderItem={({ item }) => {

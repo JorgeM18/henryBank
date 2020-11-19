@@ -1,5 +1,6 @@
 import { ADD_USER, LOGIN_SUCCESS, LOGIN_FAIL} from '../actions/user'
 import { POST_CONTACTS } from '../actions/contact'
+import { GET_CONTACTS } from '../actions/contact'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
@@ -13,6 +14,11 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+         case GET_CONTACTS:
+            return {
+                ...state,
+                contacts: action.contacts
+            } 
         case POST_CONTACTS:
             console.log("REDUCER DE CONTACTS", action.contact)
             return {

@@ -39,7 +39,7 @@ const ProfileUser = (props) => {
     const Logout = () => {
         Alert.alert(
             'Logout', //titulo
-            'Are you sure to log out?', //Mensaje
+            'Are you sure about logging out?', //Mensaje
             [{
                 text: 'OK', //Arreglo de botones
                 onPress: () => { logHome() },
@@ -54,7 +54,7 @@ const ProfileUser = (props) => {
         )
     }
 
-    // const user = useSelector(state => state.user)
+    const userRedux = useSelector(state => state.user)
 
     useEffect(() => {
         onLoad()
@@ -89,16 +89,24 @@ const ProfileUser = (props) => {
         })();
       }, []);
 
+    const goProducts = () =>{
+        props.navigation.navigate('MyProducts')
+    }
+    const goContacts = () =>{
+        props.navigation.navigate('ContactsList')
+    }
+
     return (
         <View style={style.container}>        
             <View style={style.banner}>
-                <View style={{ alignItems: 'flex-end', marginHorizontal: '3%' }}>
-                    <TouchableOpacity onPress={() => Logout()}>
-                        <Foundation
-                            name='power'
-                            color='#FFF'
-                            size={30}
-                        />
+
+                <View style={{alignItems:'flex-end', marginHorizontal:'3%'}}>
+                    <TouchableOpacity onPress={()=>Logout()}>
+                    <Foundation
+                        name='power'
+                        color='#FFF'
+                        size={30}
+                />
                     </TouchableOpacity>
 
 

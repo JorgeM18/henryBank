@@ -40,7 +40,6 @@ function MyStack() {
       }}>
     
       {/* este nos va a permitir crear las pantallas */}
-
       <Stack.Screen name="Home" component={Home}
         options={{
           headerTitle: '',
