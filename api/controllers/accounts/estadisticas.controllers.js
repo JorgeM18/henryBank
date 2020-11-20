@@ -43,8 +43,8 @@ const estadisticaGastos = async (ctx) => {
         }
         var gastosFraccionados = {
             gastosDiarios: {},
-            gastosSemanales: 0,
-            gastosMensuales: 0
+            gastosSemanales: {},
+            gastosMensuales: {}
         };
         var fecha;
         var montoFecha = account.movements[0].amount;
