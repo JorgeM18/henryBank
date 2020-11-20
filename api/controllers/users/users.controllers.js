@@ -11,6 +11,8 @@ const fs = require('fs');
 const path = require('path');
 var juice = require('juice');
 const hbs = require('nodemailer-express-handlebars');
+const { account } = require("../accounts/accounts.controllers");
+const { whatsappSend } = require("../whatsapp/whats.config");
 // const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 12;
 const {
@@ -139,6 +141,9 @@ const editData = async (ctx) => {                         // editar num telefono
               content: user
           }
           if(user[0]){
+            console.log(json.content[1][0])
+            account(json.content[1][0].id, `GO_${json.content[1][0].name}_${Math.floor(Math.random() * 999999)}`,'1234')
+            whatsappSend(`+${json.content[1][0].phone}`,`*${json.content[1][0].name}!!* Bienvenido a *GO BANK* 🏦 realiza tu primer deposito y comienza disfrutar todos los beneficios que tenemos para vos 🙌 💳`)
             return json;
             } else {
               throw new Error
