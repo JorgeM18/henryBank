@@ -46,6 +46,9 @@ const estadisticaGastos = async (ctx) => {
             gastosSemanales: {},
             gastosMensuales: {}
         };
+
+
+        //ordenar datos para mostrarlos por dia
         var fecha;
         var montoFecha = account.movements[0].amount;
         var ids = []
@@ -61,10 +64,34 @@ const estadisticaGastos = async (ctx) => {
                 ids = []
                 ids.push(account.movements[i])
             }
+            console.log(account.movements[i].createdAt.toString())
             fecha = account.movements[i].createdAt.toString().substring(0,15)
             gastosFraccionados.gastosDiarios[fecha] =  {$totalDelDia: -montoFecha, gastosDeldia: ids}
 
         }
+
+        //ordenar gastos para mostrarlos por mes
+        var fecha;
+        var montoFecha = account.movements[0].amount;
+        var ids = []
+        for(var i = 0; i < account.movements.length; i++) {
+            console.log('hi')
+            
+            console.log(fecha, montoFecha)
+            if(account.movements[i].createdAt.toString().substring(4,7) + account.movements[i].createdAt.toString().substring(11,15) === fecha) {
+                montoFecha = montoFecha + account.movements[i].amount
+                ids.push(account.movements[i])
+            } else {
+                montoFecha = account.movements[i].amount;
+                ids = []
+                ids.push(account.movements[i])
+            }
+            fecha = account.movements[i].createdAt.toString().substring(4,7) + account.movements[i].createdAt.toString().substring(11,15)
+            gastosFraccionados.gastosMensuales[fecha] =  {$totalDelMes: -montoFecha, gastosDelMes: ids}
+
+        }
+
+        //falta ordenar gastos para mostrarlos por semana
 
 
         const json = {
