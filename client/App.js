@@ -16,6 +16,7 @@ import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
 import MyProducts from './screens/Users/MyProducts';
 import MyData from './screens/MyData'
+import ConnectionPages from './screens/ConnectionPages'
 
 
 const Stack = createStackNavigator()
@@ -83,6 +84,7 @@ function MyStack() {
       />
      
      <Stack.Screen name="MyData" component={MyData}/>
+     <Stack.Screen name ="ConnectionPages" component={ConnectionPages}/>
     </Stack.Navigator>
   )
 }
