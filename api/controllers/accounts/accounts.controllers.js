@@ -1,4 +1,5 @@
 const {User, Account} = require('../../db.js')
+const { MoleculerError } = require("moleculer").Errors;
 
 const genCBU = async() =>{
     const cbu = "00000000" + Math.floor(Math.random() * 99999999999999)
@@ -13,13 +14,13 @@ const genCBU = async() =>{
     
 }
 
-const account = async (ctx) =>{
-    const {id, alias, pin} = ctx.params
+const account = async (id, alias, pin) =>{
+    //const {id, alias, pin} = ctx.params
     const cbuCode = await genCBU();
     try{
 
         const data = await Account.create({
-            balance:500,
+            balance:0,
             alias:alias,
             cbu:cbuCode,
             pin:pin,
@@ -34,6 +35,26 @@ const account = async (ctx) =>{
 
 }
 
+const getAccount = async (ctx) =>{
+    const {userId} = ctx.params
+
+    try{
+       const data = await Account.findOne({where:{userId}})
+       
+       if(!data){
+        throw new Error;
+       }
+
+       return{
+        message:"success",
+        data
+       }
+    }catch(err){
+        throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+    }
+}
+
 module.exports={
-    account
+    account,
+    getAccount
 }

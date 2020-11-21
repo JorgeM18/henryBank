@@ -15,7 +15,7 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import moment from "moment";
-import firebase from '../../utils/Firebase'
+import firebase from '../../utils/Firebase.js'
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker';

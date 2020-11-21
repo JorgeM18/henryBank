@@ -1,6 +1,7 @@
 const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
-const {User} = require('../../db');
+const { User, Contact } = require('../../db');
+const {Op} = require('sequelize'); // Import operator from sequelize module.
 const bcrypt = require('bcrypt');
 // const crypto = require('crypto');
 require('dotenv').config();
@@ -10,6 +11,8 @@ const fs = require('fs');
 const path = require('path');
 var juice = require('juice');
 const hbs = require('nodemailer-express-handlebars');
+const { account } = require("../accounts/accounts.controllers");
+const { whatsappSend } = require("../whatsapp/whats.config");
 // const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 12;
 const {
@@ -138,6 +141,9 @@ const editData = async (ctx) => {                         // editar num telefono
               content: user
           }
           if(user[0]){
+            console.log(json.content[1][0])
+            account(json.content[1][0].id, `GO_${json.content[1][0].name}_${Math.floor(Math.random() * 999999)}`,'1234')
+            whatsappSend(`+${json.content[1][0].phone}`,`*${json.content[1][0].name}!!* Bienvenido a *GO BANK* 🏦 realiza tu primer deposito y comienza disfrutar todos los beneficios que tenemos para vos 🙌 💳`)
             return json;
             } else {
               throw new Error
@@ -150,14 +156,168 @@ const editData = async (ctx) => {                         // editar num telefono
 
 }
 
-const editUser = async (ctx) => {
-
+const editUser = async (ctx) =>{
+  try {
+    const user = await User.update(
+      ctx.params,
+      {
+        where: { email: ctx.params.email }
+      })
+      const json = {
+          message: 'success',
+          content: user
+      }
+      if(user[0]){
+        return json;
+        } else {
+          throw new Error
+        }
+  }
+  catch(err) {
+    console.log(err)
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+  }
 }
 
+const getContacts = async (ctx) => {
+  const { userId } = ctx.params 
+  try{
+    const userContacts = await Contact.findAll({where: { userId: userId }});
+    if (!userContacts) throw new MoleculerError("Contacts not found", 404, "SERVICE_NOT_FOUND");
+    return {
+      message: 'success',
+      content: userContacts
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const addContact = async (ctx) => {
+  const { userId, alias, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
+  try{
+    const user = await User.findOne({where: {id: userId}});
+    const contact = await User.findOne({where: {phone: contactPhone}});
+    
+    if (!user) throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+    if (contact) {await user.addContacts(contact, {through: {alias: alias, phone: contact.phone}});
+    const userContact = await Contact.findOne({where: {userId: user.id, phone: contact.phone}});
+    return {
+      message: 'success',
+      content: userContact
+    }}
+
+   // await user.addContacts(contact, {through: {alias: alias, phone: contact.phone}});
+  //   const userContact = await Contact.findOne({where: {userId: user.id, phone: contact.phone}});
+  //   return {
+  //     message: 'success',
+  //     content: userContact
+  //   }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const editContact = async (ctx) => {
+  const { userId, contactPhone, alias } = ctx.params // Necesito userPhone y contactPhone del front
+  try{
+    const userContact = await Contact.findOne({where: {userId: userId, phone: contactPhone}});
+    if (!userContact) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
+
+    userContact.alias = alias;
+    userContact.save()
+    return {
+      message: 'success',
+      content: userContact
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const addToFavorite = async (ctx) => {
+  const { userId, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
+  try{
+    const userContact = await Contact.findOne({where: {userId: userId, phone: contactPhone}});
+    if (!userContact) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
+    userContact.status = 'favorite';
+    userContact.save()
+    return {
+      message: 'success',
+      content: userContact
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const blockContact = async (ctx) => {
+  const { userId, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
+  try{
+    const userContact = await Contact.findOne({where: {userId: userId, phone: contactPhone}});
+    if (!userContact) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
+    userContact.status = 'blocked';
+    userContact.save()
+    return {
+      message: 'success',
+      content: userContact
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const searchContacts = async (ctx) => {
+  const { query, userId } = ctx.params // Necesito userPhone y contactPhone delNP 
+  console.log('ESTA ES LA QUERY:',query);
+  let queryContacts;
+  try{
+    if (query === '') queryContacts = await Contact.findAll({where: { userId: userId }});
+    else queryContacts = await Contact.findAll(
+          {
+            where: 
+              { 
+                userId: userId, 
+                [Op.or]: 
+                  [
+                    { alias: { [Op.iLike]: `%${query}%` } },
+                    { phone: { [Op.iLike]: `%${query}%` } },
+                  ] 
+              }
+          }
+        )
+
+    if (!queryContacts) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
+    return {
+      message: 'success',
+      content: queryContacts
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
 
 module.exports = {
     createUser, 
     getMyData, 
     editData,
-    editUser
+    editUser,
+    getContacts,
+    addContact,
+    editContact,
+    addToFavorite,
+    blockContact,
+    searchContacts
 }

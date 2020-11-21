@@ -26,6 +26,7 @@ function InsertPin(props){
             style={styles.inputText}
             placeholder = ""
             keyboardType='numeric'
+            defaultValue={pin}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {Npin => setPin(Npin)}/>
             </View>

@@ -1,4 +1,6 @@
-import { ADD_USER } from '../actions/user'
+import { ADD_USER, LOGIN_SUCCESS, LOGIN_FAIL} from '../actions/user'
+import { POST_CONTACTS } from '../actions/contact'
+import { GET_CONTACTS } from '../actions/contact'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
@@ -12,6 +14,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+         case GET_CONTACTS:
+            return {
+                ...state,
+                contacts: action.contacts
+            } 
+        case POST_CONTACTS:
+            console.log("REDUCER DE CONTACTS", action.contact)
+            return {
+                ...state,
+                contacts: [...state.contacts, action.contact]
+            }
         case ADD_USER:
             return {
                 // user:state.user.concat(action.user)
@@ -19,18 +32,19 @@ export default (state = initialState, action) => {
                 ...state
             }
 
-        case 'LOGIN_SUCCESS':
-            AsyncStorage.setItem('token', JSON.stringify(action.payload.token), err => {
-                if (err) console.log('ERROR en AsyncStorage', err);
-            })
-            AsyncStorage.setItem('usuario', JSON.stringify(action.payload.data), err => {
-                if (err) console.log('ERROR en AsyncStorage', err);
-            })
-            AsyncStorage.getItem('token').then(res => console.log('token-----', res))
+        case LOGIN_SUCCESS:
+            // AsyncStorage.setItem('token', JSON.stringify(action.user.token), err => {
+            //     if (err) console.log('ERROR en AsyncStorage', err);
+            // })
+            // AsyncStorage.setItem('usuario', JSON.stringify(action.user.data), err => {
+            //     if (err) console.log('ERROR en AsyncStorage', err);
+            // })
+            // AsyncStorage.getItem('token').then(res => console.log('token-----', res))
+            // console.log('reducer',action.user)
             return {
                 ...state,
-                token: action.payload.token,
-                user: action.payload.data,
+                token: action.user.token,
+                user: action.user.data,
                 isAuthenticated: true,
             }
         case 'REGISTER_FAIL':
@@ -61,6 +75,11 @@ export default (state = initialState, action) => {
             }
         case 'GET_USER':
             return {user:action.user};
+        case 'GET_DATA_USER':
+            return{
+                ...state,
+                user:action.user
+            }
         default:
             return state
 

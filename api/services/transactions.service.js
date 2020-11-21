@@ -3,6 +3,8 @@
 
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
+const { cash } = require('../controllers/accounts/cash.controllers');
+const { mercadoPago, mercadoPagoConfirm, mercadoPagoFailure } = require('../controllers/accounts/mercadopago.controllers');
 const {transaction, paypalDeposits, confirmPaypal} = require('../controllers/accounts/movement.controllers')
 
 
@@ -34,11 +36,11 @@ module.exports = {
                 method:"POST",
                 path:"/send" 
             },
-            params:{
-                phoneContact:"number",
-                phoneUser:"number",
-                amount:"number",
-            },
+            // params:{
+            //     phoneContact:"number",
+            //     phoneUser:"number",
+            //     amount:"number",
+            // },
             handler:transaction
 		},
   	paypal:{
@@ -72,6 +74,34 @@ module.exports = {
 				path: '/incomeOutcome'
 			},
 			handler: incomeOutcome
+		},
+		cash: {
+			rest: {
+				method: 'POST',
+				path: '/cash'
+			},
+			handler: cash
+		},
+		mercadoPago: {
+			rest: {
+				method: 'POST',
+				path: '/mercadopago'
+			},
+			handler: mercadoPago
+		},
+		mercadoPagoConfirm: {
+			rest: {
+				method: 'GET',
+				path: '/mercadopagoconfirm'
+			},
+			handler: mercadoPagoConfirm 
+		},
+		mercadoPagoFailure: {
+			rest: {
+				method: 'GET',
+				path: '/failure'
+			},
+			handler: mercadoPagoFailure
 		}
 
     },
