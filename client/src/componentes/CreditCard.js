@@ -4,7 +4,7 @@ import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-i
 import {colors} from './../../utils/colors'
 
 import { connect } from "react-redux";
-import {vincularTarjeta} from './../../Store/actions/transaction'
+import {vincularTarjeta} from './../../Store/actions/cards'
 
 
 const CreditCard = ({vincularTarjeta, navigation}) => {

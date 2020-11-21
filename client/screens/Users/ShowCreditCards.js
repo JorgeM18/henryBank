@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 import { connect } from "react-redux";
-import {getCreditCards, deleteCard} from './../../Store/actions/transaction'
+import {getCreditCards, deleteCard} from './../../Store/actions/cards'
 
 
 
