@@ -61,11 +61,13 @@ import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer'
 import accountReducer from './reducers/accountReducer'
 import transacctionReducer from './reducers/transacctionReducer'
+import cardReducer from './reducers/cardReducer'
 
 const rootReducer=combineReducers({
     user:userReducer,
     balance:accountReducer,
-    transaction:transacctionReducer
+    transaction:transacctionReducer,
+    card: cardReducer,
 })
 
 

@@ -22,7 +22,7 @@
     "expo-image-picker": "~9.1.1",
     "expo-permissions": "~9.3.0",
     "expo-status-bar": "~1.0.2",
-    "firebase": "^8.0.2",
+    "firebase": "7.9.0",
     "graph.js": "^1.21.1",
     "moment": "^2.29.1",
     "react": "16.13.1",

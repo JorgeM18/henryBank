@@ -8,7 +8,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 
 import { connect } from "react-redux";
-import {getCreditCards, deleteCard} from './../../Store/actions/transaction'
+import {getCreditCards, deleteCard} from './../../Store/actions/cards'
 
 
 
@@ -19,14 +19,14 @@ const ShowCreditCards = ({getCreditCards, deleteCard, cards, navigation}) => {
 
 const handleCard = () => {
   
-    navigation.navigate('CreditCardView')
+    navigation.navigate('CreditCard')
 }
 
 const desvincularTarjeta = (i) => {
 
     Alert.alert(
         "Alerta",
-        "Desea desvincular esta tarjeta?",
+        "Do you like to unlink this card?",
         [
           {
             text: "Cancelar",
@@ -58,10 +58,6 @@ useEffect(() => {
         <View style={style.container}>
                     
             <View style={style.banner}>
-                <View style={{alignItems:'center', marginHorizontal:'3%', marginTop: '15%'}}>
-                
-           
-                </View>
                 <View style={{ paddingHorizontal: 14 }}>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -76,7 +72,7 @@ useEffect(() => {
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>Mis Tarjetas</Text>
+                            <Text style={style.text}>My Cards</Text>
                         </View>
 
                     </View>
@@ -94,8 +90,8 @@ useEffect(() => {
                                     style={{width: 75, height: 45, borderRadius: 10, marginLeft: '10%'}}
                                 />
                             </TouchableOpacity>
-                            <Text style={{ fontSize: 16, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{'... '+e.number.substring(15,19)}</Text>
-                            <Text style={{ fontSize: 16, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{e.name}</Text>
+                            <Text style={{ fontSize: 16, color: '#F6F2FC', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{'... '+e.number.substring(15,19)}</Text>
+                            <Text style={{ fontSize: 16, color: '#F6F2FC', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{e.name}</Text>
                             <TouchableOpacity onPress={() => desvincularTarjeta(i)}>
                                 {/* <FontAwesome5
                                         style={style.head}
@@ -109,11 +105,7 @@ useEffect(() => {
                 </View>
             
             ): 
-               ( <View style={style.box2}>
-                    <View style={style.subbox1} >
-                           <Text style={{ fontSize: 18, color: '#FFF', fontWeight: 'bold', marginLeft: 25, marginTop: 20, marginBottom: 2 }}>No hay tarjetas vinculadas</Text>
-                    </View>
-                </View>)
+              (' ')
             }
             
             {/* ------------------------------ */}
@@ -122,7 +114,7 @@ useEffect(() => {
                 </View>) : (
                     <View style={style.box2}>
                     <View style={style.subbox1} >
-                        <Text style={{ fontSize: 18, color: '#1e1e1e', fontWeight: 'bold', marginLeft: 25, marginTop: 8, marginBottom: 2, paddingHorizontal: '10%', paddingVertical: '10%'}}>No hay tarjetas vinculadas</Text>
+                        <Text style={{ fontSize: 18, color: '#f6f2fc', fontWeight: 'bold', marginLeft: 25, marginTop: 8, marginBottom: 2, paddingHorizontal: '10%', paddingVertical: '10%'}}>No linked card</Text>
                     </View>
                     </View>
                 )
@@ -140,7 +132,7 @@ useEffect(() => {
                                 />                     
                                
                             
-                    <Text style={{ fontSize: 18, color: '#FFF', fontWeight: 'bold', marginLeft: 25 }}>Vincular Nueva tarjeta</Text>
+                    <Text style={{ fontSize: 18, color: '#f6f2fc', fontWeight: 'bold', marginLeft: 25 }}>Link a Card</Text>
                     </TouchableOpacity>
             </View>
 
@@ -152,17 +144,17 @@ useEffect(() => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e',
-        marginTop: '-15%'
+        backgroundColor: '#1f1d5e',
+        // marginTop: '15%'
     },
     banner: {
         height: 250,
-        flex: 2,//el componente crece de arriba hacia abajo con el espacio disponible
+        flex: 1,//el componente crece de arriba hacia abajo con el espacio disponible
        
     },
     box2: {
         flex: 1,
-        backgroundColor: '#FFF',
+        backgroundColor: '#282366',
         // flexDirection: 'row',
 
         // flexDirection:'row',
@@ -183,14 +175,14 @@ const style = StyleSheet.create({
     },
     box4: {
         flex: 1,
-        flexWrap: 'wrap',
+        flexWrap: 'nowrap',
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection:'row'
     },
     subbox1: {
         flexDirection: 'row',
-        backgroundColor: '#F4EDE2',
+        backgroundColor: '#282366',
         
         alignItems:'center',
         height:80,
@@ -198,7 +190,7 @@ const style = StyleSheet.create({
         marginHorizontal:'5%',
         marginVertical:'3%',
         borderWidth:1,
-        borderColor:'#CFC9C0',
+        borderColor:'#BB59FA',
         borderRadius:8
     },
     subbox2: {
@@ -260,7 +252,7 @@ const style = StyleSheet.create({
         alignSelf:'center',
         color:'#FFF',
         marginVertical: '5%',
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#1f1d5e',
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -271,7 +263,7 @@ const style = StyleSheet.create({
         paddingLeft: 6,
         paddingTop: 0,
         paddingBottom:4,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#7D3EE7',
         color: '#fff',
         borderRadius: 5,
         alignSelf: 'center'
@@ -284,7 +276,7 @@ const style = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-      cards: state.transaction.cards
+      cards: state.card.cards
     };
   };
   

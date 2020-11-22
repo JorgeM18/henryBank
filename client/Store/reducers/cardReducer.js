@@ -7,6 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case 'ADD_CARD':
+            console.log('store', action.card)
             return {
                 // ...state,
                 cards: [...state.cards, action.card]
