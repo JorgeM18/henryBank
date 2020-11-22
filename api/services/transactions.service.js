@@ -3,9 +3,11 @@
 
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
-const { cashDeposit, cashExtraction } = require('../controllers/accounts/cash.controllers');
+
+const { cashDeposit, cashExtraction, purchase } = require('../controllers/accounts/cash.controllers');
+
 const { mercadoPago, mercadoPagoConfirm, mercadoPagoFailure } = require('../controllers/accounts/mercadopago.controllers');
-const {transaction, paypalDeposits, confirmPaypal} = require('../controllers/accounts/movement.controllers')
+const {transaction, paypalDeposits, confirmPaypal, getTransaction} = require('../controllers/accounts/movement.controllers')
 
 
 /**
@@ -109,6 +111,20 @@ module.exports = {
 				path: '/failure'
 			},
 			handler: mercadoPagoFailure
+		},
+		getTransaction:{
+			rest:{
+				method:"GET",
+				path:":id"
+			},
+			handler: getTransaction
+		},
+		purchase:{
+			rest:{
+				method:"PUT",
+				path:"/purchase"
+			},
+			handler: purchase
 		}
 
     },
