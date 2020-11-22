@@ -11,17 +11,9 @@ import CreditCard from '../src/componentes/CreditCard';
 
 
 const CreditCardView = () => {
-    
-const handleAccount = () => {
-    Alert.alert('redirecciona a mi cuenta')
-}
-
-const handleCard = () => {
-    Alert.alert('redirecciona a tarjeta')
-}
-const handleContacts = () => {
-    Alert.alert('redirecciona a contactos')
-}
+    const validarTarjeta=() =>{
+        Alert.alert('algo')
+    }
    
     return (
      
@@ -38,7 +30,17 @@ const handleContacts = () => {
                                             />
                     </View>
                     <View>
-                            <Text style={style.text}>Vincular una tarjeta</Text>
+                            <TouchableOpacity style={style.button}
+                                onPress={() => {
+                                    validarTarjeta()
+                                }}
+                                >
+                                <Text style={{ color: '#f6f2fc', fontSize: 20}}>
+                                    Add a card
+                                </Text>
+
+                            </TouchableOpacity>
+                           
                     </View>
                 
                 </View>
@@ -64,7 +66,7 @@ const handleContacts = () => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#1F1D5E',
         // height: '1%',
         // marginTop: 0
     },
@@ -75,7 +77,7 @@ const style = StyleSheet.create({
     },
     box2: {
         flex: 2,
-        backgroundColor: '#FFF',
+        backgroundColor: '#BB59FA',
         // flexDirection: 'row',
 
         // flexDirection:'row',
@@ -99,7 +101,7 @@ const style = StyleSheet.create({
     },
     subbox1: {
         flexDirection: 'row',
-        backgroundColor: '#F4EDE2',
+        backgroundColor: '#282366',
         
         alignItems:'center',
         height:80,
@@ -107,7 +109,7 @@ const style = StyleSheet.create({
         marginHorizontal:'5%',
         marginVertical:'3%',
         borderWidth:1,
-        borderColor:'#CFC9C0',
+        borderColor:'#BB59FA',
         borderRadius:8
     },
 
@@ -138,15 +140,19 @@ const style = StyleSheet.create({
         paddingTop: 18
         
     },
-    button1: {
-        width: 65,
-        height: 65,
-        marginHorizontal: 15,
-        marginVertical: 20,
-        backgroundColor: '#1e1e1e',
-        justifyContent: 'center',
-        borderRadius:8,
-    },
+    button: {
+        height: 50, 
+        width: 150, 
+        backgroundColor: '#282366', 
+        borderWidth: 1,
+        borderColor: '#bb59fa',
+        borderRadius: 20, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        alignSelf: 'center',
+        marginTop: '10%',
+        marginBottom: '10%'
+      },
     button2: {
         width: 130,
         height: 45,

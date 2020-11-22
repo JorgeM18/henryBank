@@ -21,11 +21,11 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
    if(valor.valid) {
     // Alert.alert('Datos de la tarjeta', JSON.stringify(valor, null, " ") );
     vincularTarjeta(valor)
-    // navigation.navigate('ShowCreditCards')
-    console.log('nav', navigation)
+    navigation.navigate('ShowCreditCards')
+    // console.log('nav', navigation)
     
    } else {
-    Alert.alert('Debe completar todos los campos requeridos')
+    Alert.alert('Must complete all fields')
    }
  }
 
@@ -61,24 +61,26 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
 
               labelStyle={s.label}
               inputStyle={s.input}
-              validColor={"black"}
+              validColor={'#f6f2fc'}
               invalidColor={"red"}
-              placeholderColor={"darkgray"}
+              placeholderColor={'darkgrey'}
 
               onFocus={_onFocus}
               onChange={_onChange} />
           )
         }
+        <View>
                   <TouchableOpacity style={s.button}
                         onPress={() => {
                             validarTarjeta()
                         }}
                         >
-                        <Text style={{ color: '#FFF', fontSize: 20}}>
-                            Finalizar
+                        <Text style={{ color: '#f6f2fc', fontSize: 20}}>
+                            Add a card
                         </Text>
 
                     </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -91,22 +93,25 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
       marginBottom: 20,
     },
     container: {
-      backgroundColor: "#F5F5F5",
-      marginTop: 10,
+      backgroundColor: "#1f1d5e",
+      flex:1,
+      // marginBottom: 10,
     },
     label: {
-      color: "black",
+      color: "#f6f2fc",
       fontSize: 12,
     },
     input: {
       fontSize: 16,
-      color: "black",
+      color: "#f6f2fc",
     },
     button: {
       height: 50, 
       width: 150, 
-      backgroundColor: colors.BACKGROUND_COLOR, 
-      borderRadius: 30, 
+      backgroundColor: '#282366', 
+      borderWidth: 1,
+      borderColor: '#bb59fa',
+      borderRadius: 15, 
       justifyContent: 'center', 
       alignItems: 'center',
       alignSelf: 'center',
