@@ -14,8 +14,8 @@ const genCBU = async() =>{
     
 }
 
-const account = async (id, alias, pin) =>{
-    //const {id, alias, pin} = ctx.params
+const account = async (ctx) =>{
+    const {id, alias, pin} = ctx.params
     const cbuCode = await genCBU();
     try{
 
