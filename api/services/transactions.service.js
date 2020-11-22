@@ -3,7 +3,9 @@
 
 
 const { incomeOutcome } = require('../controllers/accounts/miPosicion.controllers');
-const { cash, purchase } = require('../controllers/accounts/cash.controllers');
+
+const { cashDeposit, cashExtraction, purchase } = require('../controllers/accounts/cash.controllers');
+
 const { mercadoPago, mercadoPagoConfirm, mercadoPagoFailure } = require('../controllers/accounts/mercadopago.controllers');
 const {transaction, paypalDeposits, confirmPaypal, getTransaction} = require('../controllers/accounts/movement.controllers')
 
@@ -68,19 +70,26 @@ module.exports = {
 			}
 		},
 		//------------------------------------------------------------------------------------------
-		incomeOutcome: {
+		incomeOutcome: {  // esta ruta deberia estar en el servicio de accounts. nose porque la puse aca
 			rest: {
 				method: 'GET',
 				path: '/incomeOutcome'
 			},
 			handler: incomeOutcome
 		},
-		cash: {
+		cashDeposit: {
 			rest: {
 				method: 'POST',
 				path: '/cash'
 			},
-			handler: cash
+			handler: cashDeposit
+		},
+		cashExtraction: {
+			rest: {
+				method: 'POST',
+				path: '/cashextraction'
+			},
+			handler: cashExtraction
 		},
 		mercadoPago: {
 			rest: {

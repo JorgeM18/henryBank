@@ -21,7 +21,7 @@ const numTransaction = async () =>{
     }
 }
 
-const cash = async (ctx) => {
+const cashDeposit = async (ctx) => {      // depositos en efectivo
     const numMov = await numTransaction();
     const {id, amount, commerce } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero lo hice asi 
     try {
@@ -109,7 +109,55 @@ const purchase = async (ctx) =>{
 }
 
 
+
+const cashExtraction = async (ctx) => {
+    const numMov = await numTransaction();
+    const {id, amount, commerce } = ctx.params   // el id es el de usuario. podria ser el de cuenta pero lo hice asi 
+    try {
+
+        const account = await Account.findOne({
+            where: {
+                userId: id
+            }
+        })
+
+        const mov = await Movement.create({
+        numTransaction: numMov,
+        state: 'complete',
+        amount,
+        commerce,
+        description: 'cash',
+        movement_type: 'extraction',
+        accountId: account.id
+    })
+
+        var oldBalance = account.balance
+        await account.update({
+          balance: oldBalance - amount
+        })
+
+        const json = {
+            message: 'success',
+            content: {
+                movement: mov,
+                newBalance: account.balance
+            }
+        }
+        if(account && mov) {
+            return json;
+        } else {
+            throw new Error
+        }
+
+        } catch(err) {
+            throw new MoleculerError("something went wrong", 404, "SERVICE_NOT_FOUND")
+        }      
+}
+
+
 module.exports = {
-    cash,
-    purchase
+
+            cashDeposit,
+        cashExtraction,
+        purchase
 }

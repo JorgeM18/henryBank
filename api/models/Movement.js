@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
       type: DataTypes.TEXT
     },
     movement_type: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('deposits', 'sender', 'receiver', 'extraction', 'card', 'purchase'),
       allowNull: false
     },
     commerce: {
