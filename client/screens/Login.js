@@ -27,7 +27,7 @@ const login = () => {
     // dispatch(loginUser(state))
     axios.post(`http://${URL}/api/user/login`, state)
         .then((res)=>{
-            console.log('login',res.data)
+            // console.log('login',res.data.token)
             AsyncStorage.setItem('token', JSON.stringify(res.data.token), err => {
                 if (err) console.log('ERROR en AsyncStorage', err);
             })

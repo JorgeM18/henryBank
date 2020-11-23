@@ -4,14 +4,16 @@ import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Tex
 import {validarPin} from '../Store/actions/user'
 
 function InsertPin(props){
-    const [pin, setPin]= useState('');
+     const [pin, setPin]= useState('');
     // const [aux, setAux]=useState(false)
     const dispatch=useDispatch()
     const verificarPin=useSelector(store=>store.user.pin)
 //   console.warn(verificarPin)
     const validar=()=>{
-        dispatch(validarPin(pin, props))
-        setPin('')          
+        // dispatch(validarPin(pin, props))
+        // setPin('')   
+        props.navigation.navigate('CompleteDataUser') 
+    
     }
 
  

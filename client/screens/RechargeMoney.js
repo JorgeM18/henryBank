@@ -1,14 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { StyleSheet, TextInput, View, Dimensions, Text, Image, TouchableOpacity, Modal, WebView, Pressable, ScrollView, Alert } from 'react-native'
+import {
+    StyleSheet, TextInput, View, Dimensions, Text, Image, TouchableOpacity, Modal, WebView, Pressable, ScrollView,
+    Alert, ActivityIndicator
+} from 'react-native'
 import QRCode from 'react-native-qrcode-svg';
 import RNPickerSelect from 'react-native-picker-select';
 import { getDataUser } from '../Store/actions/user'
-import { rechargePaypal, confirmRecharge } from '../Store/actions/transactions'
+import { rechargePaypal } from '../Store/actions/transactions'
+import { getAccount } from '../Store/actions/account'
 import { URL, accessToken } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import axios from 'axios'
+import store from '../Store/store';
 
 
 const typeRecharge = [
@@ -33,7 +38,9 @@ const RechargeMoney = (props) => {
     const [qrvalue, setQrvalue] = useState('');
     const [user, setUser] = useState('')
     const [confirm, setConfirm] = useState(false)
+    const [idCuenta, setIdCuenta]=useState('')
     const userLogged = useSelector(store => store.user.user)
+    
     // console.log(monto)
     // useEffect(()=>{
     //     dispatch(getDataUser())
@@ -49,8 +56,10 @@ const RechargeMoney = (props) => {
                 qrvalue
             })
                 .then(resp => {
+                    <ActivityIndicator size="large" color="#00ff00" />
                     console.log('saldo', resp)
                     if (resp) {
+
                         Alert.alert(
                             'Success', //titulo
                             'Hurray! your money was added to your balance', //Mensaje
@@ -79,6 +88,7 @@ const RechargeMoney = (props) => {
     useEffect(() => {
         onLoad()
         user === '' ? '' : dispatch(getDataUser(user.data.id))
+       
         //    onLoad()
 
     }, [])
@@ -127,18 +137,56 @@ const RechargeMoney = (props) => {
     const [Press, setPress] = useState({
         selected: null
     })
-
+    //PARA OBTENER EL ID DE LA CUENTA
+   function IdCuenta(){
+     
+    if(user.data.id){
+        console.log('entro')
+        axios.get(`http://${URL}/api/account/?userId=${user.data.id}`)
+        .then((resp)=>{
+            // console.log('LO QUE SERIA LA CUENTA', resp.data.data.id)
+            setIdCuenta(resp.data.data.id)
+        })
+        .catch(error=>{
+            console.log(error.response)
+        })
+    
+    }
+   
+   }
     const abrir = () => {
+        IdCuenta();
+        console.log(idCuenta)
+        // user === '' ? '' : dispatch(getAccount(user.data.id))
         if (paypal) {
-
-            dispatch(rechargePaypal(monto, 1))
+          
+            dispatch(rechargePaypal(monto, idCuenta))
             const link = transactions.paypal.link
             console.log('NUMERO', link)
             if (link) {
                 Linking.openURL(link)
                 link ? setConfirm(true) : setConfirm(false)
+            //    setTimeout(()=>{
+            //     props.navigation.navigate('UserProfile')
+            //    },5000)
             }
 
+        }
+        if (mercado) {
+            axios.post(`http://${URL}/api/transactions/mercadopago`, {
+                amount:monto,
+                id:user.data.id
+            },
+                { withCredentials: true },
+                {
+                    headers: {
+                        Accept: 'application/json'
+                    }
+                }
+            ).then((resp)=>{
+                const link=resp.data.content.link
+                Linking.openURL(link)
+            })
         }
     }
 
@@ -198,7 +246,7 @@ const RechargeMoney = (props) => {
                         !cash ? (
                             <TouchableOpacity style={style.button}
                                 onPress={() => abrir()} activeOpacity={0.7}>
-                                <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Recharge</Text>
+                                <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%' }}>Recharge</Text>
                             </TouchableOpacity>
 
                         ) : null
@@ -236,7 +284,7 @@ const RechargeMoney = (props) => {
                                         />
                                         <TouchableOpacity style={style.button}
                                             onPress={() => handlerClick(monto)} activeOpacity={0.7}>
-                                            <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Generar</Text>
+                                            <Text style={{ fontSize: 15, color: '#FFF', marginHorizontal: '25%' }}>Generar</Text>
                                         </TouchableOpacity>
                                     </View></>
                                 ) : null
@@ -259,18 +307,19 @@ const style = StyleSheet.create({
         // backgroundColor: '#1e1e1e'
     },
     textInput: {
-        flexDirection: 'row',
+        flexDirection:'row',
         height: 40,
         marginTop: 30,
         marginLeft: 35,
         marginRight: 35,
         margin: 10,
         fontSize: 30,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        width:250
 
     },
     button: {
-        width: 170,
+        width: 190,
         height: 50,
         borderRadius: 10,
         justifyContent: 'center',
@@ -278,7 +327,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: '#FFF',
-        marginHorizontal: '2%',
+        // marginHorizontal: '2%',
         marginVertical: 20,
         shadowColor: "#000",
         shadowOffset: {
