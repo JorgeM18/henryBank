@@ -16,6 +16,8 @@ import RegisterAdress from './screens/Users/RegisterAdress'
 import UserProfile from './screens/Users/UserProfile'
 import MyProducts from './screens/Users/MyProducts'
 import MyData from './screens/MyData'
+import ConnectionPages from './screens/ConnectionPages'
+
 import RechargeMoney from './screens/RechargeMoney'
 import EnviarDinero from './screens/EnviarDinero'
 import ShowCreditCards from './screens/Users/ShowCreditCards'
@@ -97,6 +99,7 @@ function MyStack() {
       />
      
      <Stack.Screen name="MyData" component={MyData}/>
+     <Stack.Screen name ="ConnectionPages" component={ConnectionPages}/>
     
      <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
      <Stack.Screen name="CreditCardView" component={CreditCardView}/>
