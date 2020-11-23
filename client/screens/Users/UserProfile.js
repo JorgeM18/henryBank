@@ -17,9 +17,9 @@ const ProfileUser = (props) => {
     const balance = useSelector(store => store.balance)
     const onLoad = async () => {
         try {
-            var usuario = await AsyncStorage.getItem('usuario')
-            setUser((JSON.parse(usuario)))
-            console.log(user)
+            const usuario = await AsyncStorage.getItem('usuario')
+            await setUser((JSON.parse(usuario)))
+            console.log(usuario)
 
         } catch (error) {
             console.log(error)
@@ -57,37 +57,52 @@ const ProfileUser = (props) => {
     const userRedux = useSelector(state => state.user)
 
     useEffect(() => {
-        onLoad()
-        user === '' ? '' : dispatch(getBalance(user.data.id))
-        //me traigo los contactos con expo contacts
-        (async () => {
-          const { status } = await Contacts.requestPermissionsAsync();
-          if (status === 'granted') {
-            const { data } = await Contacts.getContactsAsync({
-              fields: [Contacts.Fields.PhoneNumbers],
-            });
-        
-            //me guardo el id del usuario logueado para usar de referencia
-            //const userId = user.user['content'][1][0].id 
-            const userId = user.data.id
-            //compruebo que haya data y la filtro, generando un array de contactos prolijo
-            if (data.length > 0) {
-              const contacts = data;
-              //console.log(contacts)
+        (async ()=>{
+            try{
+               await onLoad()
+                user === '' ? '' : dispatch(getBalance(user.data.id))
+                //me traigo los contactos con expo contact
+                await ejec()
 
-              let newContacts = []
-              for (let i = 0; i < contacts.length; i++){
-                  if(contacts[i]["phoneNumbers"]){
-                    let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
-                    newContacts.push(add)
-                    //console.log(add)
-                  } 
-              }
-             dispatch(postContacts(newContacts))
+            }catch(err){
+
             }
-          }
-        })();
+        })()
+
       }, []);
+
+      const ejec = async() =>{
+          console.log("entrooo")
+          console.log("este es",user)
+        const { status } = await Contacts.requestPermissionsAsync();
+        
+        if (status === 'granted') {
+          const { data } = await Contacts.getContactsAsync({
+            fields: [Contacts.Fields.PhoneNumbers],
+          });
+          console.log(data)
+      
+          //me guardo el id del usuario logueado para usar de referencia
+          //const userId = user.user['content'][1][0].id 
+          const userId = user.data.id
+          console.log("este es",user)
+          //compruebo que haya data y la filtro, generando un array de contactos prolijo
+          if (data.length !== 1) {
+            const contacts = data;
+            //console.log(contacts)
+           
+            let newContacts = []
+            for (let i = 0; i < contacts.length; i++){
+                if(contacts[i]["phoneNumbers"]){
+                  let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                  newContacts.push(add)
+                  //console.log(add)
+                } 
+            }
+           dispatch(postContacts(newContacts))
+          }
+        }
+      }
 
     const goProducts = () =>{
         props.navigation.navigate('MyProducts')

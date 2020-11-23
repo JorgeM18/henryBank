@@ -33,11 +33,29 @@ const RechargeMoney = (props) => {
     const [qrvalue, setQrvalue] = useState('');
     const [user, setUser] = useState('')
     const [confirm, setConfirm] = useState(false)
+    const [idCuenta, setIdCuenta]=useState('')
     const userLogged = useSelector(store => store.user.user)
     // console.log(monto)
     // useEffect(()=>{
     //     dispatch(getDataUser())
     // })
+    //PARA OBTENER EL ID DE LA CUENTA
+   function IdCuenta(){
+     
+    if(user.data.id){
+        console.log('entro')
+        axios.get(`http://${URL}/api/account/?userId=${user.data.id}`)
+        .then((resp)=>{
+            // console.log('LO QUE SERIA LA CUENTA', resp.data.data.id)
+            setIdCuenta(resp.data.data.id)
+        })
+        .catch(error=>{
+            console.log(error.response)
+        })
+    
+    }
+   
+   }
     const handlerClick = (value) => {
         console.log('Monto', value)
         setQrvalue(value)
@@ -129,9 +147,10 @@ const RechargeMoney = (props) => {
     })
 
     const abrir = () => {
+        IdCuenta();
         if (paypal) {
 
-            dispatch(rechargePaypal(monto, 1))
+            dispatch(rechargePaypal(monto, idCuenta))
             const link = transactions.paypal.link
             console.log('NUMERO', link)
             if (link) {
