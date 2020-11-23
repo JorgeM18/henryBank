@@ -2,7 +2,7 @@
 
 const { account, getAccount } = require('../controllers/accounts/accounts.controllers')
 const { balanceAndImage } = require('../controllers/accounts/miPosicion.controllers')
-
+const { estadisticaGastos } = require('../controllers/accounts/estadisticas.controllers')
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -47,6 +47,13 @@ module.exports = {
 			},
 			handler: balanceAndImage
 		},
+		estadisticaGastos: {
+			rest: {
+				method: 'GET',
+				path: '/estadisticaGastos'
+			},
+			handler: estadisticaGastos
+		}
     },
 
 	/**

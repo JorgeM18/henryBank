@@ -4,13 +4,15 @@ import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer'
 import accountReducer from './reducers/accountReducer'
 import transacctionReducer from './reducers/transacctionReducer'
+import cardReducer from './reducers/cardReducer'
 
 
 const rootReducer=combineReducers({
     user:userReducer,
     balance:accountReducer,
     transaction:transacctionReducer,
-    account:accountReducer
+    account:accountReducer,
+    card: cardReducer,
 })
 const initialState = {};
 
@@ -59,26 +61,6 @@ export default store;
 //             typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ?
 //             window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
 //     )
-    
-// );
-
-// export default store;
-// import {applyMiddleware, combineReducers, createStore} from 'redux';
-// import thunk from 'redux-thunk';
-// import userReducer from './reducers/userReducer'
-// import accountReducer from './reducers/accountReducer'
-// import transacctionReducer from './reducers/transacctionReducer'
-
-// const rootReducer=combineReducers({
-//     user:userReducer,
-//     balance:accountReducer,
-//     transaction:transacctionReducer
-// })
-
-
-// const store=createStore(
-//     rootReducer,
-//     applyMiddleware(thunk)
     
 // );
 

@@ -45,6 +45,23 @@ const RechargeMoney = (props) => {
     // useEffect(()=>{
     //     dispatch(getDataUser())
     // })
+    //PARA OBTENER EL ID DE LA CUENTA
+   function IdCuenta(){
+     
+    if(user.data.id){
+        console.log('entro')
+        axios.get(`http://${URL}/api/account/?userId=${user.data.id}`)
+        .then((resp)=>{
+            // console.log('LO QUE SERIA LA CUENTA', resp.data.data.id)
+            setIdCuenta(resp.data.data.id)
+        })
+        .catch(error=>{
+            console.log(error.response)
+        })
+    
+    }
+   
+   }
     const handlerClick = (value) => {
         console.log('Monto', value)
         setQrvalue(value)

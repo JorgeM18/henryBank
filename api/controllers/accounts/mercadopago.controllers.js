@@ -99,6 +99,7 @@ const mercadoPago = async (ctx) => {
         state:"created",
         amount: amount,
         description:"Deposito MercadoPago",
+        commerce:"MercadoPago",
         movement_type:"deposits",
         accountId: account.id
       })

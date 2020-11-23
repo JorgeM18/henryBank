@@ -52,7 +52,7 @@ const handleShowCreditCards = () => {
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>Mis Productos</Text>
+                            <Text style={style.text}>My Products</Text>
                         </View>
 
                     </View>
@@ -69,7 +69,7 @@ const handleShowCreditCards = () => {
                                     size={30}
                                 />
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mi cuenta</Text>
+                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Account</Text>
                 </View>
             </View>
 
@@ -83,7 +83,7 @@ const handleShowCreditCards = () => {
                                     size={30}
                                 />
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mis tarjetas</Text>
+                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Cards</Text>
                 </View>
             </View>
 
@@ -97,7 +97,7 @@ const handleShowCreditCards = () => {
                                     size={30}
                                 />
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mis Contactos</Text>
+                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Contacts</Text>
                 </View>
             </View>
            
@@ -111,7 +111,7 @@ const handleShowCreditCards = () => {
                                     size={30}
                                 />
                         </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#1e1e1e', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>Mas...</Text>
+                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>More...</Text>
                 </View>
             </View>
 
@@ -129,17 +129,18 @@ const handleShowCreditCards = () => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#1f1d5e',
         marginTop: '-15%'
     },
     banner: {
+        backgroundColor: '#282366',
         height: 250,
         flex: 2,//el componente crece de arriba hacia abajo con el espacio disponible
        
     },
     box2: {
         flex: 2,
-        backgroundColor: '#FFF',
+        backgroundColor: '#282366',
         // flexDirection: 'row',
 
         // flexDirection:'row',
@@ -161,15 +162,17 @@ const style = StyleSheet.create({
     },
     subbox1: {
         flexDirection: 'row',
-        backgroundColor: '#F4EDE2',
+        backgroundColor: '#1f1d5e',
         
         alignItems:'center',
         height:80,
         justifyContent: 'flex-start',
         marginHorizontal:'5%',
         marginVertical:'3%',
+        paddingTop: 10,
+        paddingBottom: 10,
         borderWidth:1,
-        borderColor:'#CFC9C0',
+        borderColor:'#bb59fa',
         borderRadius:8
     },
 
@@ -199,13 +202,13 @@ const style = StyleSheet.create({
         
     },
     button1: {
-        width: 65,
-        height: 65,
+        width: 55,
+        height: 50,
         marginHorizontal: 15,
         marginVertical: 20,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#7d3ee7',
         justifyContent: 'center',
-        borderRadius:8,
+        borderRadius:40,
     },
     button2: {
         width: 130,

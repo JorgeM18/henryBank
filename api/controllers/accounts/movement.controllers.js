@@ -43,7 +43,7 @@ const transaction = async (ctx) =>{
             model:User,
             where:{phone:phoneUser}
         }]})
-
+        
         //Se verifica el numero de telefono para traer su cvu de la persona que recibe el dinero
         const contact = await Account.findOne({include:[{
             model:User,
@@ -70,6 +70,7 @@ const transaction = async (ctx) =>{
             numTransaction: numMov,
             state:"complete",
             amount: amount,
+            commerce:"Go Bank",
             description:description,
             movement_type:"receiver",
             accountId: contact.id
@@ -79,14 +80,15 @@ const transaction = async (ctx) =>{
             numTransaction: numMov,
             state:"complete",
             amount: -amount,
+            commerce:"Go Bank",
             description:description,
             movement_type:"sender",
             accountId: user.id
         })
         
         let moutARS = formatAR.format(amount)
-        await whatsappSend(`+${phoneUser}`,`Acabas de realizar un deposito a *${user.alias}* con un monto de *${moutARS}*`)
-        await whatsappSend(`+${phoneContact}`,`Acabas de recibir un deposito de *${user.alias}* con un monto de *${moutARS}*`)
+        await whatsappSend(`+${phoneUser}`,`Acabas de realizar un deposito a *${contact.user.name}* con un monto de *${moutARS}*`)
+        await whatsappSend(`+${phoneContact}`,`Acabas de recibir un deposito de *${user.user.name}* con un monto de *${moutARS}*`)
 
        return{
            message:"success",
@@ -155,6 +157,7 @@ const paypalDeposits = async(ctx)=>{
             numTransaction: data.id ,
             state:"created",
             amount:usdArs,
+            commerce:"Paypal",
             description:"Deposito Paypal",
             movement_type:"deposits",
             accountId: id
@@ -191,7 +194,7 @@ const confirmPaypal = async (ctx) =>{
         const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer A21AAI3ELfYh855pj4YxQLYJKsOkWWrEj4Vg-m_gyy7qPDFCfwzbVlCN7WiQqOKS452Eq6aOy3qdvZMqMxb8so55yLJClqohg"
+                'Authorization': "Bearer A21AAICQA5Ym8ke1VaNMWQwGt6VLJI8ZHPAMO00etzGPW5-iQViQ46bE9ujbn6zOCu-tetbc-bvlohPL98w05lcFiQuvvIEAw"
             }
         })
         
@@ -202,7 +205,7 @@ const confirmPaypal = async (ctx) =>{
 
         if(data.payer.status === "VERIFIED"){
            const amount = await Movement.findOne({where:{numTransaction:paymentId}})
-           const {phone, accounts} = await User.findOne({include:[{
+           const {phone, accounts, name} = await User.findOne({include:[{
             model:Account,
             where:{userId:amount.accountId}
             }]})
@@ -210,7 +213,7 @@ const confirmPaypal = async (ctx) =>{
                 await Movement.update({state:"complete"},{where:{numTransaction:paymentId}})
                 await Account.update({balance: Sequelize.literal(`balance + ${amount.amount}`)},{where:{id:amount.accountId}})
                 let moutARS = formatAR.format(amount.amount)
-                await whatsappSend(`+${phone}`,`*${accounts[0].alias}* Acabas de recibir una recarga desde *Paypal* con un monto de *${moutARS}*`)
+                await whatsappSend(`+${phone}`,`*${name}* Acabas de recibir una recarga desde *Paypal* con un monto de *${moutARS}*`)
                 return {
                     message:"success",
                     content:{
@@ -227,9 +230,29 @@ const confirmPaypal = async (ctx) =>{
     }
 }
 
+const getTransaction = async (ctx) =>{
+    const {id} = ctx.params
+
+    const data = await Account.findOne({where:{userId:id},include:Movement})
+    
+    if(!data){
+        throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+    }
+
+    if (!data.movements.length){
+        throw new MoleculerError("No tiene movimientos", 404, "SERVICE_NOT_FOUND")
+    }
+
+    return {
+        message:"success",
+        data
+    }
+}
+
 
 module.exports={
     transaction,
     paypalDeposits,
-    confirmPaypal
+    confirmPaypal,
+    getTransaction
 }
