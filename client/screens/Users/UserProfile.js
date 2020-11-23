@@ -96,6 +96,11 @@ const ProfileUser = (props) => {
         props.navigation.navigate('ContactsList')
     }
 
+    const goTransactions = () =>{
+        Alert.alert('go')
+        props.navigation.navigate('TransactionsView')
+    }
+
     return (
         <View style={style.container}>        
             <View style={style.banner}>
@@ -145,7 +150,7 @@ const ProfileUser = (props) => {
 
             </View>
             <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
-                <TouchableOpacity style={style.link}><Text >1 Día</Text></TouchableOpacity>
+                <TouchableOpacity style={style.link} onPress={goTransactions}><Text >1 Día</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >7 Dias</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >30 Días</Text></TouchableOpacity>
                 <TouchableOpacity style={style.link}><Text >6 Meses</Text></TouchableOpacity>
