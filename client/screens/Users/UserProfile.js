@@ -5,21 +5,31 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import { logout, getDataUser } from '../../Store/actions/user'
-import { getBalance } from '../../Store/actions/account'
+import { getBalance, ResetAccount } from '../../Store/actions/account'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts'
-import {postContacts} from '../../Store/actions/contact'
+import { postContacts } from '../../Store/actions/contact'
+import { incomeOutcome, ResetTransacctions } from '../../Store/actions/transactions'
+import { URL } from '@env'
+import axios from 'axios'
 
 
 const ProfileUser = (props) => {
     const dispatch = useDispatch()
     const [user, setUser] = useState('')
+    const [token, setToken] = useState('')
+    const [balanc, setBalanc] = useState('')
     const balance = useSelector(store => store.balance)
+    const inc_out = useSelector(store => store.transaction.income_outcome)
+    console.log('front', inc_out)
     const onLoad = async () => {
         try {
-            const usuario = await AsyncStorage.getItem('usuario')
-            await setUser((JSON.parse(usuario)))
-            console.log(usuario)
+            var usuario = await AsyncStorage.getItem('usuario')
+            setUser((JSON.parse(usuario)))
+
+            // var tok = await AsyncStorage.getItem('token')
+            // setToken((JSON.parse(tok)))
+            // console.log('token',token)
 
         } catch (error) {
             console.log(error)
@@ -29,9 +39,12 @@ const ProfileUser = (props) => {
 
     }
 
-    const logHome = () => {
-        AsyncStorage.clear();
-        // dispatch(logout())
+    const logHome = async() => {
+        AsyncStorage.removeItem('token');
+        AsyncStorage.removeItem('usuario')
+    //   await  dispatch(logout())
+       await dispatch(ResetAccount())
+        await dispatch(ResetTransacctions())
         props.navigation.navigate('Home');
         return;
     }
@@ -42,7 +55,10 @@ const ProfileUser = (props) => {
             'Are you sure about logging out?', //Mensaje
             [{
                 text: 'OK', //Arreglo de botones
-                onPress: () => { logHome() },
+                onPress: () => {
+                    user.token ? dispatch(logout(token)) : '',
+                        logHome()
+                },
 
             },
             {
@@ -50,78 +66,65 @@ const ProfileUser = (props) => {
                 style: 'cancel',
                 onPress: () => { props.navigation.navigate('UserProfile') },
             }
-        ],
+            ],
         )
     }
 
     const userRedux = useSelector(state => state.user)
+    useEffect( () => {
+        onLoad()
+        // user === '' ? '' : getbalance(user.data.id)
+        user === '' ? '' : dispatch(getBalance(user.data.id))
+        eject()
 
-    useEffect(() => {
-        (async ()=>{
-            try{
-               await onLoad()
-                user === '' ? '' : dispatch(getBalance(user.data.id))
-                //me traigo los contactos con expo contact
-                await ejec()
-
-            }catch(err){
-
-            }
-        })()
-
-      }, []);
-
-      const ejec = async() =>{
-          console.log("entrooo")
-          console.log("este es",user)
-        const { status } = await Contacts.requestPermissionsAsync();
-        
+    }, []);
+    const eject = ( () => {
+        const { status } =  Contacts.requestPermissionsAsync();
         if (status === 'granted') {
-          const { data } = await Contacts.getContactsAsync({
-            fields: [Contacts.Fields.PhoneNumbers],
-          });
-          console.log(data)
-      
-          //me guardo el id del usuario logueado para usar de referencia
-          //const userId = user.user['content'][1][0].id 
-          const userId = user.data.id
-          console.log("este es",user)
-          //compruebo que haya data y la filtro, generando un array de contactos prolijo
-          if (data.length !== 1) {
-            const contacts = data;
-            //console.log(contacts)
-           
-            let newContacts = []
-            for (let i = 0; i < contacts.length; i++){
-                if(contacts[i]["phoneNumbers"]){
-                  let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
-                  newContacts.push(add)
-                  //console.log(add)
-                } 
-            }
-           dispatch(postContacts(newContacts))
-          }
-        }
-      }
+            const { data } =  Contacts.getContactsAsync({
+                fields: [Contacts.Fields.PhoneNumbers],
+            });
 
-    const goProducts = () =>{
+            //me guardo el id del usuario logueado para usar de referencia
+            //const userId = user.user['content'][1][0].id 
+            const userId = user.data.id
+            //compruebo que haya data y la filtro, generando un array de contactos prolijo
+            if (data.length > 0) {
+                const contacts = data;
+                //console.log(contacts)
+
+                let newContacts = []
+                for (let i = 0; i < contacts.length; i++) {
+                    if (contacts[i]["phoneNumbers"]) {
+                        let add = { userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                        newContacts.push(add)
+                        //console.log(add)
+                    }
+                }
+                dispatch(postContacts(newContacts))
+            }
+        }
+    });
+
+
+    const goProducts = () => {
         props.navigation.navigate('MyProducts')
     }
-    const goContacts = () =>{
+    const goContacts = () => {
         props.navigation.navigate('ContactsList')
     }
-
+    //  console.log('nuevo balance',balanc)
     return (
-        <View style={style.container}>        
+        <View style={style.container}>
             <View style={style.banner}>
 
-                <View style={{alignItems:'flex-end', marginHorizontal:'3%'}}>
-                    <TouchableOpacity onPress={()=>Logout()}>
-                    <Foundation
-                        name='power'
-                        color='#FFF'
-                        size={30}
-                />
+                <View style={{ alignItems: 'flex-end', marginHorizontal: '3%' }}>
+                    <TouchableOpacity onPress={() => Logout()}>
+                        <Foundation
+                            name='power'
+                            color='#FFF'
+                            size={30}
+                        />
                     </TouchableOpacity>
 
 
@@ -132,13 +135,13 @@ const ProfileUser = (props) => {
                         <View>
                             <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola {user ? user.data.name : ''}</Text>
                             <Image
-                                source={user ? {uri:user.data.image} : require('../images/favicon.png')}
+                                source={user ? { uri: user.data.image } : require('../images/favicon.png')}
                                 style={style.Image}
                             />
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>${balance.balance.balance ? balance.balance.balance : 'Sin Saldo'}</Text>
+                            <Text style={style.text}>${balance.balance.balance}</Text>
                             <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>Balance de mi cuenta</Text>
                         </View>
 
@@ -150,27 +153,27 @@ const ProfileUser = (props) => {
             <View style={style.box2}>
                 <View style={style.subbox1}>
                     <Text>Income</Text>
-                    <Text style={style.text1}>$24454</Text>
+                    <Text style={style.text1}>${inc_out.income}</Text>
 
                 </View>
                 <View style={style.subbox1}>
-                    <Text >gastos</Text>
-                    <Text style={style.text1}>$24454</Text>
+                    <Text >Outcome</Text>
+                    <Text style={style.text1}>${inc_out.outcome}</Text>
                 </View>
 
             </View>
             <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
-                <TouchableOpacity style={style.link}><Text >1 Día</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link}><Text >7 Dias</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link}><Text >30 Días</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link}><Text >6 Meses</Text></TouchableOpacity>
+                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 1))}><Text >1 Día</Text></TouchableOpacity>
+                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 7))}><Text >7 Dias</Text></TouchableOpacity>
+                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 30))}><Text >30 Días</Text></TouchableOpacity>
+                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 180))}><Text >6 Meses</Text></TouchableOpacity>
 
             </View>
 
 
             <View style={style.box3}>
                 <View>
-                    <TouchableOpacity style={style.button1} onPress={() => { user === '' ? '' : dispatch(getBalance(user.data.id)); console.log('balance', balance) }}>
+                    <TouchableOpacity style={style.button1} onPress={() => { user === '' ? '' : dispatch(getBalance(user.data.id)) }}>
                         <Feather
                             style={style.icon}
                             name="send"
@@ -198,7 +201,7 @@ const ProfileUser = (props) => {
                 </View>
                 <View style={{}}>
 
-                    <TouchableOpacity style={style.button1} onPress={()=>{props.navigation.navigate('MyData')}}>
+                    <TouchableOpacity style={style.button1} onPress={() => { props.navigation.navigate('MyData') }}>
                         <Feather
                             style={style.icon}
                             name="globe"
@@ -227,7 +230,7 @@ const ProfileUser = (props) => {
             <View style={style.box4}>
                 <View>
                     <TouchableOpacity style={style.button2}
-                    onPress={()=>{props.navigation.navigate('RechargeMoney')}}>
+                        onPress={() => { props.navigation.navigate('RechargeMoney') }}>
                         <Feather
                             name="arrow-down-circle"
                             color="#FFF"
@@ -241,7 +244,7 @@ const ProfileUser = (props) => {
                 </View>
                 <View>
                     <TouchableOpacity style={style.button2}
-                     onPress={()=>{props.navigation.navigate('EnviarDinero')}}
+                        onPress={() => { props.navigation.navigate('EnviarDinero') }}
                     >
                         <Feather
                             name="arrow-up-circle"

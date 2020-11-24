@@ -50,7 +50,7 @@ const getAccount = async (ctx) =>{
         data
        }
     }catch(err){
-        throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+        throw new MoleculerError("user not found", 402, "SERVICE_NOT_FOUND")
     }
 }
 

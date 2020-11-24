@@ -1,14 +1,25 @@
 import React from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
 import Octicons from 'react-native-vector-icons/Octicons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 const Home = (props) => {
 
     return (
         <View style={style.container}>
-        
-     
+            <LinearGradient
+                colors={['#5E4ACF', '#1e1e1e','#5E4ACF']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: Dimensions.get('window').height,
+                  }}
+            />
+
+
             <View style={style.box1}></View>
             <View style={style.box2}>
                 <View style={{ paddingTop: 50, paddingHorizontal: 14 }}>
@@ -23,8 +34,8 @@ const Home = (props) => {
                         </View>
                         <View>
                             <Text style={style.text}>GO</Text>
-                            <Text style={{ fontSize: 19, color: '#fff',  marginTop: 10, marginHorizontal: '2.5%' }}>E-Wallet for the</Text>
-                            <Text style={{ fontSize: 19, color: '#FFF',  marginTop: 2, marginHorizontal: '2.5%' }}>gaming comunity</Text>
+                            <Text style={{ fontSize: 19, color: '#fff', marginTop: 10, marginHorizontal: '2.5%' }}>E-Wallet for the</Text>
+                            <Text style={{ fontSize: 19, color: '#FFF', marginTop: 2, marginHorizontal: '2.5%' }}>gaming comunity</Text>
                         </View>
 
                     </View>
@@ -44,23 +55,23 @@ const Home = (props) => {
                         onPress={() => props.navigation.navigate("Login")}>
                         <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '35%' }}>Login</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{marginHorizontal: '7%'}} onPress={()=>{props.navigation.navigate("ForgotPassword")}}>
+                    <TouchableOpacity style={{ marginHorizontal: '7%' }} onPress={() => { props.navigation.navigate("ForgotPassword") }}>
                         <Text style={{ fontSize: 12, color: '#FFF', marginTop: 5 }}>Forget your password?</Text></TouchableOpacity>
 
                 </View>
 
             </View>
             <View style={style.box4}>
-            <Octicons
-                            // style={style.icon}
-                            name="question"
-                            color="#FFF"
-                            size={25}
-                        />
+                <Octicons
+                    // style={style.icon}
+                    name="question"
+                    color="#FFF"
+                    size={25}
+                />
 
             </View>
-            
-        </View>
+          
+         </View>
 
     )
 
@@ -86,7 +97,7 @@ const style = StyleSheet.create({
     box4: {
         padding: 20,
         flex: 1,
-        alignItems:'flex-end',
+        alignItems: 'flex-end',
     },
     Image: {
         width: 150,
@@ -94,7 +105,7 @@ const style = StyleSheet.create({
         // borderRadius: 40
     },
     text: {
-        fontSize:27,
+        fontSize: 27,
         color: '#fff',
         fontWeight: 'bold',
 
@@ -113,10 +124,10 @@ const style = StyleSheet.create({
         borderRadius: 10,
         justifyContent: 'center',
         backgroundColor: '#1e1e1e',
-        borderWidth:1,
-        borderStyle:'solid',
-        borderColor:'#FFF',
-        marginHorizontal:'2%'
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: '#FFF',
+        marginHorizontal: '2%'
     }
 });
 
