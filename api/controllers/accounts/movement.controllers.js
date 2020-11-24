@@ -189,26 +189,27 @@ const createPay = ( payment ) => {
 
 const confirmPaypal = async (ctx) =>{
     const {paymentId} = ctx.params
-    const token = process.env.TOKEN_PAYPAL
+
     try{
-        const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
+/*         const {data} = await Axios.get(`https://api.sandbox.paypal.com/v1/payments/payment/${paymentId}`,{
             headers:{
                 'Content-Type': 'application/json',
-                'Authorization': "Bearer A21AAICQA5Ym8ke1VaNMWQwGt6VLJI8ZHPAMO00etzGPW5-iQViQ46bE9ujbn6zOCu-tetbc-bvlohPL98w05lcFiQuvvIEAw"
+                'Authorization': `Bearer ${TOKEN_PAYPAL}`
             }
         })
         
         console.log(data)
         if(!data || !data.payer.status){
             throw new Error;
-        }
+        } */
 
-        if(data.payer.status === "VERIFIED"){
+        //if(data.payer.status === "VERIFIED"){
            const amount = await Movement.findOne({where:{numTransaction:paymentId}})
            const {phone, accounts, name} = await User.findOne({include:[{
             model:Account,
             where:{userId:amount.accountId}
             }]})
+            
             if(amount.state !== "complete"){
                 await Movement.update({state:"complete"},{where:{numTransaction:paymentId}})
                 await Account.update({balance: Sequelize.literal(`balance + ${amount.amount}`)},{where:{id:amount.accountId}})
@@ -222,7 +223,7 @@ const confirmPaypal = async (ctx) =>{
                     }
                 }
             }
-        }
+      // }
 
         throw new MoleculerError("Complete su deposito", 404, "SERVICE_NOT_FOUND")
     }catch(err){
