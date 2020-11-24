@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "react-native-infinite-scrolling": "^2.0.0"
+  }
+}

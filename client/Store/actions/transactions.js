@@ -3,6 +3,7 @@ import {URL} from '@env'
 
 export const RECHARGE_PAYPAL= 'RECHARGE_PAYPA'
 export const CONFIRM_RECHARGE = 'CONFIRM_RECHARGE'
+export const GET_TRANSACTIONS = 'GET_TRANSACTIONS'
 export const RECHARGE_MERCADO='RECHARGE_MERCADO'
 export const INCOME_OUTCOME='INCOME_OUTCOME'
 export const RESET_TRANSACTIONS='RESET_TRANSACTIONS'
@@ -89,6 +90,37 @@ export function confirmRecharge(paymentId){
 
     }
 }
+
+
+
+export function getTransactions(id){
+    
+    return (dispatch) => {
+        return axios.get(`http://${URL}/api/transactions/${id}`,
+        {withCredentials:true},
+       { headers: {
+              Accept: 'application/json'
+        }}
+        )
+        .then(resp=>{
+            console.log('respuesta',resp.data.data.movements)
+            const respuesta = resp.data.data.movements
+            dispatch({
+                type:GET_TRANSACTIONS,
+                transaction: respuesta
+            })
+        })
+        .catch(e => {console.log(e)
+            return dispatch({
+                type:GET_TRANSACTIONS,
+                transaction: 'No transactions'
+            })
+        })
+        
+    }
+}
+
+
 export function ResetTransacctions(){
     return (dispatch)=>{
         dispatch({

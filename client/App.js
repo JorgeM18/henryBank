@@ -24,6 +24,8 @@ import ShowCreditCards from './screens/Users/ShowCreditCards'
 import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
+import TransactionsView from './screens/Users/TransactionsView'
+import TransactionItem from './screens/Users/TransactionItem'
 
 const Stack = createStackNavigator()
 
@@ -84,6 +86,12 @@ function MyStack() {
      <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
      <Stack.Screen name="CreditCardView" component={CreditCardView}/>
      <Stack.Screen name="CreditCard" component={CreditCard}/>
+     <Stack.Screen name="TransactionsView" component={TransactionsView}/>
+     <Stack.Screen
+              name="TransactionItem"
+              component={TransactionItem}
+              initialParams={{ item: 1}}
+            />
     </Stack.Navigator>
   )
 }
