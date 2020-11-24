@@ -187,7 +187,7 @@ const ProfileUser = (props) => {
                 </View>
                 <View>
 
-                    <TouchableOpacity style={style.button1}>
+                    <TouchableOpacity style={style.button1} onPress={() =>  props.navigation.navigate('TransactionsView')}>
                         <Feather
                             style={style.icon}
                             name="activity"
