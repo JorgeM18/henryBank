@@ -35,11 +35,7 @@ const login = () => {
                 if (err) console.log('ERROR en AsyncStorage', err);
             })
             if (res.data.message==='success'){
-                <ActivityIndicator size="large" color="#00ff00" />
-                setTimeout(()=>{
-                    props.navigation.navigate("UserProfile")
-
-                },1000)
+              
                 props.navigation.navigate("UserProfile")
             }
         })
