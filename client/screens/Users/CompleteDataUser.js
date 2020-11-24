@@ -113,30 +113,27 @@ const CompleteDataUser = (props) => {
                 const imageUri = imageSelected.uri;
                 uploadImage(imageUri)
                     .then(resolve => {
-                        // console.log(JSON.stringify(resolve))
+                      
                         const nameImg = (JSON.stringify(resolve._data.name))
                         const id = nameImg.replace(/\"/g, "")
                         const fecha = moment(new Date()).format("YYYY-MM-DD")
-                        // images/${id}&${fecha}
+                     
                         let ref = firebase.storage().ref().child(`images/${id}&${fecha}`);
                         ref.put(resolve)
                             .then(resolve => {
-                                console.log('Success',resolve)
+                              
                                 firebase.storage().ref(`images/${id}&${fecha}`).getDownloadURL()
                                     .then((response) => {
-                                        console.log('URL:',response)
+                                        // console.log('URL:',response)
                                         setImage(response)
 
                                     })
+                                    .catch(err=>{})
 
                         })
-                        .catch(error => {
-                            console.log('Failed', error)
-                        });
+                        .catch(error => {});
                     })
-                    .catch(error => {
-                        console.log(error);
-                    });
+                    .catch(error => {});
 
 
             }
@@ -148,10 +145,8 @@ const CompleteDataUser = (props) => {
     };
 
     const update = () => {
-        console.log(lastname, typeDoc, numberDoc, birthday, numberPhone, image)
         AsyncStorage.getItem('email')
-            .then(email => {
-                console.log(email);
+            .then(email => {              
                 dispatch(updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props))
             })
    
