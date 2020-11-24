@@ -1,5 +1,5 @@
-  
 import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer'
 import accountReducer from './reducers/accountReducer'
@@ -18,18 +18,16 @@ const initialState = {};
 
 const middleWare  = [thunk];
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancer =composeWithDevTools(applyMiddleware(thunk))
 
 const store=createStore(
     rootReducer,
-    initialState,
-    applyMiddleware(thunk)
-    // composeEnhancer(applyMiddleware(...middleWare)),
+    composeEnhancer,
     
 );
 
-export default store;
 
+export default store;
 
 
 // SIN REDUX DEV TOOLS SI ROMPE BORRAR LO DE ARRIBA
