@@ -33,14 +33,6 @@ export default (state = initialState, action) => {
             }
 
         case LOGIN_SUCCESS:
-            // AsyncStorage.setItem('token', JSON.stringify(action.user.token), err => {
-            //     if (err) console.log('ERROR en AsyncStorage', err);
-            // })
-            // AsyncStorage.setItem('usuario', JSON.stringify(action.user.data), err => {
-            //     if (err) console.log('ERROR en AsyncStorage', err);
-            // })
-            // AsyncStorage.getItem('token').then(res => console.log('token-----', res))
-            // console.log('reducer',action.user)
             return {
                 ...state,
                 token: action.user.token,
