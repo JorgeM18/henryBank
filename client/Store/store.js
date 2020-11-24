@@ -1,25 +1,34 @@
   
-// import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
-// import thunk from 'redux-thunk';
-// import userReducer from './reducers/userReducer'
+import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
+import thunk from 'redux-thunk';
+import userReducer from './reducers/userReducer'
+import accountReducer from './reducers/accountReducer'
+import transacctionReducer from './reducers/transacctionReducer'
+import cardReducer from './reducers/cardReducer'
 
-// const rootReducer=combineReducers({
-//     user:userReducer
-// })
-// const initialState = {};
 
-// const middleWare  = [thunk];
+const rootReducer=combineReducers({
+    user:userReducer,
+    balance:accountReducer,
+    transaction:transacctionReducer,
+    account:accountReducer,
+    card: cardReducer,
+})
+const initialState = {};
 
-// const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const middleWare  = [thunk];
 
-// const store=createStore(
-//     rootReducer,
-//     initialState,
-//     composeEnhancer(applyMiddleware(...middleWare)),
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store=createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(thunk)
+    // composeEnhancer(applyMiddleware(...middleWare)),
     
-// );
+);
 
-// export default store;
+export default store;
 
 
 
@@ -56,25 +65,3 @@
 // );
 
 // export default store;
-import {applyMiddleware, combineReducers, createStore} from 'redux';
-import thunk from 'redux-thunk';
-import userReducer from './reducers/userReducer'
-import accountReducer from './reducers/accountReducer'
-import transacctionReducer from './reducers/transacctionReducer'
-import cardReducer from './reducers/cardReducer'
-
-const rootReducer=combineReducers({
-    user:userReducer,
-    balance:accountReducer,
-    transaction:transacctionReducer,
-    card: cardReducer,
-})
-
-
-const store=createStore(
-    rootReducer,
-    applyMiddleware(thunk)
-    
-);
-
-export default store;

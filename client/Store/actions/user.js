@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 import { URL } from '@env';
 import { Alert } from 'react-native'
@@ -117,8 +117,13 @@ export const loginUser = (user, props)=>{
 // }
 
 
-export const logout = () => {
-  return dispatch({ type: 'LOGOUT_SUCCESS' })
+export const logout = (token) => {
+  return function(dispatch){
+    return axios.post(`http://${URL}/api/user/logout`, {token})
+    .then(resp=>{
+       dispatch({ type: 'LOGOUT_SUCCESS' })
+    })
+  }
 };
 
 //VELIDAR PIN

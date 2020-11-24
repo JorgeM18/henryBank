@@ -78,7 +78,7 @@ function MyData (){
                 phone:text})}/>
                  <TextInput
             style={styles.inputViewSafe}
-            defaultValue={us!==''?us.data.address +' '+ us.data.addressnum:''}
+            defaultValue={us!==''?us.data.address :''}
             placeholderTextColor = "#3B8EA5"
             onChangeText = {text => setState({...state,
                 adress:text})}/>
