@@ -24,7 +24,7 @@ import ShowCreditCards from './screens/Users/ShowCreditCards'
 import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
-import TransactionsView from './screens/Users/TransactionsView';
+import TransactionsView from './screens/Users/TransactionsView'
 import TransactionItem from './screens/Users/TransactionItem'
 
 const Stack = createStackNavigator()

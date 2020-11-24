@@ -16,7 +16,7 @@ const TransactionsView = ( props) => {
     try {
         var usuario = await AsyncStorage.getItem('usuario')
         setUser((JSON.parse(usuario)))
-        user === '' ? '' : console.log('user',user)
+        user === '' ? 'nadaaaaa' : console.log('user',user)
 
     } catch (error) {
         console.log(error)
@@ -29,13 +29,20 @@ const TransactionsView = ( props) => {
   useEffect(() => {
     loadMore()
     onLoad()
-    user === '' ? '' : props.getTransactions(user.data.id)
-   
-  
+    // user === '' ? '' : props.getTransactions(user.data.id)
+    // user && props.getTransactions(user.data.id)    
   },[])
 
+  useEffect(() => {
+    user && props.getTransactions(user.data.id) 
+  },[user])
+
   const handleItem = (item) => {
-    const itemSend = props.transactions[item-1]
+  
+    const indexSend = props.transactions.findIndex(e => e.numTransaction === item)
+   
+    const itemSend = props.transactions[indexSend]
+
     props.navigation.navigate('TransactionItem', { item: itemSend})
   }
 
@@ -47,7 +54,7 @@ const TransactionsView = ( props) => {
        
         <View style={style.box}>
               <TouchableOpacity style={style.iconwrapper} onPress={() => handleItem(item.numTransaction)} >
-                          {item.movement_type === 'received' ? (
+                          {((item.movement_type === 'received') || (item.movement_type ==='deposits')) ? (
                                               <Feather
                                                       style={style.icon}
                                                       name="arrow-up-circle"
@@ -68,9 +75,9 @@ const TransactionsView = ( props) => {
                         <Text style={[style.text, {justifyContent: 'flex-start'} ]}> {item.description +'          '}  </Text>
                       )}
                   
-                    {item.movement_type === 'received' ? (
-                    <Text style={[style.text, {fontWeight: 'bold'}]}>  {item.amount} </Text>) :
-                    (<Text style={[style.text, {fontWeight: 'bold'}]}> - {item.amount} </Text>)}
+                  {((item.movement_type === 'received') || (item.movement_type ==='deposits')) ? (
+                    <Text style={[style.text, {fontWeight: 'bold'}]}> $ {item.amount} </Text>) :
+                    (<Text style={[style.text, {fontWeight: 'bold'}]}> - $ {item.amount} </Text>)}
             </View>
 
      </View>
@@ -90,14 +97,30 @@ const TransactionsView = ( props) => {
             <View style={style.head}>
               <Text style={style.title}>My Transactions</Text>
             </View>
-            <View>
-              <Text>{user ? user.data.id : 'nada'}</Text>
-            </View>
-          <InfiniteScroll 
-            renderData = {renderData}
-            data = { props.transactions && props.transactions }
-            loadMore = { loadMore }
-          />
+            {console.log(props.transactions)}
+           {/* { props.transactions ? (               
+                <InfiniteScroll 
+                  renderData = {renderData}
+                  data = { props.transactions && props.transactions }
+                  loadMore = { loadMore }
+                />) : (
+                <View style={style.box}>
+                <Text style={style.text}>No Transactions</Text>
+              </View> )} */}
+
+              {props.transactions === 'No transactions'? (
+                <View style={style.top1}>
+                 <View style={style.box}>
+                      <Text style={style.text}>No Transactions</Text>
+                  </View>
+                  </View>
+              ): (
+                <InfiniteScroll 
+                renderData = {renderData}
+                data = { props.transactions && props.transactions }
+                loadMore = { loadMore }
+              />
+              )}
       </View>
       <View style={{flex: .15, backgroundColor: '#282366'}}>
         
@@ -109,7 +132,7 @@ const TransactionsView = ( props) => {
 const style = StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: '#1f1d5e',
+      backgroundColor: '#1f2333',
       flexDirection: 'column'
   },
   head:{
@@ -118,7 +141,7 @@ const style = StyleSheet.create({
     padding: '7%'
   },
   title: {
-    // fontFamily: 'arial',
+    fontFamily: 'serif',
     fontSize: 25,
     color:'#f6f2fc',
     justifyContent: 'space-between',
@@ -128,6 +151,12 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     margin: 12,
   },
+  top1:{
+    flex: .7,
+    width: '50%',
+    alignSelf: 'center',
+    justifyContent: 'center'
+  },
   box:{
     flexDirection: 'row',
     borderWidth: 1,
@@ -136,14 +165,14 @@ const style = StyleSheet.create({
     paddingBottom: '2.5%',
     paddingLeft: '5%',
     paddingRight:'5%',
-    backgroundColor: '#282366',
+    backgroundColor: '#292768',
     width: '100%', 
-    borderRadius:10,
+    borderRadius:7,
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   text:{
-    // fontFamily:'Cochin',
+    fontFamily:'serif',
     fontSize: 16,
     marginLeft: '10%',
     color: '#f6f2fc',

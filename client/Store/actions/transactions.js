@@ -119,26 +119,29 @@ const transaction = [
       ]
 
 export function getTransactions(id){
-    
+    console.log('...entro', id)
     return (dispatch) => {
-        return axios.get(`http://${URL}/api/transactions/:${id}`,
+        return axios.get(`http://${URL}/api/transactions/${id}`,
         {withCredentials:true},
        { headers: {
               Accept: 'application/json'
         }}
         )
         .then(resp=>{
-            console.log('respuesta',resp.data)
+            console.log('respuesta',resp.data.data.movements)
+            const respuesta = resp.data.data.movements
             dispatch({
                 type:GET_TRANSACTIONS,
-                transaction: transaction
+                transaction: respuesta
             })
         })
-        .catch(e => console.log(e))
-        // return dispatch({
-        //     type:GET_TRANSACTIONS,
-        //     transaction: transaction
-        // })
+        .catch(e => {console.log(e)
+            return dispatch({
+                type:GET_TRANSACTIONS,
+                transaction: 'No transactions'
+            })
+        })
+        
     }
 }
 

@@ -6,6 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
  
 const TransactionsView = (props) => {
     const transaction = props.route.params.item
+    console.log('llega', transaction)
 
 
   return(
@@ -19,22 +20,23 @@ const TransactionsView = (props) => {
             <Text style={style.text}>
                 Transaction Number:
             </Text>
-            <Text style={style.box}>
-                {transaction && transaction.numTransaction}
+            <Text style={style.box2}>
+                    {transaction && transaction.numTransaction}
             </Text>
             <Text style={style.text}>
                 Description:
             </Text>
-            <Text style={style.box}>
+            <Text style={style.box2}>
                 {transaction && transaction.description}
             </Text>
             <Text style={style.text}>
                 Type:
             </Text>
-            <Text style={style.box}>
-                    {transaction && transaction.movement_type === 'received' ? (
+            <View style={style.box}>
+              <Text  style={{paddingHorizontal: 20, color:'#f6f2fc', fontFamily: 'serif'}}>
+                    {transaction &&  ((transaction.movement_type === 'received') || (transaction.movement_type ==='deposits'))  ? (
                                                     <Feather
-                                                            style={{marginLeft: '10%'}}
+                                                            style={style.icon}
                                                             name="arrow-up-circle"
                                                             color="green"
                                                             size={25}
@@ -46,10 +48,13 @@ const TransactionsView = (props) => {
                                                             size={25}
                                                         />
                                                         )}
-                {transaction && transaction.movement_type}
-            </Text>
+               </Text>
+               <Text style={{alignSelf: 'center', justifyContent:'flex-start', fontFamily:'serif', color:'#f6f2fc'}}>
+                    {transaction && transaction.movement_type}
+                </Text>
+            </View>
             <Text style={style.text}>
-                amount:
+                Amount:
             </Text>
             <Text style={style.box1}>
                 $ {transaction && transaction.amount}
@@ -65,37 +70,52 @@ const TransactionsView = (props) => {
 const style = StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: '#1f1d5e',
-      flexDirection: 'column',
+      backgroundColor: '#1f2333',
+      // flexDirection: 'column',
       alignItems: 'center',
   },
   head:{
     alignItems: 'center',
     justifyContent: 'center',
-    padding: '7%'
+    padding: '7%',
+    
   },
   title: {
     fontSize: 25,
     color:'#f6f2fc',
     justifyContent: 'space-between',
     alignContent:'center',
+    fontFamily: 'serif'
   },
   top:{
     flexDirection: 'row',
-    margin: 12,
+    margin: 5,
   },
   box:{
     borderWidth: 1,
     borderColor: '#bb59fa',
     paddingTop: '3%',
     paddingBottom: '3%',
+    backgroundColor: '#292768',
+    color: '#f6f2fc',
+    borderRadius: 7,
+    width: 160,
+    fontFamily: 'serif',
+    flexDirection: 'row',
+  },
+  box2:{
+    borderWidth: 1,
+    borderColor: '#bb59fa',
+    paddingTop: '3%',
+    paddingBottom: '3%',
     paddingLeft: '15%',
     paddingRight: '15%',
-    backgroundColor: '#282366',
+    backgroundColor: '#292768',
     color: '#f6f2fc',
-    borderRadius:10,
-    maxWidth: '80%',
-    
+    borderRadius: 7,
+    // width: 160,
+    fontFamily: 'serif',
+    flexDirection: 'row',
   },
   box1:{
     borderWidth: 1,
@@ -104,10 +124,11 @@ const style = StyleSheet.create({
     paddingBottom: '10%',
     paddingLeft: '15%',
     paddingRight: '15%',
-    backgroundColor: '#282366',
+    backgroundColor: '#292768',
     color: '#f6f2fc',
-    borderRadius:10,
-    fontSize: 24
+    borderRadius:7,
+    fontSize: 24,
+    fontFamily: 'serif'
     
   },
   text:{
@@ -115,11 +136,11 @@ const style = StyleSheet.create({
     color: '#f6f2fc',
     marginBottom: 10,
     marginTop: 10,
+    fontFamily: 'serif'
   },
   icon: {
-    paddingRight: 10,
-    marginLeft: 10,
-    marginHorizontal: 10
+    padding:'2%',
+    margin: 10
   },
   iconwrapper: {
     padding: '4%',
@@ -135,19 +156,5 @@ const style = StyleSheet.create({
   }
 
 })
-
-// const mapStateToProps = (state) => {
-//   return {
-//     transaction: state.transaction.transaction
-//   };
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     getTransactionForNum: (num) => dispatch(getTransactionForNum(num)),
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(TransactionsView);
 
 export default TransactionsView

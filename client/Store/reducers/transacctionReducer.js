@@ -17,6 +17,7 @@ export default (state= initialState, actions)=>{
 
             }
         case GET_TRANSACTIONS:
+            console.log('logggg', actions.transaction)
             return{
                 ...state,
                 transactions: actions.transaction
