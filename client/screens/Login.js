@@ -112,7 +112,7 @@ const handleSubmit = () => {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#292768',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -138,7 +138,10 @@ inputGroup: {
     borderColor: '#e1e1e1',
     borderWidth: 1,
     fontSize: 18,
-    width:'90%'
+    width:'90%',
+    fontFamily:'serif'
+
+
 },
 
   inputViewSafe:{
@@ -148,28 +151,32 @@ inputGroup: {
     borderRadius:8,
     marginBottom: 8,
     paddingHorizontal: 10,
-    backgroundColor: "#eceff1"
+    backgroundColor: "#eceff1",
+    fontFamily:'serif'
 },
 
  inputText:{
     height: 50,
-    color: "white"
+    color: "white",
+    fontFamily:'serif'
 },
 
  forgot:{
     color: "white",
     height: 20,
-    marginTop: 5
+    marginTop: 5,
+    fontFamily:'serif'
 },
 
  loginBtn:{
      width: "80%",
-     backgroundColor: "#f19953",
+     backgroundColor: "#1f2333",
      borderRadius: 25,
      height: 50,
      alignItems: "center",
      marginTop: 40,
-     marginBottom: 10
+     marginBottom: 10,
+     fontFamily:'serif'
 
  },
  loginText:{
@@ -178,7 +185,8 @@ inputGroup: {
 
  loginTextBtn:{
     color: "white",
-    marginTop: 15 
+    marginTop: 15,
+    fontFamily:'serif'
 }
 })
 

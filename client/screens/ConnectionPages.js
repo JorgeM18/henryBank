@@ -26,7 +26,7 @@ export default function ConnectionPages(){
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#292768',
         alignItems: 'center',
         justifyContent: 'center'
       
@@ -38,20 +38,22 @@ const styles = StyleSheet.create({
     },
     Botones:{
         width: 240,
-        backgroundColor: "#f19953",
+        backgroundColor: "#1f2333",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
-        marginTop: 40,
+        marginTop: 20,
         marginBottom: 3
    
     },
     loginText:{
         color: "white", 
+        fontFamily: 'serif'
     },
    
     textBotones:{
        color: "white",
-       marginTop: 15 
+       marginTop: 15,
+       fontFamily:'serif' 
    }
 })
