@@ -34,93 +34,82 @@ const handleShowCreditCards = () => {
         <View style={style.container}>
                     
             <View style={style.banner}>
-                <View style={{alignItems:'flex-end', marginHorizontal:'3%', marginTop: '5%'}}>
-                
-           
-                </View>
-                <View style={{ paddingHorizontal: 14 }}>
+                            
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View>
-                            <Text style={{ fontSize: 10, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}></Text>
-                            <FontAwesome5
-                                    style={style.head}
-                                    name="id-card-alt"
-                                    color="#FFF"
-                                    size={30}
-                                />
+                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: '3%' }}>
+                                    <View>
+                                        <FontAwesome5
+                                                style={style.head}
+                                                name="id-card-alt"
+                                                color="#FFF"
+                                                size={25}
+                                            />
 
-                        </View>
-                        <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>My Products</Text>
-                        </View>
+                                    </View>
+                                    <View style={{ alignItems: 'center' }}>
+                                        <Text style={style.text}>My Products</Text>
+                                    </View>
 
-                    </View>
-                </View>
-            </View>
+                                </View>
+                    
 
-            <View style={style.box2}>
-                <View style={style.subbox1} >
-                        <TouchableOpacity style={style.button1} onPress={(e) => handleAccount}>
-                                <FontAwesome5
-                                    style={style.icon}
-                                    name="id-badge"
-                                    color="#FFF"
-                                    size={30}
-                                />
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Account</Text>
-                </View>
-            </View>
+ 
+                            <View style={style.subbox1} >
+                                    <TouchableOpacity style={style.button1} onPress={(e) => handleAccount}>
+                                            <FontAwesome5
+                                                style={style.icon}
+                                                name="id-badge"
+                                                color="#FFF"
+                                                size={25}
+                                            />
+                                    </TouchableOpacity>
+                                    <Text style={style.text2}>My Account</Text>
+                            </View>
 
-            <View style={style.box2}>
-                <View style={style.subbox1}>
-                        <TouchableOpacity style={style.button1} onPress={handleShowCreditCards}>
-                                <Foundation
-                                    style={style.icon}
-                                    name="credit-card"
-                                    color="#FFF"
-                                    size={30}
-                                />
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Cards</Text>
-                </View>
-            </View>
 
-            <View style={style.box2}>
-                <View style={style.subbox1}>
-                        <TouchableOpacity style={style.button1} onPress={(e) => props.navigation.navigate('ContactsList')}>
-                                <Foundation
-                                    style={style.icon}
-                                    name="torsos-all"
-                                    color="#FFF"
-                                    size={30}
-                                />
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>My Contacts</Text>
-                </View>
-            </View>
-           
-            <View style={style.box2}>
-                <View style={style.subbox1}>
-                        <TouchableOpacity style={style.button1} onPress={(e) => handleContacts()}>
-                                <FontAwesome5
-                                    style={style.icon}
-                                    name="plus"
-                                    color="#FFF"
-                                    size={30}
-                                />
-                        </TouchableOpacity>
-                        <Text style={{ fontSize: 20, color: '#f6f2fc', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>More...</Text>
-                </View>
-            </View>
+                            <View style={style.subbox1}>
+                                    <TouchableOpacity style={style.button1} onPress={handleShowCreditCards}>
+                                            <Foundation
+                                                style={style.icon}
+                                                name="credit-card"
+                                                color="#FFF"
+                                                size={25}
+                                            />
+                                    </TouchableOpacity>
+                                    <Text style={style.text2}>My Cards</Text>
+                            </View>
 
-            
-            <View style={style.box4}>
-                
+                            <View style={style.subbox1}>
+                                    <TouchableOpacity style={style.button1} onPress={(e) => props.navigation.navigate('ContactsList')}>
+                                            <Foundation
+                                                style={style.icon}
+                                                name="torsos-all"
+                                                color="#FFF"
+                                                size={25}
+                                            />
+                                    </TouchableOpacity>
+                                    <Text style={style.text2}>My Contacts</Text>
+                            </View>
+
+                    
+
+                            <View style={style.subbox1}>
+                                    <TouchableOpacity style={style.button1} onPress={(e) => handleContacts()}>
+                                            <FontAwesome5
+                                                style={style.icon}
+                                                name="plus"
+                                                color="#FFF"
+                                                size={25}
+                                            />
+                                    </TouchableOpacity>
+                                    <Text style={style.text2}>More...</Text>
+                            </View>
+                           
 
             </View>
-
+            <View style={{flex: .10, backgroundColor: '#292768'}}>
+        
+            </View>
         </View>
 
     )
@@ -129,18 +118,18 @@ const handleShowCreditCards = () => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1f1d5e',
-        marginTop: '-15%'
+        // backgroundColor: '#1F2333',
+        // marginTop: '-15%'
     },
     banner: {
-        backgroundColor: '#282366',
+        backgroundColor: '#1F2333',
         height: 250,
-        flex: 2,//el componente crece de arriba hacia abajo con el espacio disponible
+        flex: .9,//el componente crece de arriba hacia abajo con el espacio disponible
        
     },
     box2: {
         flex: 2,
-        backgroundColor: '#282366',
+        backgroundColor: '#292768',
         // flexDirection: 'row',
 
         // flexDirection:'row',
@@ -163,23 +152,27 @@ const style = StyleSheet.create({
     subbox1: {
         flexDirection: 'row',
         backgroundColor: '#1f1d5e',
-        
         alignItems:'center',
         height:80,
         justifyContent: 'flex-start',
         marginHorizontal:'5%',
         marginVertical:'3%',
-        paddingTop: 10,
-        paddingBottom: 10,
+        paddingTop: 8,
+        paddingBottom: 8,
         borderWidth:1,
         borderColor:'#bb59fa',
         borderRadius:8
     },
 
-    text1: {
-        fontSize: 20,
-        color: 'black',
-       
+
+    text2: {
+        fontSize: 20, 
+        color: '#f6f2fc', 
+        marginHorizontal: '2%', 
+        marginVertical:'5%', 
+        fontWeight: 'bold', 
+        paddingLeft: 10,
+        fontFamily: 'serif'
     },
     icon:{
         marginVertical:'10%', 
@@ -187,18 +180,20 @@ const style = StyleSheet.create({
         alignSelf: 'center'
     },
     text: {
-        fontSize: 25,
+        fontSize: 22,
         color: '#FFF',
-        marginHorizontal: '8%',
-        paddingTop:40,
-        paddingLeft: 5,
-        fontWeight: 'bold'
+        // marginHorizontal: '8%',
+        marginTop:18,
+        // paddingLeft: 5,
+        fontWeight: 'bold',
+        fontFamily: 'serif'
     },
     head: {
         width: 50,
         height: 50,
-        paddingLeft: 15,
-        paddingTop: 18
+        marginTop:30
+        // paddingLeft: 15,
+        // paddingTop: 18
         
     },
     button1: {

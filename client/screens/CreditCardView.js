@@ -19,7 +19,7 @@ const CreditCardView = () => {
      
         <View style={style.container}>
                     
-            <View style={style.banner}>
+            {/* <View style={style.banner}> */}
                 <View style={{alignItems:'flex-end', marginHorizontal:'1%', marginTop: '5%', flexDirection: 'row', alignItems: 'center'}}>
                     <View>
                             <Foundation
@@ -43,7 +43,7 @@ const CreditCardView = () => {
                            
                     </View>
                 
-                </View>
+                {/* </View> */}
             </View>
 
    
@@ -66,7 +66,7 @@ const CreditCardView = () => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1F1D5E',
+        backgroundColor: '#1F2333',
         // height: '1%',
         // marginTop: 0
     },
@@ -89,7 +89,6 @@ const style = StyleSheet.create({
     box3: {
         marginTop: '-10%',
         paddingVertical: '15%',
-        flex: 3,
         backgroundColor: '#FFF',
         justifyContent: 'center',
         // flexWrap: 'wrap',
@@ -101,7 +100,7 @@ const style = StyleSheet.create({
     },
     subbox1: {
         flexDirection: 'row',
-        backgroundColor: '#282366',
+        backgroundColor: '#292768',
         
         alignItems:'center',
         height:80,
