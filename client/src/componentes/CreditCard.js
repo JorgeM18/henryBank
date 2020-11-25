@@ -32,10 +32,11 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
 
     return (
       <View style={s.container}>
-        <Switch
+        <View style={{ justifyContent:'center', alignContent: 'center'}}>
+        {/* <Switch
           style={s.switch}
           onValueChange={_setUseLiteCreditCardInput}
-          value={state.useLiteCreditCardInput} />
+          value={state.useLiteCreditCardInput} /> */}
 
         { state.useLiteCreditCardInput ?
           (
@@ -56,7 +57,7 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
               requiresName
               requiresCVC
               cardImageFront={require('./../../screens/images/card-front3.png')}
-              cardImageBack={require('./../../screens/images/card-back2.png')}
+              cardImageBack={require('./../../screens/images/card-back.png')}
 
 
               labelStyle={s.label}
@@ -69,13 +70,14 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
               onChange={_onChange} />
           )
         }
-        <View>
+        </View>
+        <View style={{justifyContent:'center', alignContent: 'center', marginTop: 40}}>
                   <TouchableOpacity style={s.button}
                         onPress={() => {
                             validarTarjeta()
                         }}
                         >
-                        <Text style={{ color: '#f6f2fc', fontSize: 20}}>
+                        <Text style={{ color: '#f6f2fc', fontSize: 20, fontFamily: 'serif', alignSelf: 'center'}}>
                             Add a card
                         </Text>
 
@@ -93,8 +95,10 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
       marginBottom: 20,
     },
     container: {
-      backgroundColor: "#1f1d5e",
+      backgroundColor: "#292768",
       flex:1,
+      alignContent: 'center',
+      justifyContent: 'center'
       // marginBottom: 10,
     },
     label: {
@@ -106,18 +110,18 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
       color: "#f6f2fc",
     },
     button: {
-      height: 50, 
-      width: 150, 
-      backgroundColor: '#282366', 
-      borderWidth: 1,
-      borderColor: '#bb59fa',
-      borderRadius: 15, 
-      justifyContent: 'center', 
-      alignItems: 'center',
+      width: 250,
+      height: 50,
+      borderRadius: 10,
+      justifyContent: 'center',
+      backgroundColor: '#1f2333',
       alignSelf: 'center',
-      marginTop: '10%',
-      marginBottom: '10%'
-    }
+      borderWidth: 1,
+      borderColor:'#BB59FA'
+      // marginVertical: 20,
+      // marginHorizontal: 40
+
+  },
   });
 
 
