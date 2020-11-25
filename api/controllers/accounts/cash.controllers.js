@@ -31,7 +31,7 @@ const cashDeposit = async (ctx) => {      // depositos en efectivo
                 userId: id
             }
         })
-
+        
         const mov = await Movement.create({
         numTransaction: numMov,
         state: 'complete',
@@ -43,10 +43,10 @@ const cashDeposit = async (ctx) => {      // depositos en efectivo
     })
 
         var oldBalance = account.balance
-        await account.update({
+        await Account.update({
           balance: oldBalance + amount
-        })
-
+        },{where:{userId:id}})
+        
         const json = {
             message: 'success',
             content: {
