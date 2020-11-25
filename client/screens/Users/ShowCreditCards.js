@@ -58,29 +58,25 @@ useEffect(() => {
         <View style={style.container}>
                     
             <View style={style.banner}>
-                <View style={{ paddingHorizontal: 14 }}>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{flexDirection:'row', justifyContent: 'center'}}>
                         <View>
-                            <Text style={{ fontSize: 10, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}></Text>
                             <FontAwesome5
                                     style={style.head}
                                     name="credit-card"
                                     color="#FFF"
-                                    size={30}
+                                    size={25}
                                 />
 
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             <Text style={style.text}>My Cards</Text>
                         </View>
-
-                    </View>
                 </View>
-            </View>
+            
 {/* ------------------------------ */}
         {cards ? cards.map((e,i) => 
-                <View style={style.box2}>
+
                     <View style={style.subbox1} >
                             <TouchableOpacity>
                             <Image
@@ -90,18 +86,18 @@ useEffect(() => {
                                     style={{width: 75, height: 45, borderRadius: 10, marginLeft: '10%'}}
                                 />
                             </TouchableOpacity>
-                            <Text style={{ fontSize: 16, color: '#F6F2FC', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{'... '+e.number.substring(15,19)}</Text>
-                            <Text style={{ fontSize: 16, color: '#F6F2FC', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{e.name}</Text>
+                            <Text style={{ fontSize: 16, color: '#F6F2FC', marginVertical:'5%', fontWeight: 'bold', marginLeft: 10, fontFamily: 'serif' }}>{'... '+e.number.substring(10,19)}</Text>
+                            {/* <Text style={{ fontSize: 16, color: '#F6F2FC', marginHorizontal: '2%', marginVertical:'5%', fontWeight: 'bold', paddingLeft: 10 }}>{e.name.substring(0,5)+'...'}</Text> */}
                             <TouchableOpacity onPress={() => desvincularTarjeta(i)}>
-                                {/* <FontAwesome5
-                                        style={style.head}
-                                        name="credit-card"
-                                        color="#FFF"
-                                        size={5}
-                                    /> */}
-                                    <Text style={style.button3}>x</Text>
+
+                                        <Foundation
+                                                    style={style.button3}
+                                                    name="trash"
+                                                    color="#FFF"
+                                                    size={15}
+                                                />  
                             </TouchableOpacity>
-                    </View>
+
                 </View>
             
             ): 
@@ -112,10 +108,10 @@ useEffect(() => {
 
             {cards && cards.length > 0 ? ( <View style={style.box2}>
                 </View>) : (
-                    <View style={style.box2}>
-                    <View style={style.subbox1} >
-                        <Text style={{ fontSize: 18, color: '#f6f2fc', fontWeight: 'bold', marginLeft: 25, marginTop: 8, marginBottom: 2, paddingHorizontal: '10%', paddingVertical: '10%'}}>No linked card</Text>
-                    </View>
+
+                    <View style={style.subbox} >
+                        <Text style={{ fontSize: 18, color: '#f6f2fc', fontFamily: 'serif'}}>No linked card</Text>
+
                     </View>
                 )
             }
@@ -123,17 +119,23 @@ useEffect(() => {
            
 
             
-            <View style={style.box4}>
-                    <TouchableOpacity style={style.button2} onPress={handleCard }>
-                            <Feather
-                                    name="arrow-up-circle"
-                                    color="#FFF"
-                                    size={20}
-                                />                     
-                               
-                            
-                    <Text style={{ fontSize: 18, color: '#f6f2fc', fontWeight: 'bold', marginLeft: 25 }}>Link a Card</Text>
-                    </TouchableOpacity>
+                    
+            </View>
+
+            <View style={{flex: .15, backgroundColor: '#292768'}}>
+         
+                                    <TouchableOpacity style={style.button2} onPress={handleCard }>
+                                            <Feather
+                                                    name="arrow-up-circle"
+                                                    color="#FFF"
+                                                    size={25}
+                                                />                     
+                                            
+                                            
+                                    <Text style={{ fontSize: 16, color: '#f6f2fc', fontWeight: 'bold', marginLeft: 25, fontFamily: 'serif' }}>Link a Card</Text>
+                                    </TouchableOpacity>
+
+        
             </View>
 
         </View>
@@ -144,17 +146,16 @@ useEffect(() => {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1f1d5e',
+        backgroundColor: '#1F2333',
         // marginTop: '15%'
     },
     banner: {
         height: 250,
-        flex: 1,//el componente crece de arriba hacia abajo con el espacio disponible
+        flex: .85,//el componente crece de arriba hacia abajo con el espacio disponible
        
     },
     box2: {
-        flex: 1,
-        backgroundColor: '#282366',
+       marginTop: '15%'
         // flexDirection: 'row',
 
         // flexDirection:'row',
@@ -180,13 +181,27 @@ const style = StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection:'row'
     },
-    subbox1: {
+    subbox: {
         flexDirection: 'row',
-        backgroundColor: '#282366',
-        
+        backgroundColor: '#292768',
+        fontFamily:'serif',
         alignItems:'center',
         height:80,
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
+        marginTop: 60,
+        marginHorizontal:'3%',
+        marginVertical:'3%',
+        borderWidth:1,
+        borderColor:'#BB59FA',
+        borderRadius:8
+    },
+    subbox1: {
+        flexDirection: 'row',
+        backgroundColor: '#292768',
+        fontFamily:'serif',
+        alignItems:'center',
+        height:80,
+        justifyContent: 'space-around',
         marginHorizontal:'5%',
         marginVertical:'3%',
         borderWidth:1,
@@ -223,15 +238,15 @@ const style = StyleSheet.create({
         fontSize: 25,
         color: '#FFF',
         marginHorizontal: '8%',
-        paddingTop:40,
-        paddingLeft: 5,
-        fontWeight: 'bold'
+        marginTop:40,
+        marginLeft: 5,
+        fontWeight: 'bold',
+        fontFamily: 'serif'
     },
     head: {
         width: 50,
         height: 50,
-        paddingLeft: 15,
-        paddingTop: 18
+        marginTop: 45
         
     },
     button1: {
@@ -245,28 +260,25 @@ const style = StyleSheet.create({
     },
     button2: {
         flexDirection: 'row',
-        // width: 130,
-        // height: 45,
-        marginTop: '10%',
+        marginTop: '5%',
         marginHorizontal: '20%',
         alignSelf:'center',
         color:'#FFF',
         marginVertical: '5%',
-        backgroundColor: '#1f1d5e',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     button3: {
-        width: 20,
-        height: 20,
-        marginLeft: 8,
-        paddingLeft: 6,
-        paddingTop: 0,
-        paddingBottom:4,
+        margin: 3,
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
         backgroundColor: '#7D3EE7',
         color: '#fff',
-        borderRadius: 5,
-        alignSelf: 'center'
+        borderRadius: 25,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 
   

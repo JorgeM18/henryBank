@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 import { URL } from '@env';
 import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const ADD_USER='ADD_USER'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
@@ -30,95 +31,46 @@ export function createUser(user) {
 
 }
 
-// login user
-// aca me deberia llegar el usuario y la password
-// export const loginUser = (user) => (dispatch) => {
-//     const userEnv = {
-//       email: user.email,
-//       password: user.password,
-//     };
+const LoginStorage=(user)=>{
+  AsyncStorage.setItem('token', JSON.stringify(user.token), err => {
+    if (err) console.log('ERROR en AsyncStorage', err);
+})
+AsyncStorage.setItem('usuario', JSON.stringify(user), err => {
+    if (err) console.log('ERROR en AsyncStorage', err);
+})
 
-//     return axios
-//       .post(`http://${URL}/api/user/login`, userEnv)
-//       .then((res) => {
-//         console.log('ENTRÉ AL ACTION')
-//         console.log(res.data)
-//         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
-//       })
-//       .catch((error) => {
-//         // console.log('respuesta x---', error)
-//         // dispatch(
+}
+export const loginUser=(user, props)=>async(dispatch)=>{
+  try{
+    const resp= await axios.post(`http://${URL}/api/user/login`, user);
+    
+    const loginData= await resp.data;
+    console.log('LOGIN', loginData)
+    dispatch({
+          type: LOGIN_SUCCESS,
+           user: loginData 
+         });
+    LoginStorage(loginData)
+    if(loginData.message==='success'){
+      props.navigation.navigate('UserProfile')
+    }
 
-//         //   returnErrors(error.response.data, error.response.status, LOGIN_FAIL)
-//         // );
-//         dispatch({ type: LOGIN_FAIL });
-//       });
-//   };
-// export const loginUser = (user)=>{
-//   return  function(dispatch){
-//    return  axios.post(`http://${URL}/api/user/login`, user)
-//     .then(res=>{
-//       console.log(res.data.token)
-//       dispatch({
-//          type: LOGIN_SUCCESS,
-//           user: res.data 
-//         });
-//     })
-//     .catch((error)=>{
-//       throw(error)
-//     })
-//   }
-// }
-export const loginUser = (user, props)=>{
-  return   function(dispatch){
-   return  axios.post(`http://${URL}/api/user/login`, user)
-    .then(res=>{
-      AsyncStorage.setItem('token', JSON.stringify(res.data.token), err => {
-        if (err) console.log('ERROR en AsyncStorage', err);
-    })
-    AsyncStorage.setItem('usuario', JSON.stringify(res.data), err => {
-        if (err) console.log('ERROR en AsyncStorage', err);
-    })
-    return res.data
-    })
-    .then((data)=>{
-      console.log('ACTIONS',data.message)
-      dispatch({
-        type: LOGIN_SUCCESS,
-         user: data 
-       });
-       if(data.message==='success'){
-        props.navigation.navigate("UserProfile")
-
-       }
-
-    })
-    .catch((error)=>{
-      throw('ERROR ACTIONS',error)
+  }catch(error){
+    dispatch({
+      type: 'LOGIN_FAIL',
+      user:error.resp.data
     })
   }
 }
-// export const loginUser = (user, props) => {
-//   return async function (dispatch) {
-//     const response = await axios({
-//       method: "POST",
-//       data: {
-//         user
-//       },
-//       withCredentials: true,
-//       url: `http://${URL}/api/user/login`,
-//     })
-//     dispatch({
-//       type: LOGIN_SUCCESS,
-//       user: response.data
-//     });
-
-//   }
-// }
 
 
-export const logout = () => {
-  return dispatch({ type: 'LOGOUT_SUCCESS' })
+export const logout = (token) => {
+  return function(dispatch){
+    return axios.post(`http://${URL}/api/user/logout`, {token})
+    .then(resp=>{
+       dispatch({ type: 'LOGOUT_SUCCESS' })
+    })
+  }
 };
 
 //VELIDAR PIN

@@ -14,8 +14,8 @@ const genCBU = async() =>{
     
 }
 
-const account = async (ctx) =>{
-    const {id, alias, pin} = ctx.params
+const account = async (id, alias, pin) =>{
+    //const {id, alias, pin} = ctx.params
     const cbuCode = await genCBU();
     try{
 
@@ -50,7 +50,7 @@ const getAccount = async (ctx) =>{
         data
        }
     }catch(err){
-        throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND")
+        throw new MoleculerError("user not found", 402, "SERVICE_NOT_FOUND")
     }
 }
 

@@ -8,54 +8,19 @@ import {loginUser} from './../Store/actions/user'
 import { URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const localhost='192.168.0.5:3000'
-const MAX_LEN = 15;
-const MIN_LEN = 6;
-const PASS_LABELS = ["Too Short", "Weak", "Normal", "Strong", "Secure"];
 const deviceWindow = Dimensions.get('window')
 
  function Login (props) {
 
-    const {loginUser, user} = props
-    const dispatch=useDispatch();
-   const  [state, setState] = useState({
-        email:"",
-        password:""
-  }   )
+    const dispatch = useDispatch();
+    const [state, setState] = useState({
+        email: "",
+        password: ""
+    })
 
-const login = () => {
-    // dispatch(loginUser(state))
-    axios.post(`http://${URL}/api/user/login`, state)
-        .then((res)=>{
-            console.log('login',res.data)
-            AsyncStorage.setItem('token', JSON.stringify(res.data.token), err => {
-                if (err) console.log('ERROR en AsyncStorage', err);
-            })
-            AsyncStorage.setItem('usuario', JSON.stringify(res.data), err => {
-                if (err) console.log('ERROR en AsyncStorage', err);
-            })
-            if (res.data.message==='success'){
-                <ActivityIndicator size="large" color="#00ff00" />
-                setTimeout(()=>{
-                    props.navigation.navigate("UserProfile")
-
-                },1000)
-                props.navigation.navigate("UserProfile")
-            }
-        })
-        // .catch(()=>{
-        //     Alert.alert(
-        //         'Error',
-        //         'Usuario o contraseña erroneo'
-        //     )
-        // })
-}
-
-const handleSubmit = () => {
-    login()
-    // dispatch(loginUser(state, props))
-    // props.navigation.navigate('UserProfile')
-}
+    const handleSubmit = () => {
+         dispatch(loginUser(state, props))
+    }
    
     return(
         <View style = {styles.container}>
@@ -108,6 +73,7 @@ const handleSubmit = () => {
     );
  }
 
+ export default Login;
 
 const styles = StyleSheet.create({
     container:{
@@ -190,17 +156,3 @@ inputGroup: {
 }
 })
 
-const mapStateToProps = (state) => {
-    return {
-      user: state.user
-    };
-  };
-  
-  const mapDispatchToProps = (dispatch) => {
-    return {
-      loginUser: (user) => dispatch(loginUser(user)),
-    };
-  };
-  
-  export default connect(mapStateToProps, mapDispatchToProps)(Login);
-  

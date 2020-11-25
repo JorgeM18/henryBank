@@ -5,14 +5,16 @@ import {validarPin} from '../Store/actions/user'
 import CodeInput from 'react-native-confirmation-code-input'
 
 function InsertPin(props){
-    const [pin, setPin]= useState('');
+     const [pin, setPin]= useState('');
     // const [aux, setAux]=useState(false)
     const dispatch=useDispatch()
     const verificarPin=useSelector(store=>store.user.pin)
 //   console.warn(verificarPin)
     const validar=()=>{
-        dispatch(validarPin(pin, props))
-        setPin('')          
+        // dispatch(validarPin(pin, props))
+        // setPin('')   
+        props.navigation.navigate('CompleteDataUser') 
+    
     }
 
  

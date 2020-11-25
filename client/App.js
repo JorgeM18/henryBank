@@ -25,6 +25,8 @@ import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
 import RecoveryPassword from './screens/RecoveryPassword'
+import TransactionsView from './screens/Users/TransactionsView'
+import TransactionItem from './screens/Users/TransactionItem'
 
 const Stack = createStackNavigator()
 
@@ -39,71 +41,59 @@ function MyStack() {
         },
         headerTintColor: '#fff',
         headerTitleAlign: 'center',
-        headerTitleStyle: 'bold'
+        headerTitleStyle: 'bold',
+        headerTitle:''
       }}>
-    
+
       {/* este nos va a permitir crear las pantallas */}
-      <Stack.Screen name="Home" component={Home}
-        options={{
-          headerTitle: '',
-        }}
-      />
+      <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="CreateUser"
         component={CreateUser}
-        options={{
-          title: '',
-        }} />
-        <Stack.Screen name="UserProfile"
+       />
+      <Stack.Screen name="UserProfile"
         component={UserProfile}
         options={{
           title: '',
         }} />
-        <Stack.Screen name="InsertPin" component={InsertPin}
+      <Stack.Screen name="InsertPin" component={InsertPin}
         options={{
-          headerTitle: '',
-          headerLeft: null
-         }}
         
+          headerLeft: null
+        }}
+
       />
       <Stack.Screen name="CompleteDataUser" component={CompleteDataUser}
-        options={{
-          headerTitle: ''
-        }}
+       
       />
-       <Stack.Screen name="RegisterAdress" component={RegisterAdress}
-        options={{
-          headerTitle: '',
-        }}
+      <Stack.Screen name="RegisterAdress" component={RegisterAdress}
+       
       />
-       <Stack.Screen name="EnviarDinero" component={EnviarDinero}
+      <Stack.Screen name="EnviarDinero" component={EnviarDinero}
         options={{
           headerTitle: '',
         }}
       />
       {/* <Stack.Screen name= "Faq" component={Faq}/> */}
-      <Stack.Screen name="Login" component={Login}
-        options={{
-          headerTitle: '',
-          headerStyle: {
-            backgroundColor: '#1e1e1e',
-          },
-          headerLeft: null
-        }} />
-        <Stack.Screen name="RechargeMoney"
-        component={RechargeMoney} />
-        <Stack.Screen name="MyProducts" component={MyProducts}/>
-        
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="RechargeMoney"
+        component={RechargeMoney}
+       />
+      <Stack.Screen name="MyProducts" component={MyProducts} />
       <Stack.Screen name="ContactsList" component={ContactsList}/>
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
       />
-     
      <Stack.Screen name="MyData" component={MyData}/>
      <Stack.Screen name ="ConnectionPages" component={ConnectionPages}/>
-    
      <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
      <Stack.Screen name="CreditCardView" component={CreditCardView}/>
      <Stack.Screen name="CreditCard" component={CreditCard}/>
      <Stack.Screen name="RecoveryPassword" component={RecoveryPassword}/>
+     <Stack.Screen name="TransactionsView" component={TransactionsView}/>
+     <Stack.Screen
+              name="TransactionItem"
+              component={TransactionItem}
+              initialParams={{ item: 1}}
+            />
     </Stack.Navigator>
   )
 }
@@ -112,7 +102,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        {/* <MyStack/> */}  
+        {/* <MyStack/> */}
         <MyStack />
       </NavigationContainer>
     </Provider>
