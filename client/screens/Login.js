@@ -54,7 +54,7 @@ function Login(props) {
                         style={styles.inputViewSafe}
                         placeholder="Email..."
                         keyboardType='email-address'
-                        placeholderTextColor="#3B8EA5"
+                        placeholderTextColor="grey"
                         onChangeText={text => setState({
                             ...state,
                             email: text
@@ -67,7 +67,7 @@ function Login(props) {
                         style={styles.inputViewSafe}
                         maxLength={15}
                         placeholder="Password..."
-                        placeholderTextColor="#3B8EA5"
+                        placeholderTextColor="grey"
                         onChangeText={text => setState({
                             ...state,
                             password: text

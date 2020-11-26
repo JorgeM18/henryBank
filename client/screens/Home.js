@@ -25,7 +25,7 @@ const Home = (props) => {
         <View style={style.container} >
             <Animated.View style={{opacity:fadeIn}}>
             <LinearGradient
-                colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+                colors={['#1f2333', '#1f2333','#1f2333', '#7847e5', '#BB59FA']}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 height={Dimensions.get('window').height}
@@ -35,7 +35,7 @@ const Home = (props) => {
                     <View style={{ paddingTop: 30, paddingHorizontal: 14, alignItems: 'center' }}>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <View>
+           
 
                                 <Animatable.Image
                                     animation="fadeInDown"
@@ -51,7 +51,7 @@ const Home = (props) => {
                                     }}
                                 />
 
-                            </View>
+               
 
 
                         </View>
@@ -59,7 +59,7 @@ const Home = (props) => {
                 </View>
                 <View style={{...style.box2, marginTop:30}}>
                     <View>
-                        <Texta style={style.text}>GO</Texta>
+                        <Text style={style.text}>GO</Text>
                         <Text style={{ fontSize: 19, color: '#fff', marginTop: 10, marginHorizontal: '2.5%',fontFamily:'serif' }}>E-Wallet for the gaming comunity</Text>
                       
                     </View>
@@ -78,7 +78,7 @@ const Home = (props) => {
                             <Text style={{...style.text2, color:'#FFF',marginHorizontal: '30%'}}>Login</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ marginHorizontal: '7%' }} onPress={() => { props.navigation.navigate("ForgotPassword") }}>
-                            <Text style={{ fontSize: 12, color: '#FFF', marginTop: 5, fontFamily:'serif' }}>Forget your password?</Text></TouchableOpacity>
+                            <Text style={{ fontSize: 12, color: '#FFF', marginTop: 7, fontFamily:'serif' }}>Forgot your password?</Text></TouchableOpacity>
 
                     </View>
                   
@@ -133,15 +133,16 @@ const style = StyleSheet.create({
         paddingBottom:10
     },
     Image: {
-        width: 200,
-        height: 220,
+        width: 180,
+        height: 200,
     },
     text: {
         fontSize: 27,
         color: '#fff',
         fontWeight: 'bold',
         textAlign: 'center',
-        fontFamily:'serif'
+        fontFamily:'serif',
+        marginTop:20
     },
     text2:{
         fontSize: 16,
