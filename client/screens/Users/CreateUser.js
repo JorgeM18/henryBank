@@ -7,7 +7,8 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    Alert
+    Alert,
+    Dimensions
 } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { createUser } from '../../Store/actions/user'
@@ -16,6 +17,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useTheme } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const CreateUser = (props) => {
     const [newUser, setNewUser] = useState({
@@ -138,26 +140,18 @@ const CreateUser = (props) => {
 
         } else {
             
-            dispatch(createUser(state))
+            dispatch(createUser(state, props))
             AsyncStorage.setItem('email', state.email)
             setState({
                 name: '',
                 email: '',
                 password: ''
             })
-            Alert.alert(
-                'GO Bank',
-                'Plaese confirm your Email!',
-                [{
-                    text: 'OK',
-                    onPress: ()=>{props.navigation.navigate("InsertPin")}
-                }]
-
-            )
-            
            
+            
+       
         }
-     
+       
 
     }
 
@@ -175,6 +169,12 @@ const CreateUser = (props) => {
     return (
         <ScrollView>
         <View style={styles.container}>
+        <LinearGradient
+                colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                height={Dimensions.get('window').height}
+            >
             <View style={styles.header}>
 
                 <Text style={styles.text_header}>Register Now!</Text>
@@ -211,7 +211,7 @@ const CreateUser = (props) => {
                         >
                             <Feather
                                 name="check-circle"
-                                color="green"
+                                color="purple"
                                 size={20}
                             />
                         </Animatable.View>
@@ -248,7 +248,7 @@ const CreateUser = (props) => {
                         >
                             <Feather
                                 name="check-circle"
-                                color="green"
+                                color="purple"
                                 size={20}
                             />
                         </Animatable.View>
@@ -313,12 +313,13 @@ const CreateUser = (props) => {
 
                         <Text style={[styles.textRegister, {
                             color: '#fff'
-                        }]}>Register User</Text>
+                        }]}>Register</Text>
 
                     </TouchableOpacity>
 
                 </View>
             </Animatable.View>
+            </LinearGradient>
         </View>
         </ScrollView>
     )
@@ -332,30 +333,35 @@ export default CreateUser;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e'
+        backgroundColor: '#292768'
     },
     header: {
         flex: 1,
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
-        paddingBottom: 50
+        paddingBottom: 50,
+        paddingTop:50,
+        letterSpacing:2
     },
     footer: {
         flex: 5,
-        backgroundColor: '#fff',
+        backgroundColor: '#EDF7F6',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         paddingHorizontal: 20,
         paddingVertical: 30
     },
     text_header: {
-        color: '#fff',
+        color: '#EDF7F6',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 30,
+        fontFamily:'serif'
     },
     text_footer: {
         color: '#05375a',
-        fontSize: 18
+        fontSize: 18,
+        fontFamily:'serif',
+        letterSpacing:2
     },
     action: {
         flexDirection: 'row',
@@ -370,6 +376,7 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
+        fontFamily:'serif'
     },
     errorMsg: {
         color: '#FF0000',
@@ -380,15 +387,17 @@ const styles = StyleSheet.create({
         marginTop: 50
     },
     register: {
-        width: '100%',
+        width: '85%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,
-        backgroundColor: '#1e1e1e'
+        backgroundColor: '#1f2333'
     },
     textRegister: {
-        fontSize: 18,
-        fontWeight: 'bold'
+        fontSize: 20,
+        fontWeight: 'bold',
+        letterSpacing:2,
+        fontFamily:'serif'
     }
 })

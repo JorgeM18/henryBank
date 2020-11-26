@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import {
   StyleSheet,
   Text,
@@ -28,14 +28,15 @@ const EnviarDinero = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [contacList, setContactList]=useState('')
   const dispatch = useDispatch()
-  const userId =user!==''? user.data.id:''
+  const usuario=useSelector(store=>store.user)
+  const userId =usuario ? usuario.user.id :''
   const sendMoney = (monto, mensaje) => {
     const phoneContact = contact !== '' ? contact.phone : ''
     const phoneUser = user ? user.data.phone : ''
     console.log('params',phoneUser, phoneContact, monto,msj)
     axios.post(`http://${URL}/api/transactions/send`, { phoneUser, phoneContact, amount:monto, description:msj })
       .then((resp) => {
-        console.log(resp)
+        // console.log(resp)
         if(resp){
           Alert.alert(
             'Success', 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
-import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text, Dimensions } from 'react-native';
 import {validarPin} from '../Store/actions/user'
+import { LinearGradient } from 'expo-linear-gradient';
 import CodeInput from 'react-native-confirmation-code-input'
 
 function InsertPin(props){
@@ -11,18 +12,27 @@ function InsertPin(props){
     const verificarPin=useSelector(store=>store.user.pin)
 //   console.warn(verificarPin)
     const validar=()=>{
-        // dispatch(validarPin(pin, props))
-        // setPin('')   
-        props.navigation.navigate('CompleteDataUser') 
+        dispatch(validarPin(pin, props))
+        setPin('')   
     
     }
 
  
         return(
-          
-            <View style = {styles.container}>
+            <View style={styles.container}>
+            <LinearGradient
+            colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            height={Dimensions.get('window').height}
+        >
+           
+            <View style={styles.view}>
             <Image source={require('./images/Logo-04.png')} style= {styles.logo}/>
-            <Text style={styles.text_header}>Insert  PIN!</Text>
+                </View> 
+           
+           <View style={styles.view}>
+           <Text style={styles.text_header}>Insert  PIN!</Text>
             <View style= {styles.text}>
     
             {/* <TextInput
@@ -47,7 +57,10 @@ function InsertPin(props){
             <TouchableOpacity style={styles.send_emailBtn} onPress={()=>validar()}>
             <Text style={styles.textButton}>Validate Pin</Text>
             </TouchableOpacity>
-
+           
+           </View>
+           
+            </LinearGradient>
             </View>
         )
     
@@ -56,12 +69,10 @@ function InsertPin(props){
 export default InsertPin;
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
-        backgroundColor: '#292768',
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: '#1f2333',
+        
     },
     text_header: {
         color: '#fff',
@@ -70,16 +81,21 @@ const styles = StyleSheet.create({
         marginVertical:20,
         fontFamily:'serif'
     },
+    view:{
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
     logo:{
         width: 150,
         height: 200,  
-         marginBottom: 40
+         marginBottom: 40,
+        
      },
 
     text:{
-        // width: "80%",
-        // backgroundColor: "#465881",
-        borderRadius: 25,
+        width: "85%",
+        backgroundColor: "#465881",
+        borderRadius:10,
         height: 50,
         marginBottom: 20,
         justifyContent: "center",
@@ -88,23 +104,25 @@ const styles = StyleSheet.create({
 
     inputText:{
         height: 50,
-        color: "white"
+        color: "white",
+        fontFamily:'serif'
     },
 
     textButton:{
         color: "white",
         fontSize:20,
         marginVertical:10,
-        fontFamily:'serif'
+        fontFamily:'serif',
+        letterSpacing:2
     },
 
     send_emailBtn:{
-        width: "80%",
-        backgroundColor: "#1f2333",
-        borderRadius: 25,
+        width: "70%",
         height: 50,
-        alignItems: "center",
-        marginTop: 60,
+        alignItems: 'center',
+        backgroundColor: "#7847e5",
+        borderRadius: 10,
+        marginTop: 20,
         marginBottom: 10
    
     },

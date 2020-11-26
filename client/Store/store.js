@@ -1,12 +1,28 @@
+
 import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension'
+import AsyncStorage from '@react-native-community/async-storage';
+import { persistStore, persistReducer } from 'redux-persist'
+// import storage from 'redux-persist/lib/storage'
+import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 import userReducer from './reducers/userReducer'
 import accountReducer from './reducers/accountReducer'
 import transacctionReducer from './reducers/transacctionReducer'
 import cardReducer from './reducers/cardReducer'
 
-
+// CONFIG MIDDLEWARE REDUX PERSIST 
+const persistConfig ={
+    key: 'root',
+    storage: AsyncStorage,
+    whitelist:[
+        'userReducer',
+        'transacctionReducer',
+        'accountReducer'
+    ],
+    blacklist:[
+        ''
+    ]
+}
 const rootReducer=combineReducers({
     user:userReducer,
     balance:accountReducer,
@@ -14,20 +30,28 @@ const rootReducer=combineReducers({
     account:accountReducer,
     card: cardReducer,
 })
+
+const persistedReducer =persistReducer (persistConfig, rootReducer);
 const initialState = {};
 
-const middleWare  = [thunk];
+// const middleWare  = [thunk];
+const loggerMiddleware = createLogger({ predicate: () => false })
+const enhancer = compose(
+    applyMiddleware(thunk, loggerMiddleware)
+  )
 
-const composeEnhancer =composeWithDevTools(applyMiddleware(thunk))
+// const composeEnhancer =composeWithDevTools(applyMiddleware(thunk))
 
 const store=createStore(
-    rootReducer,
-    composeEnhancer,
+    persistedReducer,
+    initialState,
+    enhancer
     
 );
+let persistor = persistStore(store);
 
+export  {store, persistor};
 
-export default store;
 
 
 // SIN REDUX DEV TOOLS SI ROMPE BORRAR LO DE ARRIBA

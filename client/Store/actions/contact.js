@@ -24,13 +24,13 @@ export function postContacts(newContacts){
                 })
             })
             .catch((error)=>{
-             console.warn(error)
+            //  console.warn(error)
     
             })
         }
 }
 export function getContacts(userId){
-    console.log('Se hizo el dispatch de getContacts')
+    // console.log('Se hizo el dispatch de getContacts')
     return function(dispatch){
         return axios.get(`http://${URL}/api/user/contacts/${userId}` )
         .then((resp) =>{

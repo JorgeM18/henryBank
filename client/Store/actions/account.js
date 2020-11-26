@@ -4,6 +4,7 @@ import { URL } from '@env';
 
 export const GET_BALANCE = 'GET_BALANCE'
 export const GET_ACCOUNT='GET_ACCOUNT'
+export const OUTCOME_MOVEMENT='OUTCOME_MOVEMENT'
 export const RESET_ACCOUNT='RESET_ACCOUNT'
 
 
@@ -23,7 +24,7 @@ export function getBalance(id){
             })
         })
         .catch(error=>{
-            console.log('ERROR',error)
+            // console.log('ERROR',error)
         })
     }
 }
@@ -32,16 +33,53 @@ export function getAccount(id){
     return (dispatch)=>{
         return axios.get(`http://${URL}/api/account?id=${id}`)
         .then((resp)=>{
-            console.log('ACTION', resp)
+            // console.log('ACTION', resp)
             dispatch({
                 type: GET_ACCOUNT,
                 account:resp.data.content
             })
         })
         .catch(error=>{
-            console.log('ERROR',error)
+            // console.log('ERROR',error)
         })
     }
+}
+const StadisticsStorage=(outcome)=>{
+    AsyncStorage.setItem('stadistics', JSON.stringify(outcome), err => {
+      if (err) console.log('ERROR en AsyncStorage', err);
+  })
+  
+  }
+export function outcomeMovements(id, days, props){
+    
+    return function(dispatch){
+        console.log('action', id, days)
+        return axios.get(`http://${URL}/api/account/estadisticaGastos?id=${id}&days=${days}`)
+        .then((resp)=>{
+            // console.log(resp.data.content.gastosFraccionados)
+           if(resp.data.message==='success'){
+            dispatch({
+                type:OUTCOME_MOVEMENT,
+                outcomeMov:resp.data.content.gastosFraccionados
+            })
+            StadisticsStorage(resp.data.content.gastosFraccionados)
+           }
+        })
+        .catch(err=>{
+           if(err){
+               Alert.alert(
+                'GO Bank',
+                        'You have not outcome',
+                        [{
+                            text: 'OK',
+                            onPress: ()=>{props.navigation.navigate("stadistics")}
+                        }]
+        
+               )
+           }
+        })
+    }
+
 }
 
 export function ResetAccount(){
