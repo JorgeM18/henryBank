@@ -18,7 +18,7 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
  const  _setUseLiteCreditCardInput = (useLiteCreditCardInput) => setState({ useLiteCreditCardInput: true });
 
  const validarTarjeta = () => {
-   if(valor.valid) {;
+   if(valor.valid) {
     vincularTarjeta(valor)
     navigation.navigate('ShowCreditCards')
     
@@ -115,7 +115,7 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
       backgroundColor: '#BB59FA',
       alignSelf: 'center',
       borderWidth: 1,
-      borderColor:'#BB59FA'
+      borderColor:'#BB59FA',
       // marginVertical: 20,
       // marginHorizontal: 40
 
