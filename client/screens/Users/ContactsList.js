@@ -3,6 +3,10 @@ import axios from 'axios';
 import {URL} from '@env';
 import {useDispatch, useSelector, connect} from 'react-redux';
 import {
+  Button,
+  Alert,
+  Modal,
+  TouchableHighlight,
   StyleSheet,
   Text,
   View,
@@ -12,82 +16,123 @@ import {
   TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import getContacts from '../../Store/actions/contact'
+import * as Contacts from 'expo-contacts';
+import { getContacts, postContacts } from '../../Store/actions/contact'
 
 const ContactsList = (props) => {
-  const [user, setUser]=useState('')
-/*    const contactosHardcodeados = [
-    {alias: 'Bruno Gallardo', phone: '+542974155305', status:'favorite'},
-    {alias: 'Cesar Contreras', phone: '+5429746545', status:'contact'},
-    {alias: 'Gonzalo Sundblad', phone: '+546876513566', status:'contact'},
-    {alias: 'Ex Tóxico', phone: '+54222155305', status:'blocked'},
-    {alias: 'Flor G', phone: '+540114155305', status:'contact'},
-    {alias: 'Carlos Bono', phone: '+54297411105', status:'contact'}, 
-    {alias: 'Mamá', phone: '+54297445835', status:'favorite'},
-    {alias: 'Papá', phone: '+542234634', status:'favorite'},
-    {alias: 'Mica Salguero', phone: '+542974155', status:'contact'}
-] */ 
-  const dispatch = useDispatch()
-  const onLoad =  () => {
 
-         AsyncStorage.getItem('usuario')
-         .then((usuario)=>{
-          setUser((JSON.parse(usuario)))
-          console.log(user)
-         }) 
-}
-const userId =user!==''? user.data.id:''
-
-  // const userId = useSelector(state => state.user.user["id"])
-  console.log("USUARIO REDUX CONTACT LIST", userId)
-  //const contactsFromStore = useSelector(state => state.contacts)
- const contactos=useSelector(store=>store.user.contacts)
- console.log('CONTACTOS', contactos)
-  const [text, setText] = useState('');
+  const [modalVisible, setModalVisible] = useState(false)
+  const [editingContact, setEditingContact] = useState(false)
   const [loading, setLoading] = useState(false)
   const [localContacts, setLocalContacts] = useState('')
   const [memoryContacts, setMemoryContacts] = useState('')
-  const contacts=()=>{
-    // <ActivityIndicator size='large' color='#2f363c'/>
-    setLoading(true)
-    if(userId){
-      axios.get(`http://${URL}/api/user/contacts/${userId}`)
-      .then((resp) =>{
-            console.log('Se pidieron los contactos')
-            setLocalContacts(resp.data.content)
-            setMemoryContacts(resp.data.content)
-            setLoading(false)
-      })
-      .catch((error)=>{console.log(error)})
-    }
-   
+  const [selectedContact, setSelectedContact] = useState('')
+  const [newAlias, setNewAlias] = useState('')
+
+
+  const dispatch = useDispatch()
+
+  const userRedux = useSelector(state => state.user)
+  const userId = userRedux.user.id
+  
+  const loadContacts = async() => {
+    try {
+    const { status } = await Contacts.requestPermissionsAsync();
+      if (status === 'granted') {
+        const { data } = await Contacts.getContactsAsync({
+          fields: [Contacts.Fields.PhoneNumbers],
+        });
+        if (data.length > 0) {
+          const contacts = data;
+          let newContacts = [];
+          
+          for (let i = 0; i < contacts.length; i++){
+              if(contacts[i]["phoneNumbers"]){
+                let add = {userId: userId, alias: contacts[i]["name"], contactPhone: contacts[i]["phoneNumbers"][0].number }
+                newContacts.push(add)
+              }
+           }
+            dispatch(postContacts(newContacts))
+        }
+      }} catch (error) {
+        console.log(error, "error")
+      }
+    } 
+
+  const getContacts = async() => {
+      setLoading(true)
+      if(userId){
+        axios.get(`http://${URL}/api/user/contacts/${userId}`)
+        .then((resp) =>{
+              setLocalContacts(resp.data.content)
+              setMemoryContacts(resp.data.content)
+              setLoading(false)
+        })
+        .catch((error)=>{console.log(error)})
+    } 
+  } 
+  
+      useEffect(() => {
+        loadContacts()
+        getContacts()
+        console.log(userId)
+        console.log(localContacts)
+      }, [])
+  
+  //funcion para mostrar en el modal los datos del contacto clickeado
+  //los leemos desde el estado selectedContact
+  const viewContactProfile = ({item}) => {
+    setSelectedContact({item})
+    console.log(selectedContact)
+    setModalVisible(true)
+    setEditingContact(false)
   }
-  
 
-  useEffect(() => {
-    onLoad()  
-    // contacts()
-  //  userId ? dispatch(getContacts(userId)):''
-  // dispatch(getContacts(1))
-    setLoading(true)
-   
-    }, []);
-  
+  //funcion para renderizar condicionalmente la vista de edicion en el modal
+  const editContact = () => {
+    setEditingContact(true)
+  }
 
- let renderItem = ({ item }) => (
+  //funcion para cambiar el alias
+  const confirmEditContact = (value) => {
+    if(value.length < 1) {
+      Alert.alert('The alias must be longer')
+    } else {
+    console.log(selectedContact.item.alias, " changed to ", value)
+    setEditingContact(false)
+    }
+    
+  }
+
+  //funcion para cambiar de contact a favorito
+  const editFavourites = () => {
+    if (selectedContact.item.status === 'contact') {
+      console.log(selectedContact.item.alias, " is now a Favorite")
+      }
+    
+    if (selectedContact.item.status === 'favorite') {
+      console.log(selectedContact.item.alias, " is not a Favorite anymore :(")
+      }
+    }
+
+
+  //funcion para dar formato a cada celda de contacto en la lista
+  let renderItem = ({ item }) => (
     <View style={{ minHeight: 55, padding: 5 }}>
+      {item.alias === 'favorite'? <Text>:3</Text> : null}
+      <TouchableOpacity onPress={() => viewContactProfile({item})}>
       <Text style={{ color: '#2f363c', fontWeight: 'bold', fontSize: 18 }}>
         {item.alias}
       </Text>
       <Text style={{ color: 'grey', fontWeight: 'bold' }}>
         {item.phone}
       </Text>
+      </TouchableOpacity>
     </View>
   );
 
+  //funcion para filtrar contactos cuando se use la searchbar
   let searchContact = (value) => {
-    //setText(value)
     const filteredContact = memoryContacts.filter( contact => {
       let aliasLowerCase = (contact.alias).toLowerCase();
       let searchLowerCase = value.toLowerCase();
@@ -99,8 +144,7 @@ const userId =user!==''? user.data.id:''
 
   return (
     <View style={{ flex: 1}}>
-      <SafeAreaView style={{backgroundColor: '#2f363c'}} />
-     
+     <SafeAreaView style={{backgroundColor: '#2f363c'}} />
       <TextInput 
       placeholder="Search" 
       placeholderTextColor="#dddddd" 
@@ -113,7 +157,6 @@ const userId =user!==''? user.data.id:''
       onChangeText={(value) => searchContact(value)} 
       />
       <View style={{flex:1}}>
-      <TouchableOpacity onPress={()=>contacts()}><Text></Text></TouchableOpacity>
         {loading? (
           <View
             style={{
@@ -137,6 +180,87 @@ const userId =user!==''? user.data.id:''
              <Text style={{color:'#2f363c'}}>No contacts found</Text>
              </View>}
            />
+
+      { modalVisible && editingContact === false ? (<View style={style.centeredView}>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false)
+              setEditingContact(false)
+          }}>
+          <View style={style.centeredView}>
+          <View style={style.modalView}>
+          <Button
+            title="X"
+            color="#f194ff"
+            onPress={() => {
+                setModalVisible(false)
+                setEditingContact(false)
+                setNewAlias('')
+                  }}
+          /> 
+          <Button
+            title="Change Status"
+            color="#f194ff"
+            onPress={() => editFavourites()}
+            />
+      
+          <Text style={style.modalText}>{selectedContact.item.alias}</Text>
+          <Text style={style.modalText}>{selectedContact.item.phone}</Text>
+          <Button
+          title={"Edit " + selectedContact.item.alias + " alias"}
+          color="#f194ff"
+          onPress={() => editContact()}
+        />
+          </View>
+        </View>
+      </Modal>
+      </View>) : null}
+
+      {modalVisible && editingContact ? (<View style={style.centeredView}>
+          <Modal
+            animationType="fade"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(false)
+              setEditingContact(false)
+          }}>
+          <View style={style.centeredView}>
+          <View style={style.modalView}>
+          <Button
+            title="Cancel"
+            color="#f194ff"
+            onPress={() => {
+                setModalVisible(false)
+                setEditingContact(false)
+                setNewAlias('')
+                  }}
+          /> 
+          
+          <Text>Enter new Alias:</Text>
+          <TextInput
+            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+            placeholder={"Write new alias for ",  selectedContact.item.alias}
+            onChangeText={(value) => setNewAlias(value)}
+            value={newAlias}
+          />
+
+          <Button
+            title="Save Changes"
+            color="#f194ff"
+            onPress={() => 
+              confirmEditContact(newAlias)
+              }
+          />
+
+          </View>
+        </View>
+      </Modal>
+      </View>) : null}
+
       </View>
     </View>
     )
@@ -148,14 +272,43 @@ const style = StyleSheet.create({
       backgroundColor: '#1e1e1e',
       alignItems: 'center',
       justifyContent: 'center'
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 })
 
-/* const mapStateToProps = (state) => {
-  return {
-    contacts: state.contacts
-  };
-}; */
-
-//export default connect(mapStateToProps, {})(ContactsList);
 export default ContactsList;
