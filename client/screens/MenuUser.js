@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux'
 function MenuUser(props) {
     
     const usuario = useSelector(store => store.user)
+    const url=  usuario.user ? usuario.user.image : 'https://www.gstatic.com/devrel-devsite/prod/v8ea8343deca3e735c5e491f22b0e2533427dcd1d0302777baea2667771626911/firebase/images/touchicon-180.png'
     console.log('MENU USER', usuario)
     const dispatch = useDispatch()
     const logHome = async () => {
@@ -62,7 +63,7 @@ function MenuUser(props) {
                     <View style={{ flexDirection: 'row', marginTop: 15 }}>
                         <Avatar.Image
                             size={50}
-                            source={{ uri: usuario.user? usuario.user.image : null }}
+                            source={{ uri:url }}
 
 
                         />
