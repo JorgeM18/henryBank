@@ -205,8 +205,8 @@ const RechargeMoney = (props) => {
             const link = transactions.paypal.link
             console.log('NUMERO', link)
             if (link) {
-                Linking.openURL(link)
-                link ? setConfirm(true) : setConfirm(false)
+                Linking.openURL(link).then(resp=>setConfirm(resp))
+                //link ? setConfirm(true) : setConfirm(false)
                 // setTimeout(()=>{
                 //     Alert.alert(
                 //         'Success', //titulo
@@ -260,6 +260,7 @@ const RechargeMoney = (props) => {
            setPaypal(false)
            setMonto('')
            setConfirm(false)
+           usuario ? dispatch(getBalance(usuario.user.id)) : null;
         props.navigation.navigate('UserProfile')
 
        }

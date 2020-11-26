@@ -25,6 +25,9 @@ export default function App() {
   useEffect(() => {
     onLoad()
   }, [user])
+  //esto elimina los warning
+  console.disableYellowBox = true
+  //-----------------------------
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
