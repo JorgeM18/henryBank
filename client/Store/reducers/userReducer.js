@@ -73,6 +73,11 @@ export default (state = initialState, action) => {
                 ...state,
                 user:action.user
             }
+        case 'NEW_DATA': 
+            return {
+                ...state,
+                //nose para q cambiar el estado no le veo la utilidad
+            }
         default:
             return state
 

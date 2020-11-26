@@ -4,20 +4,46 @@ import {View, TextInput, StyleSheet, Dimensions, TouchableOpacity, Text, Image} 
 import {getDataUser, newData} from '../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import axios from 'axios'
+import { URL } from '@env';
+
+
 
 
 const deviceWindow = Dimensions.get('window')
 function MyData (){
     const dispatch=useDispatch()
     
-    const [edit, setEdit] = useState(false) // para el renderizado condicional
-    const [us, setUs]=useState('')
+    const [edit, setEdit] = useState(false); // para el renderizado condicional
+    const [modified, setModified] = useState('');
+    const [us, setUs]=useState({
+        data: {       // este objeto lo pongo porque me tira un error al cargar sino. no deberia pasar pero bueno esto lo soluciona por el momento
+            phone: '',
+            address: '',
+            addressnum: '',
+            documenttype: 'f',
+            documentnum: '',
+            name: '',
+            lastname: '',
+            city: ''
+        }
+    });
     // AsyncStorage.getItem('usuario').then(resp=>console.log('usuario',resp.data)) 
     const onLoad = async () => {
         try {
             var usuario = await AsyncStorage.getItem('usuario')
-            console.log(usuario, 'ACACAACAA')  
             setUs((JSON.parse(usuario)))
+            usuario = JSON.parse(usuario)
+            setState({
+                ...state,
+                email: usuario.data.email,
+                phone: usuario.data.phone,
+                address: usuario.data.address,
+                addressnum: usuario.data.addressnum,
+                city: usuario.data.city,
+                province: usuario.data.province,
+                country: usuario.data.country
+            })
             
         
         } catch (error) {
@@ -30,12 +56,12 @@ function MyData (){
     //REVISAR
     useEffect(() => {
         onLoad()
-        us!==''? dispatch(getDataUser(us.data.id)):''
+        // us!==''? dispatch(getDataUser(us.data.id)):''
         //    onLoad()
 
     }, [])
    
-   console.log('my data', us)
+
     const [state, setState] = useState({
         id:'',
         name:"",
@@ -43,22 +69,31 @@ function MyData (){
         typeDocument:"",
         numberDocument:"",
         phone: "",
-        adress :""
+        address :"",
+        addressnum: '',
+        city: '',
+        province: '',
+        country: '',
+        email: ''
+        
     })
 
     const newData = () => {
+        // dispatch(newData(state))
+        axios.put(`http://${URL}/api/user/editUser`, state)
+        .then(res=> {
+            setModified(res.data.content[1][0])
+        })
         setEdit(false);
-        // dispatch(newData({
-        //     phone: state.phone,
-        //     address: state.adress
-        // }))
     }
     
   
     return(
         <View style={styles.container}>
+            {!edit && (
+                <View style={styles.container2}>
             <Image source ={us!==''?{uri:us.data.image}:require('../screens/images/favicon.png')} style={styles.logo}/>
-            <View style={{ flexDirection:'row' }}>
+            <View style={{ flexDirection:'row', marginTop: 15 }}>
                 <TextInput
                 style={styles.transparent}
                 defaultValue='Name:'
@@ -69,118 +104,128 @@ function MyData (){
                 style={styles.inputGroup}
                 defaultValue={us!==''? us.data.name:''}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    name:text})} editable = {false}/>
+                 editable = {false}/>
             </View>
             <View style={{ flexDirection:'row' }}>
                 <TextInput
                 style={styles.transparent}
                 defaultValue='Lastname:'
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    name:text})} editable = {false}/>
+                editable = {false}/>
                 <TextInput
                 style={styles.inputGroup}
                 defaultValue={us!==''? us.data.lastname:''}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    lastname:text})} editable = {false}/>
+                editable = {false}/>
             </View>
             <View style={{ flexDirection:'row' }}>
                 <TextInput
                 style={styles.transparent}
                 defaultValue={us!==''?us.data.documenttype.toUpperCase() + ':': ''}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    name:text})} editable = {false}/>
+                editable = {false}/>
                 <TextInput
                 style={styles.inputGroup}
                 defaultValue={us!==''? us.data.documentnum:''}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    numberDocument:text})} editable = {false}/>
+                editable = {false}/>
             </View>
             <View style={{ flexDirection:'row' }}>
                 <TextInput
                 style={edit? styles.transparent2: styles.transparent}
-                defaultValue={edit? 'New Phone:' : 'Phone'}
+                defaultValue={edit? 'New Phone:' : 'Phone:'}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    name:text})} editable = {false}/>
+                editable = {false}/>
                 <TextInput
                 style={edit? styles.new: styles.inputGroup}
-                defaultValue={us!==''? us.data.phone: ''}
-                placeholder={us!==''? us.data.phone: ''}
+                defaultValue={!modified? us.data.phone: modified.phone}
+                // defaultValue={us!==''? us.data.phone: ''}
+                // defaultValue={!modified? us.data.phone: modified.phone}
+                // placeholder={us!==''? us.data.phone: ''}
                 placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
                     phone:text})} editable = {edit}/>
             </View>
-            {
-                !edit &&
             <View style={{ flexDirection:'row' }}>
             <TextInput
                 style={styles.transparent}
                 defaultValue='Address:'
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    name:text})} editable = {false}/>
+                editable = {false}/>
                 <TextInput
                 style={styles.inputGroup}
-                defaultValue={us!==''? us.data.address + ' ' + us.data.addressnum + ', ' + us.data.city :''}
+                defaultValue={!modified? us.data.address + ' ' + us.data.addressnum + ', ' + us.data.city : modified.address + ' ' + modified.addressnum + ', ' + modified.city}
                 placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                editable = {edit}/>
             </View>
-            }
+            </View>
+
+        )}
+            
+                
+        
             {
                 edit && (
-                    <View style={styles.container}>
+        <View style={styles.container}>
+            <View style={{ flexDirection:'row' }}>
+                <TextInput
+                style={edit? styles.transparent2: styles.transparent}
+                defaultValue={edit? 'New Phone:' : 'Phone:'}
+                placeholderTextColor = "#3B8EA5"
+                editable = {false}/>
+                <TextInput
+                style={edit? styles.new: styles.inputGroup}
+                // defaultValue={!modified? us.data.phone: modified.phone}
+                placeholder='New phone number'
+                placeholderTextColor = "gray"
+                onChangeText = {text => setState({...state,
+                    phone:text})} editable = {edit}/>
+            </View>
             <View style={{ flexDirection:'row' }}>
                 <TextInput
                 style={styles.transparent2}
                 defaultValue='New Address'
                 placeholder = 'New Address'
-                placeholderTextColor = "#3B8EA5"
-                onChangeText = {text => setState({...state,
-                    adress:text})} editable = {false}/>
+                placeholderTextColor = "gray"
+                editable = {false}/>
                 <TextInput
                 style={styles.new3}
-                defaultValue={us!==''? us.data.address: 'Street'}
+                // defaultValue={us!==''? us.data.address: 'Street'}
                 placeholder = {'Street'}
-                placeholderTextColor = "#3B8EA5"
+                placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                    address:text})} editable = {edit}/>
                 <TextInput
                 style={styles.new3}
-                defaultValue={us!==''? us.data.addressnum :'Num'}
+                // defaultValue={us!==''? us.data.addressnum :'Num'}
                 placeholder = {'Num'}
-                placeholderTextColor = "#3B8EA5"
+                placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                    addressnum:text})} editable = {edit}/>
             </View>
             <View style={{ flexDirection:'row' }}>
                 <TextInput
                 style={styles.new3}
-                defaultValue={us!==''? us.data.city :'City'}
+                // defaultValue={us!==''? us.data.city :'City'}
                 placeholder = {'City'}
-                placeholderTextColor = "#3B8EA5"
+                placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                    city:text})} editable = {edit}/>
 
                 <TextInput
                 style={styles.new3}
-                defaultValue={us!==''? us.data.province :'Province'}
+                // defaultValue={us!==''? us.data.province :'Province'}
                 placeholder = {'Province'}
-                placeholderTextColor = "#3B8EA5"
+                placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                    province:text})} editable = {edit}/>
                     <TextInput
                 style={styles.new3}
-                defaultValue={us!==''? us.data.country :'Country'}
+                // defaultValue={us!==''? us.data.country :'Country'}
                 placeholder = {'Country'}
-                placeholderTextColor = "#3B8EA5"
+                placeholderTextColor = "gray"
                 onChangeText = {text => setState({...state,
-                    adress:text})} editable = {edit}/>
+                    country:text})} editable = {edit}/>
             </View>
             </View>
                 )
@@ -204,18 +249,18 @@ function MyData (){
             }
                 {
                     !edit &&
+                    <View style={styles.container2}>
                 <TouchableOpacity style={styles.btn0} onPress={() => setEdit(true)}>
                     <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
-                       Edit My Data
+                       Edit my data
                         </Text>
                 </TouchableOpacity>
-                }
-                {/* <TouchableOpacity style={styles.editBtn} >
-                    <Text style={styles.editTextBtn} >Edit My Data</Text> 
-                </TouchableOpacity> */}
                 <TouchableOpacity>
                     <Text style={styles.needHelp}>Do you need help?</Text>
                 </TouchableOpacity>
+                </View>
+                }
+                
         </View>
     )
 }
@@ -229,9 +274,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center' 
     },
+    container2:{
+        // flex: 1,
+        backgroundColor: '#292768',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15
+    },
     logo:{
-        width: 60,
-        height: 80,
+        width: 80,
+        height: 100,
         alignItems: 'flex-start'
     },
 
@@ -266,7 +318,7 @@ const styles = StyleSheet.create({
     needHelp:{
         color: "white",
         height: 20,
-        marginTop: 5
+        marginBottom: 10
     },
     btn0: {
         width: 250,
@@ -289,9 +341,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderStyle: 'solid',
         borderColor: '#FFF',
-        marginVertical: 20,
+        
         marginHorizontal: 5,
-        width: '30%'
+        width: '30%',
+        marginBottom: 80
 
     },
     new: {
@@ -313,14 +366,14 @@ const styles = StyleSheet.create({
     new3: {
         marginVertical: 10,
         height: 40,
-        borderColor: '#dee2ff',
+        borderColor: 'black',
         borderWidth: 1,
         fontSize: 18,
         width: '30.8333%',
         padding: 10,
         color: 'black',
         backgroundColor: '#dee2ff',
-        textAlign: "right",
+        textAlign: "center",
 
         opacity: 0.7
 

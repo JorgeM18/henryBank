@@ -157,11 +157,19 @@ const editData = async (ctx) => {                         // editar num telefono
 }
 
 const editUser = async (ctx) =>{
+  const { phone, address, addressnum, city, province, country, email } = ctx.params
   try {
-    const user = await User.update(
-      ctx.params,
+    const user = await User.update({
+      phone,
+      address,
+      addressnum,
+      city,
+      province,
+      country
+    },
       {
-        where: { email: ctx.params.email }
+        returning: true,
+        where: { email }
       })
       const json = {
           message: 'success',
