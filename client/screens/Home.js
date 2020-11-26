@@ -65,7 +65,7 @@ const Home = (props) => {
                     </View>
 
                 </View>
-                <View style={{...style.box3, marginTop:20}}>
+                <View style={{...style.box3, marginTop:30}}>
                     <View style={{ paddingVertical: 20 }}>
                         <TouchableOpacity style={{...style.but, ...style.create}}
                             onPress={() => props.navigation.navigate("CreateUser")} >
