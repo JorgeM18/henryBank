@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet, Image, Text, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Foundation from 'react-native-vector-icons/Foundation';
-import { logout, getDataUser } from '../../Store/actions/user'
-import { getBalance, ResetAccount } from '../../Store/actions/account'
+import { getBalance } from '../../Store/actions/account'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts'
 import { postContacts } from '../../Store/actions/contact'
-import { incomeOutcome, ResetTransacctions } from '../../Store/actions/transactions'
-import { URL } from '@env'
-import axios from 'axios'
+import { incomeOutcome } from '../../Store/actions/transactions'
+
 
 
 const ProfileUser = (props) => {
@@ -20,8 +16,10 @@ const ProfileUser = (props) => {
     const [token, setToken] = useState('')
     const [balanc, setBalanc] = useState('')
     const balance = useSelector(store => store.balance)
+    const userStore=useSelector(store=>store.user.user)
     const inc_out = useSelector(store => store.transaction.income_outcome)
-    console.log('front', inc_out)
+    // console.log('front', inc_out)
+    console.log('USUARIO STORE',userStore)
     const onLoad = async () => {
         try {
             var usuario = await AsyncStorage.getItem('usuario')
@@ -32,49 +30,20 @@ const ProfileUser = (props) => {
             // console.log('token',token)
 
         } catch (error) {
-            console.log(error)
+            // console.log(error)
 
 
         }
 
     }
 
-    const logHome = async() => {
-        AsyncStorage.removeItem('token');
-        AsyncStorage.removeItem('usuario')
-    //   await  dispatch(logout())
-       await dispatch(ResetAccount())
-        await dispatch(ResetTransacctions())
-        props.navigation.navigate('Home');
-        return;
-    }
-
-    const Logout = () => {
-        Alert.alert(
-            'Logout', //titulo
-            'Are you sure about logging out?', //Mensaje
-            [{
-                text: 'OK', //Arreglo de botones
-                onPress: () => {
-                    user.token ? dispatch(logout(token)) : '',
-                        logHome()
-                },
-
-            },
-            {
-                text: 'Cancel',
-                style: 'cancel',
-                onPress: () => { props.navigation.navigate('UserProfile') },
-            }
-            ],
-        )
-    }
-
-    const userRedux = useSelector(state => state.user)
+    // const userRedux = useSelector(state => state.user)
     useEffect( () => {
         onLoad()
         // user === '' ? '' : getbalance(user.data.id)
-        user === '' ? '' : dispatch(getBalance(user.data.id))
+     //    user === '' ? '' : dispatch(getBalance(user.data.id))
+         userStore? dispatch(getBalance(userStore.id)): null
+         userStore?  dispatch(incomeOutcome(userStore.id, 1)): null
         eject()
 
     }, []);
@@ -116,150 +85,134 @@ const ProfileUser = (props) => {
     //  console.log('nuevo balance',balanc)
     return (
         <View style={style.container}>
-            <View style={style.banner}>
+        <View style={style.banner}>
 
-                <View style={{ alignItems: 'flex-end', marginHorizontal: '3%' }}>
-                    <TouchableOpacity onPress={() => Logout()}>
-                        <Foundation
-                            name='power'
-                            color='#FFF'
-                            size={30}
-                        />
-                    </TouchableOpacity>
+           
+            <View style={{ paddingHorizontal: 14 }}>
 
-
-                </View>
-                <View style={{ paddingHorizontal: 14 }}>
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View>
-                            <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: 17 }}>Hola {user ? user.data.name : ''}</Text>
-                            <Image
-                                source={user ? { uri: user.data.image } : require('../images/favicon.png')}
-                                style={style.Image}
-                            />
-
-                        </View>
-                        <View style={{ alignItems: 'center' }}>
-                            <Text style={style.text}>${balance.balance.balance}</Text>
-                            <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>Balance de mi cuenta</Text>
-                        </View>
-
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                   
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={style.text}>${balance.balance.balance}</Text>
+                        <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>Balance de mi cuenta</Text>
                     </View>
-                </View>
-            </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row' }}>
-                <Text style={{ fontSize: 20, marginVertical: '3%' }}>General</Text></View>
-            <View style={style.box2}>
-                <View style={style.subbox1}>
-                    <Text>Income</Text>
-                    <Text style={style.text1}>${inc_out.income}</Text>
-
-                </View>
-                <View style={style.subbox1}>
-                    <Text >Outcome</Text>
-                    <Text style={style.text1}>${inc_out.outcome}</Text>
-                </View>
-
-            </View>
-            <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
-                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 1))}><Text >1 Día</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 7))}><Text >7 Dias</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 30))}><Text >30 Días</Text></TouchableOpacity>
-                <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 180))}><Text >6 Meses</Text></TouchableOpacity>
-
-            </View>
-
-
-            <View style={style.box3}>
-                <View>
-                    <TouchableOpacity style={style.button1} onPress={() => { user === '' ? '' : dispatch(getBalance(user.data.id)) }}>
-                        <Feather
-                            style={style.icon}
-                            name="send"
-                            color="#FFF"
-                            size={30}
-                        />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Transacciones</Text>
-                    </TouchableOpacity>
-
-
-                </View>
-                <View>
-
-                    <TouchableOpacity style={style.button1} onPress={() =>  props.navigation.navigate('TransactionsView')}>
-                        <Feather
-                            style={style.icon}
-                            name="activity"
-                            color="#FFF"
-                            size={35}
-                        />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '7%', marginVertical: '5%' }}>Estadisticas</Text>
-                    </TouchableOpacity>
-
-
-                </View>
-                <View style={{}}>
-
-                    <TouchableOpacity style={style.button1} onPress={() => { props.navigation.navigate('MyData') }}>
-                        <Feather
-                            style={style.icon}
-                            name="globe"
-                            color="#FFF"
-                            size={30}
-                        />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '15%', marginVertical: '5%' }}>Mis Datos</Text>
-                    </TouchableOpacity>
-
-
-                </View>
-                <View>
-                    <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
-                        <Feather
-                            style={style.icon}
-                            name="credit-card"
-                            color="#FFF"
-                            size={30}
-                        />
-                        <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Mis Productos</Text>
-                    </TouchableOpacity>
-
 
                 </View>
             </View>
-            <View style={style.box4}>
-                <View>
-                    <TouchableOpacity style={style.button2}
-                        onPress={() => { props.navigation.navigate('RechargeMoney') }}>
-                        <Feather
-                            name="arrow-down-circle"
-                            color="#FFF"
-                            size={20}
-                        />
+        </View>
+        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row' }}>
+            <Text style={{ fontSize: 20, marginVertical: '3%' }}>General</Text></View>
+        <View style={style.box2}>
+            <View style={style.subbox1}>
+                <Text>Income</Text>
+                <Text style={style.text1}>${inc_out.income}</Text>
 
-                        <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Recargar Dinero</Text>
-                    </TouchableOpacity>
+            </View>
+            <View style={style.subbox1}>
+                <Text >Outcome</Text>
+                <Text style={style.text1}>${inc_out.outcome}</Text>
+            </View>
 
+        </View>
+        <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
+            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 1))}><Text >1 Día</Text></TouchableOpacity>
+            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 7))}><Text >7 Dias</Text></TouchableOpacity>
+            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 30))}><Text >30 Días</Text></TouchableOpacity>
+            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 180))}><Text >6 Meses</Text></TouchableOpacity>
 
-                </View>
-                <View>
-                    <TouchableOpacity style={style.button2}
-                        onPress={() => { props.navigation.navigate('EnviarDinero') }}
-                    >
-                        <Feather
-                            name="arrow-up-circle"
-                            color="#FFF"
-                            size={20}
-                        />
-                        <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Enviar Dinero</Text>
-                    </TouchableOpacity>
+        </View>
 
 
-                </View>
+        <View style={style.box3}>
+            <View>
+                <TouchableOpacity style={style.button1} onPress={() => { userStore === '' ? '' : dispatch(getBalance(userStore.id)) }}>
+                    <Feather
+                        style={style.icon}
+                        name="send"
+                        color="#FFF"
+                        size={30}
+                    />
+                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Transacciones</Text>
+                </TouchableOpacity>
+
+
+            </View>
+            <View>
+
+                <TouchableOpacity style={style.button1}>
+                    <Feather
+                        style={style.icon}
+                        name="activity"
+                        color="#FFF"
+                        size={35}
+                    />
+                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '7%', marginVertical: '5%' }}>Estadisticas</Text>
+                </TouchableOpacity>
+
+
+            </View>
+            <View style={{}}>
+
+                <TouchableOpacity style={style.button1} onPress={() => { props.navigation.navigate('MyData') }}>
+                    <Feather
+                        style={style.icon}
+                        name="globe"
+                        color="#FFF"
+                        size={30}
+                    />
+                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '15%', marginVertical: '5%' }}>Mis Datos</Text>
+                </TouchableOpacity>
+
+
+            </View>
+            <View>
+                <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
+                    <Feather
+                        style={style.icon}
+                        name="credit-card"
+                        color="#FFF"
+                        size={30}
+                    />
+                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Mis Productos</Text>
+                </TouchableOpacity>
+
+
+            </View>
+        </View>
+        <View style={style.box4}>
+            <View>
+                <TouchableOpacity style={style.button2}
+                    onPress={() => { props.navigation.navigate('RechargeMoney') }}>
+                    <Feather
+                        name="arrow-down-circle"
+                        color="#FFF"
+                        size={20}
+                    />
+
+                    <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Recargar Dinero</Text>
+                </TouchableOpacity>
+
+
+            </View>
+            <View>
+                <TouchableOpacity style={style.button2}
+                    onPress={() => { props.navigation.navigate('EnviarDinero') }}
+                >
+                    <Feather
+                        name="arrow-up-circle"
+                        color="#FFF"
+                        size={20}
+                    />
+                    <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Enviar Dinero</Text>
+                </TouchableOpacity>
+
 
             </View>
 
         </View>
+
+    </View>
+
 
     )
 }
