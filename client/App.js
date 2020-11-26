@@ -8,6 +8,7 @@ import store from './Store/store'
 import Home from './screens/Home'
 import CreateUser from './screens/Users/CreateUser'
 import Faq from './src/componentes/Faq'
+import Faq2 from './src/componentes/Faq2'
 import Login from './screens/Login'
 import ForgotPassword from './screens/ForgotPassword'
 import CompleteDataUser from './screens/Users/CompleteDataUser'
@@ -45,6 +46,7 @@ function MyStack() {
       }}>
 
       {/* este nos va a permitir crear las pantallas */}
+      
       <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="CreateUser"
         component={CreateUser}
@@ -67,16 +69,13 @@ function MyStack() {
       <Stack.Screen name="RegisterAdress" component={RegisterAdress}
        
       />
-      <Stack.Screen name="EnviarDinero" component={EnviarDinero}
-        options={{
-          headerTitle: '',
-        }}
-      />
-      <Stack.Screen name= "Faq" component={Faq}/>
+      
+      <Stack.Screen name= "Faq" component={Faq2}/>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="RechargeMoney"
         component={RechargeMoney}
        />
+      <Stack.Screen name="EnviarDinero" component={EnviarDinero}/>
       <Stack.Screen name="MyProducts" component={MyProducts} />
       <Stack.Screen name="ContactsList" component={ContactsList}/>
       <Stack.Screen name="ForgotPassword" component={ForgotPassword}
