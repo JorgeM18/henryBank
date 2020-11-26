@@ -72,7 +72,7 @@ function MyStack() {
           headerTitle: '',
         }}
       />
-      {/* <Stack.Screen name= "Faq" component={Faq}/> */}
+      <Stack.Screen name= "Faq" component={Faq}/>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="RechargeMoney"
         component={RechargeMoney}
