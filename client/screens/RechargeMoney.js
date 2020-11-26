@@ -256,6 +256,13 @@ const RechargeMoney = (props) => {
     }
 
    const confirmPaylpal=()=>{
+       if(mercado){
+           setMercado(false)
+           setMonto('')
+           setConfirm(false)
+           usuario ? dispatch(getBalance(usuario.user.id)) : null;
+           props.navigation.navigate('UserProfile')
+       }
        if(numTransaction){
            setPaypal(false)
            setMonto('')
@@ -264,7 +271,6 @@ const RechargeMoney = (props) => {
         props.navigation.navigate('UserProfile')
 
        }
-    
    }
 
 
