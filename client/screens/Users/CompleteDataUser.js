@@ -234,7 +234,7 @@ const CompleteDataUser = (props) => {
                 </View>
                 <View style={style.actionInput}>
 
-                    <TouchableOpacity style={{ ...style.inputGroup, width: 305, height: 40 }} onPress={showDatePicker}>
+                    <TouchableOpacity style={{ ...style.inputGroup, height: 40 }} onPress={showDatePicker}>
                         <Text style={{ fontSize: 18, justifyContent: 'center', color: 'grey', fontFamily: 'serif' }}>Select a Birth Date</Text>
                     </TouchableOpacity>
                     <DateTimePickerModal
@@ -328,14 +328,14 @@ const style = StyleSheet.create({
         borderColor: '#e1e1e1',
         borderWidth: 1,
         fontSize: 18,
-        width: '90%',
+        width: '80%',
         padding: 10,
         backgroundColor: '#EDF7F6',
         borderRadius: 8,
         fontFamily: 'serif' 
     },
     picker: {
-        width: '90%',
+        width: '80%',
         height: 45,
         borderRadius: 8,
         marginVertical: 10,

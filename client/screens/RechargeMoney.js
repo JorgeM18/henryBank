@@ -250,7 +250,7 @@ const RechargeMoney = (props) => {
                 }
             ).then((resp) => {
                 const link = resp.data.content.link
-                Linking.openURL(link)
+                Linking.openURL(link).then(resp=>setConfirm(resp))
             })
         }
     }

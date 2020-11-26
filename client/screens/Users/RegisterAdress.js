@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert, Dimensions} from 'react-native'
+import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert, Dimensions, ScrollView} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location'
 import {colors} from '../../utils/colors'
@@ -132,17 +132,13 @@ export default function RegisterAdress(props) {
       }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
              <LinearGradient
-                colors={['#5E4ACF', '#1e1e1e','#5E4ACF']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: Dimensions.get('window').height,
-                  }}
-            />
+                colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                height={Dimensions.get('window').height}
+            >
             <View>
                 <Text style={styles.tittle}>
                     Address
@@ -201,7 +197,8 @@ export default function RegisterAdress(props) {
                     </Text>
                 </TouchableHighlight>
             </View>
-        </View>
+            </LinearGradient>
+        </ScrollView>
     )
 }
 
@@ -232,9 +229,11 @@ const styles = StyleSheet.create({
 
     },
     textButton: {
+        fontSize: 16, 
+        color: '#FFF', 
+        marginHorizontal: '30%', 
         textAlign: 'center',
-        color: '#fff',
-        fontFamily:'serif'
+        letterSpacing:2
     },
     inputGroup: {
         marginVertical: 10,
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
         borderColor: '#e1e1e1',
         borderWidth: 1,
         fontSize: 18,
-        width: '90%',
+        width: '80%',
         padding: 10,
         backgroundColor: '#EDF7F6',
         borderRadius: 8,
@@ -260,7 +259,9 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'white',
         fontSize: 20,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        padding: 10,
+         marginTop: 20
 
     },
 

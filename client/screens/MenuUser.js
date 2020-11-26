@@ -23,7 +23,7 @@ import { useSelector } from 'react-redux'
 function MenuUser(props) {
     
     const usuario = useSelector(store => store.user)
-    console.log('MENU USER', usuario)
+    // console.log('MENU USER', usuario)
     const dispatch = useDispatch()
     const logHome = async () => {
         AsyncStorage.removeItem('token');
@@ -62,7 +62,7 @@ function MenuUser(props) {
                     <View style={{ flexDirection: 'row', marginTop: 15 }}>
                         <Avatar.Image
                             size={50}
-                            source={{ uri: usuario.user? usuario.user.image : null }}
+                            source={ usuario.user?{ uri:usuario.user.image }:require('../screens/images/favicon.png')}
 
 
                         />
