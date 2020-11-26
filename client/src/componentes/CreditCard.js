@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Switch, TouchableOpacity, Text, Alert } from "react-native";
+import { StyleSheet, View, Switch, TouchableOpacity, Text, Alert, LogBox  } from "react-native";
 import { CreditCardInput, LiteCreditCardInput } from "react-native-credit-card-input";
 import {colors} from './../../utils/colors'
 
@@ -8,6 +8,7 @@ import {vincularTarjeta} from './../../Store/actions/cards'
 
 
 const CreditCard = ({vincularTarjeta, navigation}) => {
+  LogBox.ignoreAllLogs(true)
   const [state, setState] = useState({ useLiteCreditCardInput: false })
   const [valor, setValor] = useState('')
 

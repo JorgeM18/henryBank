@@ -53,6 +53,7 @@ function MenuUser(props) {
             ],
         )
     }
+    const imagen = 'https://www.gstatic.com/devrel-devsite/prod/v8ea8343deca3e735c5e491f22b0e2533427dcd1d0302777baea2667771626911/firebase/images/touchicon-180.png'
 
     return (
         <View style={{ flex: 1 }}>
@@ -60,9 +61,10 @@ function MenuUser(props) {
 
                 <View style={styles.userInfo}>
                     <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                        {console.log('susuusususus', usuario.user)}
                         <Avatar.Image
                             size={50}
-                            source={{ uri: usuario.user? usuario.user.image : null }}
+                            source={{ uri: usuario.user && usuario.user.image ? usuario.user.image : imagen }}
 
 
                         />
