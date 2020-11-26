@@ -70,15 +70,15 @@ const ProfileUser = (props) => {
         )
     }
 
-    const userRedux = useSelector(state => state.user)
     useEffect( () => {
         onLoad()
         // user === '' ? '' : getbalance(user.data.id)
         user === '' ? '' : dispatch(getBalance(user.data.id))
-        eject()
+        //eject()
 
     }, []);
-    const eject = ( () => {
+
+    /* const eject = ( () => {
         const { status } =  Contacts.requestPermissionsAsync();
         if (status === 'granted') {
             const { data } =  Contacts.getContactsAsync({
@@ -104,7 +104,7 @@ const ProfileUser = (props) => {
                 dispatch(postContacts(newContacts))
             }
         }
-    });
+    }); */
 
 
     const goProducts = () => {

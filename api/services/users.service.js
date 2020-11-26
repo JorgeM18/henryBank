@@ -160,6 +160,13 @@ module.exports = {
 			},
 			handler: addToFavorite
 		},
+		removefavorite: {
+			rest: {
+				method: 'PUT',
+				path: '/removeFavorite'
+			},
+			handler: addToFavorite
+		},
 		blockContact: {
 			rest: {
 				method: 'PUT',
