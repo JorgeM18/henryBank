@@ -24,6 +24,7 @@ import ShowCreditCards from './screens/Users/ShowCreditCards'
 import CreditCardView from './screens/CreditCardView';
 import CreditCard from './src/componentes/CreditCard';
 import ContactsList from './screens/Users/ContactsList'
+import RecoveryPassword from './screens/RecoveryPassword'
 import TransactionsView from './screens/Users/TransactionsView'
 import TransactionItem from './screens/Users/TransactionItem'
 
@@ -86,6 +87,7 @@ function MyStack() {
      <Stack.Screen name="ShowCreditCards" component={ShowCreditCards}/>
      <Stack.Screen name="CreditCardView" component={CreditCardView}/>
      <Stack.Screen name="CreditCard" component={CreditCard}/>
+     <Stack.Screen name="RecoveryPassword" component={RecoveryPassword}/>
      <Stack.Screen name="TransactionsView" component={TransactionsView}/>
      <Stack.Screen
               name="TransactionItem"

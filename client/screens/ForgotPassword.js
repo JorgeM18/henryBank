@@ -19,7 +19,7 @@ const[email, setEmail] = useState('');
             <TextInput
             style={styles.inputText}
             placeholder = "Email..."
-            placeholderTextColor = "#3B8EA5"
+            placeholderTextColor = "white"
             onChangeText = {text => setEmail(text)}/>
             </View>
             <TouchableOpacity style={styles.send_emailBtn} onPress={()=>props.navigation.navigate("InsertPin")}>
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e',
+        backgroundColor: '#292768',
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -48,27 +48,30 @@ const styles = StyleSheet.create({
 
     text:{
         width: "80%",
-        backgroundColor: "#465881",
+        backgroundColor: "#7D3EE7",
         borderRadius: 25,
         height: 50,
         marginBottom: 20,
         justifyContent: "center",
-        padding: 20
+        padding: 20,
+        fontFamily:'serif'
     },
 
     inputText:{
         height: 50,
-        color: "white"
+        color: "white",
+        fontFamily:'serif'
     },
 
     textButton:{
         color: "white",
-        marginTop: 15
+        marginTop: 15,
+        fontFamily:'serif'
     },
 
     send_emailBtn:{
         width: "80%",
-        backgroundColor: "#f19953",
+        backgroundColor: "#BB59FA",
         borderRadius: 25,
         height: 50,
         alignItems: "center",
