@@ -70,10 +70,20 @@ const cashDeposit = async (ctx) => {      // depositos en efectivo
 
 }
 const purchase = async (ctx) =>{
-    const {amount, commerce, accountId} = ctx.params
-    const numMov = await numTransaction();
-    
-    const {balance, userId} = await Account.findOne({where:{id:accountId}})
+    const {amount, commerce, userid} = ctx.params
+    console.log(ctx.params)
+    let numMov = await numTransaction();
+
+    if(commerce.toLowerCase() === 'google play'){
+        numMov = `GP-ALSADO1OAM-${numMov}`
+    }else if(commerce.toLowerCase() === 'epic games'){
+        numMov = `EG-1AJWEIS1-${numMov}`
+    }else if(commerce.toLowerCase() === 'steam'){
+        numMov = `ST-QWIEJS5E-${numMov}`
+    }
+
+
+    const {balance, id} = await Account.findOne({where:{userId:userid}})
     
     if(balance<amount){
         throw new MoleculerError("supera el monto maximo", 404, "SERVICE_NOT_FOUND")
@@ -86,23 +96,26 @@ const purchase = async (ctx) =>{
         movement_type:"purchase",
         description:`compras en ${commerce}`,
         state:"complete",
-        accountId
+        accountId:id
     })
     if(!movement){
         throw new MoleculerError("favor revisar datos", 404, "SERVICE_NOT_FOUND")
     }
-    const desc = await Account.update({balance: Sequelize.literal(`balance - ${amount}`)},{where:{id:accountId}})
+    const desc = await Account.update({balance: Sequelize.literal(`balance - ${amount}`)},{where:{id:id}})
     if(!desc){
         throw new MoleculerError("favor revisar datos", 404, "SERVICE_NOT_FOUND")
     }
-    const {phone, name} = await User.findOne({where:{id:userId}})
+    const {phone, name} = await User.findOne({where:{id:userid}})
     let moutARS = formatAR.format(amount)
     await whatsappSend(`+${phone}`,`*${name}* acabas de hacer una compra de *${moutARS}* en *${commerce}*`)
+
+
     return{
         message: 'success',
         content:{
             amount,
             commerce,
+            numMov
         }
     }
 

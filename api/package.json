@@ -28,7 +28,7 @@
     "axios": "^0.21.0",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
-    "firebase": "^8.0.2",
+    "firebase": "^8.1.1",
     "handlebars": "^4.7.6",
     "jsonwebtoken": "^8.5.1",
     "juice": "^7.0.0",

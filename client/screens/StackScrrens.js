@@ -8,6 +8,7 @@ import CompleteDataUser from './Users/CompleteDataUser'
 import RegisterAdress from './Users/RegisterAdress'
 import InsertPin from './InsertPin'
 import ForgotPassword from './ForgotPassword'
+import RecoveryPassword from './RecoveryPassword'
 import Login from './Login'
 import Faq from '../src/componentes/Faq'
 import UserProfile from './StackScreenUser'
@@ -75,6 +76,7 @@ const StackScreen = (props) => {
             <Stack.Screen name="CompleteDataUser" component={CompleteDataUser} />
             <Stack.Screen name="RegisterAdress" component={RegisterAdress} />
             <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+            <Stack.Screen name="RecoveryPassword" component={RecoveryPassword} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Faq" component={Faq} />
             <Stack.Screen name="UserProfile" component={UserProfile} options={{

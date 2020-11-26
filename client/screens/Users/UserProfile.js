@@ -18,7 +18,7 @@ const ProfileUser = (props) => {
     const balance = useSelector(store => store.balance)
     const userStore=useSelector(store=>store.user.user)
     const inc_out = useSelector(store => store.transaction.income_outcome)
-    // console.log('front', inc_out)
+
     console.log('USUARIO STORE',userStore)
     const onLoad = async () => {
         try {
@@ -37,17 +37,17 @@ const ProfileUser = (props) => {
 
     }
 
-    // const userRedux = useSelector(state => state.user)
+
     useEffect( () => {
         onLoad()
-        // user === '' ? '' : getbalance(user.data.id)
-     //    user === '' ? '' : dispatch(getBalance(user.data.id))
-         userStore? dispatch(getBalance(userStore.id)): null
-         userStore?  dispatch(incomeOutcome(userStore.id, 1)): null
-        eject()
+   
+         userStore ? dispatch(getBalance(userStore.id)): null
+         userStore ?  dispatch(incomeOutcome(userStore.id, 1)): null
+       // eject()
 
     }, []);
-    const eject = ( () => {
+
+    /* const eject = ( () => {
         const { status } =  Contacts.requestPermissionsAsync();
         if (status === 'granted') {
             const { data } =  Contacts.getContactsAsync({
@@ -73,7 +73,7 @@ const ProfileUser = (props) => {
                 dispatch(postContacts(newContacts))
             }
         }
-    });
+    }); */
 
 
     const goProducts = () => {

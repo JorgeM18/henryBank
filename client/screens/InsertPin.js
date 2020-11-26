@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { SafeAreaView, View, StyleSheet, TextInput, Image, TouchableOpacity, Text, Dimensions } from 'react-native';
 import {validarPin} from '../Store/actions/user'
 import { LinearGradient } from 'expo-linear-gradient';
+import CodeInput from 'react-native-confirmation-code-input'
 
 function InsertPin(props){
      const [pin, setPin]= useState('');
@@ -34,13 +35,24 @@ function InsertPin(props){
            <Text style={styles.text_header}>Insert  PIN!</Text>
             <View style= {styles.text}>
     
-            <TextInput
+            {/* <TextInput
             style={styles.inputText}
             placeholder = ""
             keyboardType='numeric'
             defaultValue={pin}
             placeholderTextColor = "#3B8EA5"
-            onChangeText = {Npin => setPin(Npin)}/>
+            onChangeText = {Npin => setPin(Npin)}/> */}
+            <CodeInput
+            useRef="codeInputRef2"
+            keyboardType="numeric"
+            codeLength={6}
+            className = 'border-box'
+            compareWithCode='123456'
+            autoFocus={false}
+            codeInputStyle={{fontWeight: '800'}}
+            // onFulfill={(isValid, code)=> _onFinishCheckingCode2(isValid, code)}
+            onChangeText={Npin =>setPin(Npin)}
+            />
             </View>
             <TouchableOpacity style={styles.send_emailBtn} onPress={()=>validar()}>
             <Text style={styles.textButton}>Validate Pin</Text>
@@ -57,7 +69,6 @@ function InsertPin(props){
 export default InsertPin;
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         backgroundColor: '#1f2333',

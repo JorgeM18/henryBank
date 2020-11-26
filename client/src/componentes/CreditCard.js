@@ -19,10 +19,8 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
 
  const validarTarjeta = () => {
    if(valor.valid) {
-    // Alert.alert('Datos de la tarjeta', JSON.stringify(valor, null, " ") );
     vincularTarjeta(valor)
     navigation.navigate('ShowCreditCards')
-    // console.log('nav', navigation)
     
    } else {
     Alert.alert('Must complete all fields')
@@ -77,7 +75,7 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
                             validarTarjeta()
                         }}
                         >
-                        <Text style={{ color: '#f6f2fc', fontSize: 20, fontFamily: 'serif', alignSelf: 'center'}}>
+                        <Text style={{ color: '#f6f2fc', fontSize: 16, fontFamily: 'serif', alignSelf: 'center'}}>
                             Add a card
                         </Text>
 
@@ -114,10 +112,10 @@ const CreditCard = ({vincularTarjeta, navigation}) => {
       height: 50,
       borderRadius: 10,
       justifyContent: 'center',
-      backgroundColor: '#1f2333',
+      backgroundColor: '#BB59FA',
       alignSelf: 'center',
       borderWidth: 1,
-      borderColor:'#BB59FA'
+      borderColor:'#BB59FA',
       // marginVertical: 20,
       // marginHorizontal: 40
 
