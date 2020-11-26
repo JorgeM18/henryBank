@@ -1,12 +1,12 @@
 export default [
   {
-    bg: '#FDBD50',
-    color: '#F5F5EB',
+    bg: '#1e1e1e',
+    color: '#FFF',
     category: 'Login',
     subCategories: ['If you can`t login, you can send a email to: gohenrybank@gmail.com'],
   },
   {
-    bg: '#FDBD50',
+    bg: '#1e1e1e',
     color: '#F5F5EB',
     category: 'Credit Card',
     subCategories: [
@@ -14,13 +14,13 @@ export default [
     ],
   },
   {
-    bg: '#FDBD50',
+    bg: '#1e1e1e',
     color: '#F5F5EB',
     category: 'Transfers and charges',
     subCategories: ['There are several ways to upload I go out and all are free and instantaneous By CVU or Rapipago are some of the options'],
   },
   {
-    bg: '#FDBD50',
+    bg: '#1e1e1e',
     color: '#F5F5EB',
     category: 'Forgot your password',
     subCategories: [
@@ -28,7 +28,7 @@ export default [
     ],
   },
   {
-    bg: '#FDBD50',
+    bg: '#1e1e1e',
     color: '#F5F5EB',
     category: 'How to use',
     subCategories: [

@@ -85,7 +85,7 @@ const Home = (props) => {
                 </View>
                 
                 <View style={style.box4}>
-                    <TouchableOpacity onPress={()=>props.navigation.navigate('Faq')}>
+                    <TouchableOpacity onPress={()=>props.navigation.navigate('Faq2')}>
                     <Feather
                             style={style.icon}
                             name="help-circle"

@@ -177,7 +177,8 @@ function MenuUser(props) {
                             />
                         )}
                         label="Send Money"
-                    // onPress={() => { props.navigation.navigate('stadistics') }}
+                
+                     onPress={() => { props.navigation.navigate('EnviarDinero') }}
                     />
 
                 </Drawer.Section>
