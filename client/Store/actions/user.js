@@ -164,3 +164,17 @@ export function getDataUser(id) {
 
 }
 
+
+export function newData(payload) {
+  console.log(payload, 'ENTRE E E EEEE E E E')
+  return function (dispatch) {
+    return axios.put(`http://${URL}/api/user/editUser`, payload)
+      .then(resp => {
+        dispatch({
+          type: 'NEW_DATA',
+          user: resp.data
+        })
+      })
+  }
+}
+
