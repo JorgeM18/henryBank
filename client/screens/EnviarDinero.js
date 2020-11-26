@@ -83,22 +83,33 @@ const EnviarDinero = (props) => {
               setModalVisible(true);
             }}
           >
-            <Text> Select Contact</Text>
+            <Text style={{color:'#fff', fontFamily:'serif'}}> Select Contact</Text>
           </TouchableOpacity>
           {/* <Text>{contact !==''?contact.}</Text> */}
         </View>
-        <View>
+        <View >
           <Modal
+          
             animationType="slide"
             visible={modalVisible}
             onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
+              Alert.alert("Warning","no selected contact",[
+                {
+                  text:'Cancel',
+                  onPress:()=>setModalVisible(true)
+                },
+                {
+                  text:'OK',
+                  onPress:()=> setModalVisible(false)
+                }
+              ]);
+              
             }}
           >
-            <ScrollView>
-              <View style={{ flex: 1, marginTop: 30 }}>
+              <View style={{ flex: 1, backgroundColor:'#292768' }}>
                 <View>
                   <Text style={styles.modalText}>My Contacs</Text>
+                  
                   <FlatList
                     data={contacList}
                     inverted
@@ -112,38 +123,38 @@ const EnviarDinero = (props) => {
                           }}
                         >
                           <View style={styles.panelItemContainer} >
-                            <View style={{ flexDirection: 'row', alingItems: 'center' }}>
-                              <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Name:</Text>
-                              <Text style={{ fontSize: 15 }} >{item.alias}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', alingItems: 'center', marginLeft: 10 }}>
-                              <Text style={{ fontWeight: 'bold', fontSize: 17 }}>Phone:</Text>
-                              <Text style={{ fontSize: 15 }}>{item.phone}</Text>
+                            <View style={{ flexDirection: 'column' }}>
+                              <Text style={{ fontSize: 20, fontFamily:'serif', color:'#fff', paddingLeft:10 }} >{item.alias}</Text>
+                              <Text style={{  fontSize: 17, fontFamily:'serif', color:'#fff', paddingLeft:30, marginTop:5}}>+{item.phone}</Text>
                             </View>
                           </View>
                         </TouchableHighlight>
                       )
-
-                    }} />
+                    }} 
+                    />
                 </View>
               </View>
-            </ScrollView>
           </Modal>
         </View>
         <View>
+          <View style={{alignItems:'flex-start', justifyContent:'center'}}>
+            <Text style={{fontSize:20, marginHorizontal:20, paddingTop:30, color:'#fff', fontFamily:'serif'}}>Insert Amount:</Text>
+          </View>
           <View style={styles.dinero}>
-            <Text style={styles.balance}>$</Text>
-            <TextInput
-              style={styles.balance}
-              keyboardType="numeric"
-              defaultValue={monto}
-              autoFocus
-              onChangeText={(value) => setMonto(value)}
-            />
+            <View style={{flexDirection:'row', alignItems:'center'}}>
+              <Text style={{fontSize:35, marginTop:30, color:'#fff', fontFamily:'serif'}}>$</Text>
+              <TextInput
+                style={styles.balance}
+                keyboardType="numeric"
+                defaultValue={monto}
+                autoFocus
+                onChangeText={(value) => setMonto(value)}
+              />
+            </View>
           </View>
           <View style={styles.inputService}>
-            <Text style={styles.cont}>AMOUNT</Text>
             <TextInput
+              style={{color:'#fff', width:'100%', height:'100%',fontFamily:'serif' }}
               placeholder={"Write your message ..."}
               placeholderTextColor="#C7C7CD"
               multiline
@@ -154,8 +165,7 @@ const EnviarDinero = (props) => {
             <TouchableOpacity style={styles.button}
               onPress={() => sendMoney(monto, msj)} activeOpacity={0.7}>
               <View style={{ flexDirection: 'row', alingItems: 'center' }}>
-              <Text style={{ fontSize: 19, color: '#FFF', marginHorizontal: '15%' }}>TRANSFER</Text>
-              <Icon name="money" size={20} color="white" style={{justifyContent:'flex-end'}} />
+              <Text style={{ fontSize: 17,fontFamily:'serif', color: '#FFF', marginHorizontal: '15%' }}>TRANSFER</Text>
               </View>
             </TouchableOpacity>
 
@@ -168,31 +178,35 @@ const EnviarDinero = (props) => {
 const styles = StyleSheet.create({
   contenedorPrincipal: {
     flex: 1,
-    backgroundColor: "#1e1e1e",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#292768'
   },
   dinero: {
-
-    backgroundColor: "#FFFFFF",
-    paddingTop: 2,
-    flexDirection: "row",
-    marginHorizontal: "3%",
+    alignItems:'center'
   },
   contact: {
-    backgroundColor: "#FFFFFF",
+    width: 150,
+    height: 30,
+    justifyContent:'center',
+    alignItems:'center',
+    backgroundColor: "#bb59fa",
+    color:'#fff',
     alignSelf: "center",
+    borderRadius:10,
+    marginTop:50,
+    marginBottom:30
     // marginTop: -145,
   },
   panelItemContainer: {
     borderWidth: 0.7,
-    borderColor: '#666',
+    borderColor: '#BB59FA',
     padding: 16,
-    borderRadius: 6,
+    borderRadius: 4,
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop:20,
     marginBottom: 20,
     marginHorizontal: '3%'
+    
   },
   cont: {
     color: "#1e1e1e",
@@ -202,18 +216,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   balance: {
-    alignSelf: "center",
-    position: "relative",
-    bottom: 8,
-    padding: 6,
-    paddingLeft: 19,
-    paddingRight: 19,
-    fontSize: 30,
+    flexDirection: 'row',
+    height: 50,
     marginTop: 30,
-    borderRadius: 10,
+    marginLeft: 15,
+    marginRight: 35,
+    // margin: 10,
+    fontSize: 40,
+    fontWeight: 'bold',
+    width: 150,
+    backgroundColor: '#292768',
+    alignItems: 'flex-start',
+    color: '#fff',
+    borderBottomWidth: 3,
+    borderColor: '#BB59FA',
   },
   inputAmount: {
-    marginTop: 90,
+    marginTop: 50,
+    alignItems: 'center'
   },
   top: {
     width: "100%",
@@ -224,11 +244,8 @@ const styles = StyleSheet.create({
     letterSpacing: 3,
   },
   container: {
-    width: "90%",
-    height: "100%",
-    borderRadius: 10,
-    justifyContent: "center",
-    backgroundColor: "#FFF",
+    flex: 1,
+    backgroundColor: '#292768'
   },
   openButton: {
     backgroundColor: "#F194FF",
@@ -242,27 +259,40 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   modalText: {
+    marginTop:30,
     marginBottom: 15,
     textAlign: "center",
-    fontSize: 15
+    fontSize: 15,
+    color:'#fff',
+    fontFamily:'serif'
   },
   button: {
-    width: 200,
+    width: 190,
     height: 50,
     borderRadius: 10,
     justifyContent: 'center',
-    backgroundColor: '#1e1e1e',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: '#FFF',
-    marginHorizontal: '10%',
+    backgroundColor: '#bb59fa',
+    alignItems: 'center',
     marginVertical: 20,
     shadowColor: "#000",
     shadowOffset: {
       width: 3,
       height: 12,
     }
+  },
+  inputService:{
+    alignItems:'flex-start',
+    backgroundColor:'#13124E',
+    height:55,
+    marginTop:60,
+    marginLeft:20,
+    marginRight:20,
+    borderWidth:2,
+    borderColor:'#BB59FA',
+    borderRadius:10
+    
   }
+
   });
 
 export default EnviarDinero;
