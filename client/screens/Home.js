@@ -61,7 +61,8 @@ const Home = (props) => {
                 </View>
 
             </View>
-            <View style={style.box4}>
+            <TouchableOpacity style={style.box4}
+            onPress={() => props.navigation.navigate("Faq")}>
                 <Octicons
                     // style={style.icon}
                     name="question"
@@ -69,7 +70,7 @@ const Home = (props) => {
                     size={25}
                 />
 
-            </View>
+            </TouchableOpacity>
           
          </View>
 
