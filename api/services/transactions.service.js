@@ -121,7 +121,7 @@ module.exports = {
 		},
 		purchase:{
 			rest:{
-				method:"PUT",
+				method:"POST",
 				path:"/purchase"
 			},
 			handler: purchase
