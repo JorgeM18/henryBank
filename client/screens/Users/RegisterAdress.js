@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react'
-import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert} from 'react-native'
+import { View, Text, AppRegistry, StyleSheet, TextInput, TouchableHighlight, Alert, Dimensions, ScrollView} from 'react-native'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Location from 'expo-location'
 import {colors} from '../../utils/colors'
 import { addAddress } from '../../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export default function RegisterAdress(props) {
@@ -26,7 +27,7 @@ export default function RegisterAdress(props) {
     }
     const dispatch = useDispatch();
     const handleSubmit = () => {
-        if (state.telefono && state.calle && state.localidad && state.numero && state.provincia && state.pais) {
+        if ( state.calle && state.localidad && state.numero && state.provincia && state.pais) {
             checkAddress()
             
             AsyncStorage.getItem('email')
@@ -131,54 +132,64 @@ export default function RegisterAdress(props) {
       }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
+             <LinearGradient
+                colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                height={Dimensions.get('window').height}
+            >
             <View>
-                <Text style={styles.domicilio}>
-                    Datos del domicilio
+                <Text style={styles.tittle}>
+                    Address
                 </Text>
-                <TextInput 
-                    style={styles.input}
-                    placeholder='Telefono'
-                    name='telefono'
-                    defaultValue={state.telefono}
-                    onChangeText={(e) => handleChange('telefono', e)}
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder='Calle'
-                    name='calle'
-                    defaultValue={state.calle}
-                    onChangeText={(e) => handleChange('calle', e)}
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder='Numero'
-                    name='numero'
-                    defaultValue={state.numero}
-                    onChangeText={(e) => handleChange('numero', e)}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder='Localidad'
-                    name='localidad'
-                    defaultValue={state.localidad}
-                    onChangeText={(e) => handleChange('localidad', e)}
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder='Provincia'
-                    name='provincia'
-                    defaultValue={state.provincia}
-                    onChangeText={(e) => handleChange('provincia', e)}
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder='Pais'
-                    name='pais'
-                    defaultValue={state.pais}
-                    onChangeText={(e) => handleChange('pais', e)}
-                />
-                <TouchableHighlight style={styles.button}
+                <View style={styles.actionInput}>
+                        <TextInput 
+                            style={styles.inputGroup}
+                            placeholder='Calle'
+                            name='calle'
+                            defaultValue={state.calle}
+                            onChangeText={(e) => handleChange('calle', e)}
+                        />
+                </View>
+                <View style={styles.actionInput}>
+                        <TextInput 
+                            style={styles.inputGroup}
+                            placeholder='Numero'
+                            name='numero'
+                            defaultValue={state.numero}
+                            onChangeText={(e) => handleChange('numero', e)}
+                        />
+                </View>
+                <View style={styles.actionInput}>
+                        <TextInput
+                            style={styles.inputGroup}
+                            placeholder='Localidad'
+                            name='localidad'
+                            defaultValue={state.localidad}
+                            onChangeText={(e) => handleChange('localidad', e)}
+                        />
+                </View>
+                <View style={styles.actionInput}>
+                        <TextInput 
+                            style={styles.inputGroup}
+                            placeholder='Provincia'
+                            name='provincia'
+                            defaultValue={state.provincia}
+                            onChangeText={(e) => handleChange('provincia', e)}
+                        />
+                </View>
+                <View style={styles.actionInput}>
+                        <TextInput 
+                            style={styles.inputGroup}
+                            placeholder='Pais'
+                            name='pais'
+                            defaultValue={state.pais}
+                            onChangeText={(e) => handleChange('pais', e)}
+                        />
+                </View>
+                
+                <TouchableHighlight style={styles.btn}
                     onPress={() => handleSubmit()}
                 >
                     <Text style={styles.textButton}>
@@ -186,35 +197,15 @@ export default function RegisterAdress(props) {
                     </Text>
                 </TouchableHighlight>
             </View>
-        </View>
+            </LinearGradient>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF',
-        color: colors.BACKGROUND_COLOR,
-        marginTop: 30,
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    domicilio: {
-        borderColor: colors.BACKGROUND_COLOR,
-        backgroundColor: colors.BACKGROUND_COLOR,
-        textAlign:'center',
-        fontSize: 18,
-        marginBottom: 10,
-        padding: 10,
-        color: '#FFF',
-    },
-    input: {
-        height: 40,
-        borderColor: colors.BACKGROUND_COLOR,
-        color: colors.BACKGROUND_COLOR,
-        borderWidth: 1,
-        padding: 10,
-        marginBottom: 20
+        backgroundColor: '#1e1e1e'
     },
     button: {
         alignSelf: 'center',
@@ -226,8 +217,52 @@ const styles = StyleSheet.create({
         width: '50%',
         borderRadius: 5,
     },
+    btn: {
+        width: 250,
+        height: 50,
+        borderRadius: 10,
+        justifyContent: 'center',
+        backgroundColor: '#1f2333',
+        marginVertical: 20,
+        marginHorizontal: 40,
+        alignSelf:'center'
+
+    },
     textButton: {
+        fontSize: 16, 
+        color: '#FFF', 
+        marginHorizontal: '30%', 
         textAlign: 'center',
-        color: '#fff'
-    }
+        letterSpacing:2
+    },
+    inputGroup: {
+        marginVertical: 10,
+        height: 40,
+        borderColor: '#e1e1e1',
+        borderWidth: 1,
+        fontSize: 18,
+        width: '80%',
+        padding: 10,
+        backgroundColor: '#EDF7F6',
+        borderRadius: 8,
+        fontFamily: 'serif' 
+    },
+    actionInput:{
+        flexDirection: 'row',
+        alignItems:'center',
+        justifyContent: 'center',
+        marginTop: 5,
+
+    },
+    tittle: {
+        fontFamily: 'serif',
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 20,
+        alignSelf: 'center',
+        padding: 10,
+         marginTop: 20
+
+    },
+
 })

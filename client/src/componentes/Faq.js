@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import data from './Data';
+import { StyleSheet, Text, View, TouchableOpacity,Dimensions } from 'react-native';
+import Data from './Data';
 import { Transition, Transitioning } from 'react-native-reanimated';
 import * as Animatable from 'react-native-animatable';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const transition = (
   <Transition.Together>
@@ -18,13 +19,26 @@ export default function App() {
   const ref = React.useRef();
 
   return (
-    <Transitioning.View
+    
+    <Transition.View
       ref={ref}
       transition={transition}
       style={styles.container}
     >
+      <LinearGradient
+                colors={['#5E4ACF', '#1e1e1e','#5E4ACF']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: Dimensions.get('window').height,
+                  }}
+            />
+      
+      
       <StatusBar hidden />
-      {data.map(({ bg, color, category, subCategories }, index) => {
+      {Data.map(({ bg, color, category, subCategories }, index) => {
         return (
           <TouchableOpacity
             key={category}
@@ -50,7 +64,7 @@ export default function App() {
           </TouchableOpacity>
         );
       })}
-    </Transitioning.View>
+    </Transition.View>
   );
 }
 
@@ -65,15 +79,20 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexGrow: 1,
     marginVertical: 10,
-    marginHorizontal:10
+    marginHorizontal:10,
   },
   card: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: '#FFF',
+    marginHorizontal: '6%',
+    borderRadius: 30
   },
   heading: {
-    fontSize: 38,
+    fontSize: 25,
     fontWeight: '900',
     textTransform: 'uppercase',
     textAlign: 'center',

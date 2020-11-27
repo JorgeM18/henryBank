@@ -125,7 +125,7 @@ export function ResetTransacctions(){
     return (dispatch)=>{
         dispatch({
             type: RESET_TRANSACTIONS
-        })
+        }) 
 
     }
   

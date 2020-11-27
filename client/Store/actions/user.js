@@ -11,19 +11,39 @@ export const LOGIN_FAIL = 'LOGIN_FAIL'
 export const POST_CONTACTS = 'POST_CONTACTS'
 
 //ACTIONS CREATE: CREAR UN USUARIO 
-export function createUser(user) {
-
+export function createUser(user, props) {
   return function (dispatch) {
     console.log(URL)
     return axios.post(`http://${URL}/api/user/createUser`, user)
       .then((resp) => {
-        dispatch({
-          type: ADD_USER,
-          user: resp.data
-        })
+        if(resp.data){
+          dispatch({
+            type: ADD_USER,
+            user: resp.data
+          })
+          Alert.alert(
+            'GO Bank',
+            'Plaese confirm your Email!',
+            [{
+                text: 'OK',
+                onPress: ()=>{props.navigation.navigate("InsertPin")}
+            }]
+
+        )
+        }
+     
       })
       .catch((error) => {
         // console.warn(error)
+        Alert.alert(
+          'GO Bank',
+          'Server Error!',
+          [{
+              text: 'OK',
+              onPress: ()=>{props.navigation.navigate("Home")}
+          }]
+
+      )
 
       })
 
@@ -56,10 +76,16 @@ export const loginUser=(user, props)=>async(dispatch)=>{
     }
 
   }catch(error){
+
     dispatch({
       type: 'LOGIN_FAIL',
       user:error.resp.data
     })
+    Alert.alert(
+      'Error',
+      'User or Password Invalid'
+
+)
   }
 }
 
@@ -109,7 +135,6 @@ export function validarPin(pin, props) {
 
 export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props) {
   const usuario = { lastname, typeDoc, numberDoc, birthday, numberPhone, email, image }
-  // console.log('USUARIO RECIVIDO', usuario)
 
   return function (dispatch) {
     return axios.put(`http://${URL}/api/user/approveUser`, usuario)
@@ -126,7 +151,14 @@ export function updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, 
         }
       })
       .catch(error => {
-        console.log(error)
+        Alert.alert(
+          'Error',
+          'Sorry!Insert your data again',
+          [{
+            text: 'OK',
+            onPress: () => { props.navigation.navigate("CompleteDataUser") }
+          }]
+        )
       })
   }
 }
@@ -162,5 +194,19 @@ export function getDataUser(id) {
   
   }
 
+}
+
+
+export function newData(payload) {
+  console.log(payload, 'ENTRE E E EEEE E E E')
+  return function (dispatch) {
+    return axios.put(`http://${URL}/api/user/editUser`, payload)
+      .then(resp => {
+        dispatch({
+          type: 'NEW_DATA',
+          user: resp.data
+        })
+      })
+  }
 }
 

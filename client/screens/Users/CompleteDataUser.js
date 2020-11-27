@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
     View,
-    TextInput,
     ScrollView,
+    TextInput,
     StyleSheet,
     Text,
     TouchableOpacity,
     Platform,
     Image,
-    Alert
+    Alert,
+    Dimensions,
+    Icon
 } from 'react-native'
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -21,6 +23,12 @@ import * as Permissions from 'expo-permissions'
 import * as ImagePicker from 'expo-image-picker';
 import { updateUser } from '../../Store/actions/user'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Appbar, Title } from 'react-native-paper'
+import { LinearGradient } from 'expo-linear-gradient';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Feather from 'react-native-vector-icons/Feather';
+
+
 
 const typeDocs = [
 
@@ -39,6 +47,7 @@ const CompleteDataUser = (props) => {
     const [birthday, setBirthday] = useState('')
     const [numberPhone, setNumberPhone] = useState('')
     const [image, setImage] = useState('')
+   
 
     //    CONFIGURACION DE DATA-PICKER
     const [fecha, setFecha] = useState('')
@@ -66,8 +75,7 @@ const CompleteDataUser = (props) => {
             setFecha(date.toLocaleDateString('es-ES', opciones))
             setBirthday(fechaNac)
             setIsmayor(true)
-            console.log(birthday)
-
+        
         } else {
             setIsmayor(false)
             setFecha(date.toLocaleDateString('es-ES', opciones))
@@ -80,8 +88,8 @@ const CompleteDataUser = (props) => {
     const placeholderTypeDoc = {
         label: 'Select a Type Document',
         value: null,
-        color: '#1e1e1e',
-
+        // color: '#1e1e1e',
+        color: '#1c100b',
     }
     //UPLOAD IMAGE
     const uploadImage = (uri) => {
@@ -98,6 +106,7 @@ const CompleteDataUser = (props) => {
             xhr.send();
         });
     };
+  
 
     //CARGAR IMAGEN
 
@@ -117,23 +126,28 @@ const CompleteDataUser = (props) => {
                         const nameImg = (JSON.stringify(resolve._data.name))
                         const id = nameImg.replace(/\"/g, "")
                         const fecha = moment(new Date()).format("YYYY-MM-DD")
-                     
+                       
                         let ref = firebase.storage().ref().child(`images/${id}&${fecha}`);
                         ref.put(resolve)
                             .then(resolve => {
-                              
+                                
                                 firebase.storage().ref(`images/${id}&${fecha}`).getDownloadURL()
                                     .then((response) => {
-                                        // console.log('URL:',response)
+                                      
                                         setImage(response)
+                                       
 
                                     })
-                                    .catch(err=>{})
+                                    .catch(err => { })
 
-                        })
-                        .catch(error => {});
+                            })
+                            .catch(error => {
+                             
+                            });
                     })
-                    .catch(error => {});
+                    .catch(error => {
+                       
+                    });
 
 
             }
@@ -145,87 +159,124 @@ const CompleteDataUser = (props) => {
     };
 
     const update = () => {
+      
         AsyncStorage.getItem('email')
-            .then(email => {              
+            .then(email => {
+              
                 dispatch(updateUser(lastname, typeDoc, numberDoc, birthday, numberPhone, email, image, props))
+               
             })
-   
+
 
     }
 
 
     return (
         <ScrollView style={style.container} >
+            <LinearGradient
+                colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                height={Dimensions.get('window').height}
+            >
+
+                <View style={{ padding: 10, marginTop: 20, alignItems: 'center' }}><Title style={style.tittle}>Complete your Personal Data</Title></View>
+
+                <View style={style.actionInput} >
+                    <TextInput style={style.inputGroup}
+                        placeholder=" Lastname"
+                        autoCapitalize="none"
+                        defaultValue={lastname}
+                        onChangeText={value => setLastname(value) } 
+                        />
+                   
+                </View>
+                <View style={style.actionInput} >
+                    <TouchableOpacity style={style.inputGroup} onPress={openGallery}><Text style={{ color: 'grey', fontSize: 17, fontFamily: 'serif' }}>Select an Image</Text></TouchableOpacity>
+
+                </View>
+                <View style={style.actionInput}>
+                    <TextInput style={style.inputGroup} placeholder=" Phone Number"
+                        keyboardType='numeric'
+                        defaultValue={numberPhone}
+                        onChangeText={value => setNumberPhone(value)} />
+                  
+                </View>
+                <View style={style.actionInput}>
+                    <View style={style.picker}>
+                        <RNPickerSelect
+                            style={pickerSelectStyles}
+                            placeholder={placeholderTypeDoc}
+                            useNativeAndroidPickerStyle={false}
+                            Icon={() => {
+                                return <FontAwesome
+                                    name="caret-down"
+                                    size={1.5}
+                                    color={'black'}
+                                    backgroundColor="transparent"
+                                    underlayColor="transparent"
+                                    style={pickerSelectStyles.icon}
+                                />;
+                            }}
+                            onValueChange={value => { setTypeDoc(value)}}
+                            items={typeDocs}
+                        />
+
+                    </View>
+                </View>
 
 
-            <View style={style.header}>
-                <Image style={{ width: 70, height: 70 }}
-                    source={require('../images/Logo-05.png')} />
+                <View style={style.actionInput}>
+                    <TextInput style={style.inputGroup} placeholder="Document Number"
+                     keyboardType='numeric'
+                        onChangeText={value => setNumberDoc(parseInt(value))} />
+                    
+                </View>
+                <View style={style.actionInput}>
 
-            </View>
+                    <TouchableOpacity style={{ ...style.inputGroup, height: 40 }} onPress={showDatePicker}>
+                        <Text style={{ fontSize: 18, justifyContent: 'center', color: 'grey', fontFamily: 'serif' }}>Select a Birth Date</Text>
+                    </TouchableOpacity>
+                    <DateTimePickerModal
+                        isVisible={isDatePickerVisible}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
+            
+                  
+                </View>
+                <View style={{marginHorizontal:20}}>
+                   {
+                        isMayor ? null :
+                            <Animatable.View animation="fadeInLeft" duration={500}>
+                                <Text style={style.errorMsg}>You must be of legal age</Text>
+                            </Animatable.View>
+                    }
 
-            <View >
-                <TextInput style={style.inputGroup} placeholder=" Lastname"
-
-                    onChangeText={value => setLastname(value)} />
-            </View>
-            <View >
-                <TouchableOpacity style={style.inputGroup} onPress={openGallery}><Text>Select an Image</Text></TouchableOpacity>
-
-            </View>
-            <View >
-                <TextInput style={style.inputGroup} placeholder=" Phone Number"
-                    keyboardType='numeric'
-                    onChangeText={value => setNumberPhone(value)} />
-            </View>
-            <View style={style.picker}>
-                <RNPickerSelect
-                    style={pickerSelectStyles}
-                    placeholder={placeholderTypeDoc}
-                    onValueChange={value => setTypeDoc(value)}
-                    items={typeDocs}
-                />
-            </View>
-
-
-            <View >
-                <TextInput style={style.inputGroup} placeholder="Document Number"
-                    onChangeText={value => setNumberDoc(value)} />
-            </View>
-            <View>
-
-                <TouchableOpacity style={style.inputGroup} onPress={showDatePicker}>
-                    <Text style={{ fontSize: 18, justifyContent: 'center', color: 'gray' }}>Select a Birth Date</Text>
-                </TouchableOpacity>
-                <DateTimePickerModal
-                    isVisible={isDatePickerVisible}
-                    mode="date"
-                    onConfirm={handleConfirm}
-                    onCancel={hideDatePicker}
-                />
+                   </View>
+                <View style={{marginHorizontal:20}}>
                 {
-                    fecha !== '' ? <Text style={{ fontSize: 18, marginTop: 15, alignItems: 'center' }}> Date Selected: {fecha}</Text>
-                        : null
-                }
-                {
-                    isMayor ? null :
-                        <Animatable.View animation="fadeInLeft" duration={500}>
-                            <Text style={style.errorMsg}>You must be of legal age</Text>
-                        </Animatable.View>
-                }
+                        fecha !== '' ?
+    
+                        <Text style={{ fontSize: 18, marginTop: 10, alignItems: 'center', color: '#fff' }}> Date Selected: {fecha}</Text>
+                                
+          
+                            : null
+                    }
+                </View>
 
-            </View>
-        
-            <View >
+                <View style={style.actionInput}>
 
-                <TouchableOpacity style={style.btn} onPress={update}>
-                    <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
-                        Save User
-                        </Text>
-                </TouchableOpacity>
-            </View>
+                    <TouchableOpacity style={style.btn} onPress={()=>update()}>
+                        <Text style={{ fontSize: 16, color: '#FFF', marginHorizontal: '30%', textAlign: 'center' }}>
+                            Continue
+            </Text>
+                    </TouchableOpacity>
 
+                </View>
 
+            </LinearGradient>
         </ScrollView>
 
     )
@@ -236,20 +287,40 @@ export default CompleteDataUser;
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FFF',
-        paddingHorizontal: 20,
-        paddingVertical: 10
+        backgroundColor: '#1f2333',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+    },
+    actionInput:{
+        flexDirection: 'row',
+        alignItems:'center',
+        justifyContent: 'center',
+        marginTop: 5,
+
+    },
+    icon:{
+        padding: 10,
     },
     header: {
         flex: 1,
         flexDirection: 'column',
-        height: 90,
+        height: 70,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    tittle: {
+        fontFamily: 'serif',
+        fontWeight: 'bold',
+        color: 'white',
+        fontSize: 20
+
     },
     errorMsg: {
         color: '#FF0000',
         fontSize: 14,
+    },
+    text_gral: {
+
     },
     inputGroup: {
         marginVertical: 10,
@@ -257,27 +328,19 @@ const style = StyleSheet.create({
         borderColor: '#e1e1e1',
         borderWidth: 1,
         fontSize: 18,
-        width: '90%',
+        width: '80%',
         padding: 10,
-        color: 'gray'
-
-    },
-    input: {
-        flexDirection: 'row',
-        marginTop: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#f2f2f2',
-        paddingBottom: 5,
-        borderRadius: 3
-
+        backgroundColor: '#EDF7F6',
+        borderRadius: 8,
+        fontFamily: 'serif' 
     },
     picker: {
-        borderColor: '#e1e1e1',
-        borderWidth: 1,
-        width: 330,
+        width: '80%',
         height: 45,
-        marginVertical: 10
-
+        borderRadius: 8,
+        marginVertical: 10,
+        backgroundColor: '#EDF7F6',
+        fontSize: 20,
     },
     textInput: {
         flex: 1,
@@ -298,7 +361,7 @@ const style = StyleSheet.create({
     button: {
         width: 280,
         height: 70,
-        backgroundColor: '#330066',
+        backgroundColor: '#1f2333',
         borderRadius: 30,
         justifyContent: 'center',
         marginTop: 15
@@ -313,23 +376,40 @@ const style = StyleSheet.create({
         height: 50,
         borderRadius: 10,
         justifyContent: 'center',
-        backgroundColor: '#1e1e1e',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: '#FFF',
+        backgroundColor: '#1f2333',
         marginVertical: 20,
         marginHorizontal: 40
 
     },
 });
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles = {
 
     inputAndroid: {
         fontSize: 17,
-        borderColor: 'black',
-        borderWidth: 1,
+        fontFamily: 'serif',
         color: 'black',
-
+        justifyContent: 'center',
+        paddingHorizontal: 10,
+        paddingVertical: 8,
     },
-});
+    placeholder: {
+        color: 'grey',
+        fontFamily: 'serif',
+        fontSize: 17
+    },
+    icon: {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        borderTopWidth: 5,
+        borderTopColor: '#00000099',
+        borderRightWidth: 5,
+        borderRightColor: 'transparent',
+        borderLeftWidth: 5,
+        borderLeftColor: 'transparent',
+        width: 0,
+        height: 0,
+        top: 20,
+        right: 15,
+    },
+};

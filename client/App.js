@@ -1,22 +1,13 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { Provider } from 'react-redux'
-import store from './Store/store'
+import { NavigationContainer } from '@react-navigation/native';
+import { Provider } from 'react-redux';
+import { store, persistor } from './Store/store';
+import StackScrrens from './screens/StackScrrens';
+import StackScreenUser from './screens/StackScreenUser';
+import { PersistGate } from 'redux-persist/integration/react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Home from './screens/Home'
-import CreateUser from './screens/Users/CreateUser'
-import Faq from './src/componentes/Faq'
-import Login from './screens/Login'
-import ForgotPassword from './screens/ForgotPassword'
-import CompleteDataUser from './screens/Users/CompleteDataUser'
-import InsertPin from './screens/InsertPin'
-import RegisterAdress from './screens/Users/RegisterAdress'
-import UserProfile from './screens/Users/UserProfile'
-import MyProducts from './screens/Users/MyProducts'
-import MyData from './screens/MyData'
-import ConnectionPages from './screens/ConnectionPages'
 
 import RechargeMoney from './screens/RechargeMoney'
 import EnviarDinero from './screens/EnviarDinero'
@@ -107,12 +98,36 @@ function MyStack() {
 }
 
 export default function App() {
+  const [user, setUser] = useState(null)
+  const onLoad = async () => {
+    try {
+      var usuario = await AsyncStorage.getItem('usuario')
+      setUser((JSON.parse(usuario)))
+
+    } catch (error) {
+
+    }
+
+  }
+  useEffect(() => {
+    onLoad()
+  }, [user])
+  //esto elimina los warning
+  console.disableYellowBox = true
+  //-----------------------------
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        {/* <MyStack/> */}
-        <MyStack />
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          {user !== null ?
+            <StackScreenUser />
+            :
+            <StackScrrens />
+          }
+        </NavigationContainer>
+
+      </PersistGate>
+
     </Provider>
 
   );

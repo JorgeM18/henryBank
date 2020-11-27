@@ -180,9 +180,11 @@ const editUser = async (ctx) =>{
 }
 
 const getContacts = async (ctx) => {
-  const { userId } = ctx.params 
+  const { userId } = ctx.params
+  let id = parseInt(userId) 
   try{
-    const userContacts = await Contact.findAll({where: { userId: userId }});
+    const userContacts = await Contact.findAll({where: { userId: id }});
+    console.log(userContacts, "ACA EL USER CONTACTS DESDE CONTROLLERS")
     if (!userContacts) throw new MoleculerError("Contacts not found", 404, "SERVICE_NOT_FOUND");
     return {
       message: 'success',
@@ -190,6 +192,7 @@ const getContacts = async (ctx) => {
     }
   } 
   catch(err) {
+    console.log('ESTE ES EL ERROR DE GET CONTACTS')
     console.log(err);
     throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
   }
@@ -217,7 +220,7 @@ const addContact = async (ctx) => {
   //   }
   } 
   catch(err) {
-    console.log(err);
+    console.log(err, '');
     throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
   }
 }
@@ -247,6 +250,24 @@ const addToFavorite = async (ctx) => {
     const userContact = await Contact.findOne({where: {userId: userId, phone: contactPhone}});
     if (!userContact) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
     userContact.status = 'favorite';
+    userContact.save()
+    return {
+      message: 'success',
+      content: userContact
+    }
+  } 
+  catch(err) {
+    console.log(err);
+    throw new MoleculerError("user not found", 404, "SERVICE_NOT_FOUND");
+  }
+}
+
+const removeFavorite = async (ctx) => {
+  const { userId, contactPhone } = ctx.params // Necesito userPhone y contactPhone del front
+  try{
+    const userContact = await Contact.findOne({where: {userId: userId, phone: contactPhone}});
+    if (!userContact) throw new MoleculerError("Contact not found", 404, "SERVICE_NOT_FOUND");
+    userContact.status = 'contact';
     userContact.save()
     return {
       message: 'success',
@@ -318,6 +339,7 @@ module.exports = {
     addContact,
     editContact,
     addToFavorite,
+    removeFavorite,
     blockContact,
     searchContacts
 }

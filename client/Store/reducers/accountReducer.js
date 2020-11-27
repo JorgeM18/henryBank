@@ -1,8 +1,10 @@
-import { GET_BALANCE, GET_ACCOUNT, RESET_ACCOUNT } from '../actions/account'
+import { GET_BALANCE, GET_ACCOUNT, RESET_ACCOUNT,OUTCOME_MOVEMENT } from '../actions/account'
+
 
 const initialState = {
     balance: '',
-    account: ''
+    account: '',
+    movements:''
 }
 
 export default (state = initialState, actions) => {
@@ -17,11 +19,17 @@ export default (state = initialState, actions) => {
                 ...state,
                 account: actions.account
             }
+        case OUTCOME_MOVEMENT:
+            return {
+                ...state,
+                movements: actions.outcomeMov
+            }
         case RESET_ACCOUNT:
             return {
                 ...state,
                 account: '',
-                balance:''
+                balance: '',
+                movements:''
             }
         default:
             return state
