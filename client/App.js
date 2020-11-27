@@ -27,6 +27,10 @@ import ContactsList from './screens/Users/ContactsList'
 import RecoveryPassword from './screens/RecoveryPassword'
 import TransactionsView from './screens/Users/TransactionsView'
 import TransactionItem from './screens/Users/TransactionItem'
+import Buy_PlayStore from './screens/Buy_PlayStore'
+import Buy_Steam from './screens/Buy_Steam'
+import Buy_PlayStation from './screens/Buy_PlayStation'
+import Buy from './screens/Buy'
 
 const Stack = createStackNavigator()
 
@@ -89,11 +93,15 @@ function MyStack() {
      <Stack.Screen name="CreditCard" component={CreditCard}/>
      <Stack.Screen name="RecoveryPassword" component={RecoveryPassword}/>
      <Stack.Screen name="TransactionsView" component={TransactionsView}/>
+     <Stack.Screen name= "Buy_PlayStore" component = {Buy_PlayStore}/>
      <Stack.Screen
               name="TransactionItem"
               component={TransactionItem}
               initialParams={{ item: 1}}
             />
+    <Stack.Screen name = "Buy_Steam" component = {Buy_Steam}/>
+    <Stack.Screen name = "Buy_PlayStation" component={Buy_PlayStation}/>
+    <Stack.Screen name = "Buy" component={Buy}/>
     </Stack.Navigator>
   )
 }
