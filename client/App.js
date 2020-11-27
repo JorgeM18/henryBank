@@ -9,7 +9,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-
 export default function App() {
   const [user, setUser] = useState(null)
   const onLoad = async () => {

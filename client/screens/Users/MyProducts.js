@@ -20,7 +20,7 @@ const handleAccount = () => {
 }
 
 const handleContacts = () => {
-    Alert.alert('redirecciona a contactos')
+    props.navigation.navigate('Buy')
 }
 
 const handleShowCreditCards = () => {
@@ -97,12 +97,13 @@ const handleShowCreditCards = () => {
                                     <TouchableOpacity style={style.button1} onPress={(e) => handleContacts()}>
                                             <FontAwesome5
                                                 style={style.icon}
-                                                name="plus"
+                                                name="gamepad"
                                                 color="#FFF"
                                                 size={25}
                                             />
                                     </TouchableOpacity>
-                                    <Text style={style.text2}>More...</Text>
+                                    <Text style={style.text2}>Buy Cards</Text>
+                                    
                             </View>
                            
 

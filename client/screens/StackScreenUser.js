@@ -17,6 +17,10 @@ import ConnectionPages from './ConnectionPages'
 import TransactionsView from './Users/TransactionsView'
 import TransactionItem from './Users/TransactionItem'
 // import Home from './StackScrrens'
+import Buy from './Buy'
+import BuySteam from './BuySteam'
+import Buy_PlayStore from './Buy_PlayStore'
+import Buy_PlayStation from './Buy_PlayStation'
 
 const Drawer = createDrawerNavigator();
 
@@ -56,6 +60,10 @@ const StackScreenUser = (props) => {
             <Drawer.Screen name="TransactionItem" component={TransactionItem} />
             {/* <Drawer.Screen name="Home" component={Home} /> */}
             
+            <Drawer.Screen name="Buy" component={Buy} />
+            <Drawer.Screen name="BuySteam" component={BuySteam} />
+            <Drawer.Screen name="Buy_PlayStore" component={Buy_PlayStore} />
+            <Drawer.Screen name="Buy_PlayStation" component={Buy_PlayStation} />
         </Drawer.Navigator>
     )
 

@@ -16,10 +16,10 @@ import { getBalance } from '../Store/actions/account'
 import axios from 'axios'
 import store from '../Store/store';
 import { LoadingIndicator } from 'react-native-expo-fancy-alerts';
-import { selectIsLoading } from 'selectors';
+// import { selectIsLoading } from 'selectors';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+const URL='192.168.1.5:3000'
 
 const typeRecharge = [
     {label:'', value:'default'},
