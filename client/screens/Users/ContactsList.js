@@ -18,6 +18,8 @@ import {
 } from 'react-native';
 import * as Contacts from 'expo-contacts';
 import { getContacts, postContacts } from '../../Store/actions/contact'
+import Octicons from 'react-native-vector-icons/Octicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const ContactsList = (props) => {
 
@@ -118,13 +120,20 @@ const ContactsList = (props) => {
 
   //funcion para dar formato a cada celda de contacto en la lista
   let renderItem = ({ item }) => (
-    <View style={{ minHeight: 55, padding: 5 }}>
-      {item.alias === 'favorite'? <Text>:3</Text> : null}
+    
+    <View style={style.contact}>
+    {item.alias === 'favorite'? <Octicons name="heart" color="#FFF" size={25} style={{width: '10%'}}/> : null}
       <TouchableOpacity onPress={() => viewContactProfile({item})}>
-      <Text style={{ color: '#2f363c', fontWeight: 'bold', fontSize: 18 }}>
+      <Text style={{ 
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 18,
+        marginLeft: '24%'
+        
+         }}>
         {item.alias}
       </Text>
-      <Text style={{ color: 'grey', fontWeight: 'bold' }}>
+      <Text style={{ color: 'grey', fontWeight: 'bold', marginLeft: '24%' }}>
         {item.phone}
       </Text>
       </TouchableOpacity>
@@ -143,20 +152,28 @@ const ContactsList = (props) => {
   }
 
   return (
-    <View style={{ flex: 1}}>
-     <SafeAreaView style={{backgroundColor: '#2f363c'}} />
+    <View style={style.container}>
+     <SafeAreaView style={{backgroundColor: '#292768'}} />
+     <View style={style.searchBar}>
+     <Octicons name="search" color="#FFF" size={25} />
       <TextInput 
       placeholder="Search" 
       placeholderTextColor="#dddddd" 
       style={{
-        backgroundColor: '#2f363c', 
-        height:50, 
+        backgroundColor: '#1f1d5e',
+        borderColor: '#bb59fa', 
+        borderWidth:1,
+        height:40, 
         fontSize:18,
-        padding:10,
-        color:'white'}}
+        color:'white',
+        width: '88%',
+        marginHorizontal:'4%',
+        paddingLeft: 20,
+        borderRadius: 20}}
       onChangeText={(value) => searchContact(value)} 
       />
-      <View style={{flex:1}}>
+      </View>
+      <View style={{width: '100%'}}>
         {loading? (
           <View
             style={{
@@ -164,20 +181,19 @@ const ContactsList = (props) => {
               alignItems:'center',
               justifyContent: 'center'
             }}>
-            <ActivityIndicator size='large' color='#2f363c' />
+            <ActivityIndicator size='large' color='#fff' />
           </View>
         ) : null}
           <FlatList
              data={localContacts}
              renderItem={renderItem}
+             keyExtractor={(item, index) => index.toString()}
              ListEmptyComponent={ () => 
              <View style={{
                flex: 1,
-               alignItems: 'center',
-               justifyContent: 'center',
                marginTop: 50
              }}>
-             <Text style={{color:'#2f363c'}}>No contacts found</Text>
+             <Text style={{color:'#fff'}}>No contacts found</Text>
              </View>}
            />
 
@@ -190,32 +206,37 @@ const ContactsList = (props) => {
               setModalVisible(false)
               setEditingContact(false)
           }}>
-          <View style={style.centeredView}>
           <View style={style.modalView}>
-          <Button
-            title="X"
-            color="#f194ff"
-            onPress={() => {
+          <View style={style.topButtons}>
+            
+            <TouchableOpacity onPress={() => editFavourites()}>
+              <FontAwesome5
+                
+                name="star"
+                color="#FFF"
+                size={25}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => {
                 setModalVisible(false)
                 setEditingContact(false)
                 setNewAlias('')
-                  }}
-          /> 
-          <Button
-            title="Change Status"
-            color="#f194ff"
-            onPress={() => editFavourites()}
-            />
-      
+                  }}>
+              <FontAwesome5
+                style={style.xButton}
+                name="times"
+                color="#FFF"
+                size={25}
+                />
+            </TouchableOpacity>
+          </View>
           <Text style={style.modalText}>{selectedContact.item.alias}</Text>
           <Text style={style.modalText}>{selectedContact.item.phone}</Text>
-          <Button
-          title={"Edit " + selectedContact.item.alias + " alias"}
-          color="#f194ff"
-          onPress={() => editContact()}
-        />
+          <TouchableOpacity style={style.editAlias} onPress={() => editContact()}>
+              <Text style={{color:'#fff'}}>Edit Alias</Text>
+            </TouchableOpacity>
           </View>
-        </View>
       </Modal>
       </View>) : null}
 
@@ -228,36 +249,42 @@ const ContactsList = (props) => {
               setModalVisible(false)
               setEditingContact(false)
           }}>
-          <View style={style.centeredView}>
           <View style={style.modalView}>
-          <Button
-            title="Cancel"
-            color="#f194ff"
-            onPress={() => {
+
+          <TouchableOpacity onPress={() => {
                 setModalVisible(false)
                 setEditingContact(false)
                 setNewAlias('')
-                  }}
-          /> 
+                  }}>
+              <FontAwesome5
+                style={style.xButton2}
+                name="times"
+                color="#FFF"
+                size={25}
+                />
+            </TouchableOpacity>
           
-          <Text>Enter new Alias:</Text>
+          <Text style={style.modalText}>Enter new Alias:</Text>
           <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            placeholder={"Write new alias for ",  selectedContact.item.alias}
+            placeholderTextColor="white" 
+            style={{
+              backgroundColor: '#1F2333',
+              borderColor: '#1f1d5e', 
+              borderWidth:1,
+              height:40, 
+              fontSize:14,
+              width: '100%',
+              paddingLeft: 20,
+              marginBottom: '10%',
+              borderRadius: 20}}
+            placeholder={"write new alias..."}
             onChangeText={(value) => setNewAlias(value)}
             value={newAlias}
           />
-
-          <Button
-            title="Save Changes"
-            color="#f194ff"
-            onPress={() => 
-              confirmEditContact(newAlias)
-              }
-          />
-
+          <TouchableOpacity style={style.editAlias} onPress={() => confirmEditContact(newAlias)}>
+              <Text style={{color:'#fff'}}>Save Changes</Text>
+          </TouchableOpacity>
           </View>
-        </View>
       </Modal>
       </View>) : null}
 
@@ -269,22 +296,37 @@ const ContactsList = (props) => {
 const style = StyleSheet.create({
   container: {
       flex: 1,
-      backgroundColor: '#1e1e1e',
+      backgroundColor: '#1F2333',
       alignItems: 'center',
-      justifyContent: 'center'
   },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
+  searchBar: {
+    backgroundColor: '#1F2333',
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 22,
+    padding: 20,
+    marginLeft: '2%'
+    
+  },
+  contact: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    alignSelf: 'center',
+    width: '92%',
+    margin: '2%',
+    minHeight: 55, 
+    padding: 10, 
+    borderColor: '#bb59fa',
+    borderWidth: 1,
+    borderRadius: 5
+    
   },
   modalView: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: '#bb59fa',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -292,23 +334,33 @@ const style = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    borderRadius: 5
   },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+  topButtons: {
+    flexDirection: 'row',
+    marginTop:'2%',
+    marginBottom: '5%'
   },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+  xButton: {
+    marginLeft: '88%'
+  },
+  xButton2: {
+    marginLeft: '92%'
   },
   modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+    color: '#fff',
+    paddingBottom: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'left',
   },
+  editAlias: {
+    backgroundColor: '#1f1d5e',
+    marginTop: '5%',
+    borderRadius: 5,
+    color: 'white',
+    padding: 10
+  } 
 })
 
 export default ContactsList;
