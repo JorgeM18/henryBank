@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import { logout, getDataUser } from '../../Store/actions/user'
-import { getBalance, ResetAccount } from '../../Store/actions/account'
+import { getBalance, getAccount } from '../../Store/actions/account'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts'
 import { postContacts } from '../../Store/actions/contact'
@@ -50,6 +50,7 @@ const ProfileUser = (props) => {
 
         userStore ? dispatch(getBalance(userStore.id)) : null
         userStore ? dispatch(incomeOutcome(userStore.id, 1)) : null
+        userStore ? dispatch(getAccount(userStore.id)): null
         // eject()
 
     }, []);

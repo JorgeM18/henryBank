@@ -9,32 +9,45 @@ export const DELETE_CARD = 'DELETE_CARD'
 export const GET_ALL_CARDS = 'GET_ALL_CARDS'
 
 
-export function vincularTarjeta(tarjeta){
+export function vincularTarjeta(tarjeta, id, props){
+    const newCard =  {
+        number: tarjeta.values.number,
+        name: tarjeta.values.name,
+        expyry: tarjeta.values.expiry,
+        type: tarjeta.values.type
+    }
    
     return function(dispatch){
-        console.log('tarjeta', tarjeta)
-        const newCard =  {
-            number: tarjeta.values.number,
-            name: tarjeta.values.name,
-            expyry: tarjeta.values.expiry,
-            type: tarjeta.values.type
-        }
-        
-        return dispatch({
+        return axios.post(`http://${URL}/api/user/addCard`,{
+            userId:id,
+            cardNumber:tarjeta.values.number,
+            expyry:tarjeta.values.expiry,
+            cvc:tarjeta.values.cvc,
+            cardName:tarjeta.values.name,
+            type:tarjeta.values.type
+            
+        } )
+        .then((resp)=>{
+            if(resp.data.message==='succes'){
+                dispatch({
                     type: ADD_CARD,
                     card: newCard
                 })
-        // return axios.post(`http://${URL}/api/user/createUser`, user)
-        // .then((resp)=>{
-        //     dispatch({
-        //         type: ADD_USER,
-        //         user:resp.data
-        //     })
-        // })
-        // .catch((error)=>{
-        //     // console.warn(error)
-
+                // Alert.alert(
+                //     'Success',
+                //     'Credit Card add!',
+                //     [{
+                //         text: 'OK', //Arreglo de botones
+                //         onPress: () => { props.navigation.navigate('ShowCreditCards')
+                //         },
         
+                //     }],
+
+                // )
+            }            
+        })
+        .catch(error=>{})
+       
 
     }
   
@@ -42,13 +55,18 @@ export function vincularTarjeta(tarjeta){
 
 const tarjetas = []
 
-export function getCreditCards(){
-    console.log('----', tarjetas)
+export function getCreditCards(id){
     return function(dispatch){
-        return dispatch({
-            type: ALL_CARDS,
-            cards: tarjetas
+        return axios.get(`http://${URL}/api/user/${id}/getCards`)
+        .then((resp)=>{
+            console.log('ACTION',resp)
+             dispatch({
+                type: ALL_CARDS,
+                cards: resp.data.content
+            })
+
         })
+       
     }
 }
 

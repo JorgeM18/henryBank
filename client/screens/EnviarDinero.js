@@ -9,15 +9,18 @@ import {
   Alert,
   Modal,
   TouchableHighlight,
-  FlatList
+  FlatList,
+  ScrollView
 } from "react-native";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import axios from 'axios';
 import { URL } from '@env'
 // import { getContacs } from '../Store/actions/contact'
-import { ScrollView } from "react-native-gesture-handler";
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getTransactions} from '../Store/actions/transactions'
+import { getBalance } from '../Store/actions/account'
 
 
 const EnviarDinero = (props) => {
@@ -43,7 +46,13 @@ const EnviarDinero = (props) => {
             'Transfer Complete', 
             [{
                 text: 'OK', //Arreglo de botones
-                onPress: () => {  props.navigation.navigate('UserProfile') },
+                onPress: () => { 
+                  usuario ? dispatch(getTransactions(usuario.user.id)) : null;
+                  usuario ? dispatch(getBalance(usuario.user.id)) :null
+                  setMonto('')
+                  setMsj('')
+                  setContact('')
+                   props.navigation.navigate('UserProfile') },
 
             }
         ],
@@ -75,7 +84,7 @@ const EnviarDinero = (props) => {
   }
  
   return (
-    <View style={styles.contenedorPrincipal}>
+    <ScrollView style={styles.contenedorPrincipal}>
       <View style={styles.container}>
         <View style={styles.contact}>
           <TouchableOpacity
@@ -114,7 +123,7 @@ const EnviarDinero = (props) => {
                   <FlatList
                     data={contacList}
                     inverted
-                    keyExtractor={item => item.key}
+                    keyExtractor={item => item.id}
                     renderItem={({ item }) => {
                       return (
                         <TouchableHighlight
@@ -159,6 +168,7 @@ const EnviarDinero = (props) => {
               placeholder={"Write your message ..."}
               placeholderTextColor="#C7C7CD"
               multiline
+              defaultValue={msj}
               onChangeText={value => setMsj(value)}
             />
           </View>
@@ -166,14 +176,14 @@ const EnviarDinero = (props) => {
             <TouchableOpacity style={styles.button}
               onPress={() => sendMoney(monto, msj)} activeOpacity={0.7}>
               <View style={{ flexDirection: 'row', alingItems: 'center' }}>
-              <Text style={{ fontSize: 17,fontFamily:'serif', color: '#FFF', marginHorizontal: '15%' }}>TRANSFER</Text>
+              <Text style={{ fontSize: 17,fontFamily:'serif', color: '#FFF', marginHorizontal: '15%', letterSpacing:2 }}>Transfer</Text>
               </View>
             </TouchableOpacity>
 
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

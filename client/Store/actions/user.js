@@ -4,7 +4,6 @@ import { URL } from '@env';
 import { Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export const ADD_USER='ADD_USER'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAIL = 'LOGIN_FAIL'
@@ -63,9 +62,9 @@ AsyncStorage.setItem('usuario', JSON.stringify(user), err => {
 export const loginUser=(user, props)=>async(dispatch)=>{
   try{
     const resp= await axios.post(`http://${URL}/api/user/login`, user);
-    
+   
     const loginData= await resp.data;
-    console.log('LOGIN', loginData)
+    // console.log('LOGIN', loginData)
     dispatch({
           type: LOGIN_SUCCESS,
            user: loginData 
@@ -81,23 +80,27 @@ export const loginUser=(user, props)=>async(dispatch)=>{
       type: 'LOGIN_FAIL',
       user:error.resp.data
     })
-    Alert.alert(
-      'Error',
-      'User or Password Invalid'
+    if(error){
+      Alert.alert(
+        'Error',
+        'User or Password Invalid'
+  
+  )
 
-)
+    }
+    
   }
 }
 
 
-export const logout = (token) => {
-  return function(dispatch){
-    return axios.post(`http://${URL}/api/user/logout`, {token})
-    .then(resp=>{
-       dispatch({ type: 'LOGOUT_SUCCESS' })
-    })
+export function logout(){
+  return(dispatch)=>{
+      dispatch({
+        type: 'LOGOUT_SUCCESS'
+      })
   }
-};
+  
+}
 
 //VELIDAR PIN
 export function validarPin(pin, props) {

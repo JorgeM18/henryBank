@@ -22,6 +22,14 @@ module.exports = (sequalize) =>{
         bank:{
             type: DataTypes.STRING,
             allowNull:false
+        },
+        type:{
+            type: DataTypes.STRING,
+            allowNull:true,
+        },
+        cardName:{
+            type: DataTypes.STRING,
+            allowNull:true,
         }
     })
 

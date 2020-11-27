@@ -2,14 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
     StyleSheet, TextInput, View, Dimensions, Text, Image, TouchableOpacity, Modal, ScrollView,
-    Alert, ActivityIndicator
+    Alert, ActivityIndicator,FlatList, TouchableHighlight
 } from 'react-native'
 import QRCode from 'react-native-qrcode-svg';
 import RNPickerSelect from 'react-native-picker-select';
 import { getDataUser } from '../Store/actions/user'
-import { rechargePaypal } from '../Store/actions/transactions'
+import { rechargePaypal, getTransactions } from '../Store/actions/transactions'
 import { getAccount } from '../Store/actions/account'
-import { URL } from '@env'
+// import { URL } from '@env'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Linking from 'expo-linking';
 import { getBalance } from '../Store/actions/account'
@@ -19,7 +19,7 @@ import { LoadingIndicator } from 'react-native-expo-fancy-alerts';
 // import { selectIsLoading } from 'selectors';
 import { LinearGradient } from 'expo-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-
+const URL='192.168.1.5:3000'
 
 const typeRecharge = [
     {label:'', value:'default'},
@@ -46,6 +46,12 @@ const RechargeMoney = (props) => {
     const [confirm, setConfirm] = useState(false)
     const [idCuenta, setIdCuenta] = useState('')
     const [loading, setLoading] = useState(false);
+    const [isVisible, setIsvisible]=useState(false)
+    const [cardList, setCardList]=useState('')
+    const [cardSelected, setCardSelected]=useState({
+        id:''
+    })
+    const [ischange, setIsChange]=useState(false)
 
 
     console.log('usurario', usuario.user.id)
@@ -56,12 +62,6 @@ const RechargeMoney = (props) => {
 
     }
 
-   const onclose=()=>{
-    setMonto('');
-    setCash(false);
-    usuario ? dispatch(getBalance(usuario.user.id)) : null;
-    props.navigation.navigate('UserProfile');
-   }
 
     const handlerClick = (value) => {
         // console.log('id', usuario.user)
@@ -76,23 +76,12 @@ const RechargeMoney = (props) => {
                 commerce: qrvalue
             })
                 .then(resp => {
-                    console.log('entro', resp)
+                    // console.log('entro', resp)
                     if (resp) {
-                       
-                        Alert.alert(
-                            'Success', //titulo
-                            'Hurray! your money was added to your balance', //Mensaje
-                            [{
-                                text: 'OK', //Arreglo de botones
-                                onPress: () => {
-                                    onclose()
-                                    
-                                },
-
-                            }],
-                        )
-                        setMonto('')
-                        setCash(false)
+                        // setMonto('')
+                        // setCash(false) 
+                        // setIsChange(false)                      
+                         msjSuccess()                       
                     }
                 })
                 .catch(error => {
@@ -130,7 +119,7 @@ const RechargeMoney = (props) => {
         onLoad()
         // user === '' ? '' : dispatch(getDataUser(usuario.user.id))
         usuario? IdCuenta(): ''
-
+    
         //    onLoad()
 
     }, [usuario])
@@ -143,20 +132,26 @@ const RechargeMoney = (props) => {
                 setConfirm(false)
                 setPaypal(false)
                 setMercado(false)
+                setIsvisible(true);
+                setIsChange(true)
+                CardofList();
                 return setCard(true);
             case 'QR':
+                setIsChange(true)
                 setPaypal(false)
                 setCard(false)
                 setConfirm(false)
                 setMercado(false)
                 return setCash(true);
             case 'paypal':
+                setIsChange(true)
                 setCard(false)
                 setCash(false)
                 setConfirm(false)
                 setMercado(false)
                 return setPaypal(true)
             case 'mercado':
+                setIsChange(true)
                 setCard(false)
                 setCash(false)
                 setConfirm(false)
@@ -176,7 +171,52 @@ const RechargeMoney = (props) => {
         color: '#1e1e1e',
 
     }
+    const changePlaceHolder=()=>{
+        if(!ischange){
+            return placeholderPicker
+        }
+    }
+    const onclose=()=>{
+        setMonto('');
+        setCash(false);
+        setIsChange(false);
+        setMercado(false);
+        setPaypal(false);
+        setCard(false) 
+        setConfirm(false)       
+        usuario ? dispatch(getBalance(usuario.user.id)) : null;
+        usuario ? dispatch(getTransactions(usuario.user.id)) : null;
+        props.navigation.navigate('UserProfile');
+       }
 
+    const msjSuccess=()=>{
+        Alert.alert(
+            'Success', //titulo
+            'Hurray! your money was added to your balance', //Mensaje
+            [{
+                text: 'OK', //Arreglo de botones
+                onPress: () => {
+                    onclose()
+                    
+                },
+
+            }],
+        )
+    }
+    const alertError=()=>{
+        Alert.alert(
+            'Error', //titulo
+            'Network Error,Please Recharge again! ', //Mensaje
+            [{
+                text: 'OK', //Arreglo de botones
+                onPress: () => { props.navigation.navigate('RechargeMoney')
+                },
+
+            }],
+
+        )
+
+    }
 
     //PARA OBTENER EL ID DE LA CUENTA
     function IdCuenta() {
@@ -206,34 +246,10 @@ const RechargeMoney = (props) => {
             console.log('NUMERO', link)
             if (link) {
                 Linking.openURL(link).then(resp=>setConfirm(resp))
-                //link ? setConfirm(true) : setConfirm(false)
-                // setTimeout(()=>{
-                //     Alert.alert(
-                //         'Success', //titulo
-                //         'Hurray! your money was added to your balance', //Mensaje
-                //         [{
-                //             text: 'OK', //Arreglo de botones
-                //             onPress: () => {
-                //                 usuario ? dispatch(getBalance(usuario.user.data.id)) : null;
-                //                 props.navigation.navigate('UserProfile')
-                //             },
-
-                //         }],
-                //     )
-                // },7000)
-
-            }else{
-                Alert.alert(
-                    'Error', //titulo
-                    'Network Error,Please Recharge again! ', //Mensaje
-                    [{
-                        text: 'OK', //Arreglo de botones
-                        onPress: () => { onclose()
-                        },
-
-                    }],
-
-                )
+                .catch(err=>{
+                  alertError()
+                })
+               
             }
 
         }
@@ -251,27 +267,57 @@ const RechargeMoney = (props) => {
             ).then((resp) => {
                 const link = resp.data.content.link
                 Linking.openURL(link).then(resp=>setConfirm(resp))
+                .catch(err=>{
+                alertError()
+                })
             })
+        }
+        if(card){
+            axios.post(`http://${URL}/api/transactions/creditCard`,{
+                userId:  usuario.user.id,
+                amount: monto,
+                cardId: cardSelected.id
+            }).then(resp=>{
+                console.log(resp)
+                if(resp.data.message==='success'){
+                    // setCard(false);
+                    // setMonto('')
+                    // setIsChange(false)
+                    msjSuccess()                   
+                }
+            }).catch(err=>{console.log(err)})
         }
     }
 
-   const confirmPaylpal=()=>{
-       if(mercado){
-           setMercado(false)
-           setMonto('')
-           setConfirm(false)
-           usuario ? dispatch(getBalance(usuario.user.id)) : null;
-           props.navigation.navigate('UserProfile')
-       }
-       if(numTransaction){
-           setPaypal(false)
-           setMonto('')
-           setConfirm(false)
-           usuario ? dispatch(getBalance(usuario.user.id)) : null;
-        props.navigation.navigate('UserProfile')
+const confirmRecharge=()=>{
+       if(numTransaction || mercado){
+        //    setPaypal(false)
+        //    setMonto('')
+        //    setConfirm(false)
+        //    setIsChange(false)
+           msjSuccess();
+        //    usuario ? dispatch(getBalance(usuario.user.id)) : null;
+        //    props.navigation.navigate('UserProfile')
 
        }
+    //    if(mercado){
+    //     //    setMercado(false)
+    //     //    setMonto('')
+    //     //    setConfirm(false)
+    //     //    setIsChange(false)
+    //        msjSuccess();
+    //     //    usuario ? dispatch(getBalance(usuario.user.id)) : null;
+    //     // props.navigation.navigate('UserProfile')
+    //    }
+    
    }
+   const CardofList=()=>{
+    //    console.log('ejecuta')
+    axios.get(`http://${URL}/api/user/${usuario.user.id}/getCards`)
+      .then((resp) =>{
+        //   console.log('CARDS',resp.data.content)
+      setCardList(resp.data.content)})
+  }
 
 
     return (
@@ -296,7 +342,7 @@ const RechargeMoney = (props) => {
                         <View style={style.picker}>
                             <RNPickerSelect
                                 style={pickerSelectStyles}
-                                placeholder={placeholderPicker}
+                                placeholder={changePlaceHolder()}
                                 useNativeAndroidPickerStyle={false}
                                 onValueChange={value => payselectRechargepal(value)}
                                 items={typeRecharge}
@@ -330,7 +376,7 @@ const RechargeMoney = (props) => {
                     {
                         confirm ? (
                             <TouchableOpacity style={style.button}
-                                onPress={() => confirmPaylpal(numTransaction)} activeOpacity={0.7}>
+                                onPress={() => confirmRecharge(numTransaction)} activeOpacity={0.7}>
                                 <Text style={{ fontSize: 15, color: '#FFF',fontFamily:'serif', marginHorizontal: '5%' }}>Confirm Recharge</Text>
                             </TouchableOpacity>
 
@@ -367,6 +413,56 @@ const RechargeMoney = (props) => {
                     </View>
 
                 </View>
+                <View >
+          <Modal
+          
+            animationType="slide"
+            visible={isVisible}
+            onRequestClose={() => {
+              Alert.alert("Warning","no selected card",[
+                {
+                  text:'Cancel',
+                  onPress:()=>setIsvisible(true)
+                },
+                {
+                  text:'OK',
+                  onPress:()=> {setIsvisible(false); setIsChange(false)}
+                }
+              ]);
+              
+            }}
+          >
+              <View style={{ flex: 1, backgroundColor:'#292768' }}>
+                <View>
+                  <Text style={style.modalText}>My Credit Card</Text>
+                  
+                  <FlatList
+                    data={cardList}
+                    inverted
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) => {
+                      return (
+                        <TouchableHighlight
+                          onPress={() => {
+                             setCardSelected(item)
+                            setIsvisible(!isVisible);
+                           
+                          }}
+                        >
+                          <View style={style.panelItemContainer} >
+                            <View style={{ flexDirection: 'column' }}>
+                        <Text style={{ fontSize: 20, fontFamily:'serif', color:'#fff', paddingLeft:10 }} >{item.bank}</Text>
+                        <Text style={{  fontSize: 17, fontFamily:'serif', color:'#fff', paddingLeft:30, marginTop:5}}>{item.cardNumber}</Text>
+                            </View>
+                          </View>
+                        </TouchableHighlight>
+                      )
+                    }} 
+                    />
+                </View>
+              </View>
+          </Modal>
+        </View>
                 
             </View>
         </ScrollView>
@@ -457,6 +553,28 @@ const style = StyleSheet.create({
         paddingVertical: 32,
         borderRadius: 16,
     },
+    modalText: {
+        marginTop:30,
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 17,
+        fontWeight:'bold',
+        color:'#fff',
+        fontFamily:'serif',
+        letterSpacing:2
+      },
+      panelItemContainer: {
+        borderWidth: 0.7,
+        borderColor: '#BB59FA',
+        padding: 16,
+        borderRadius: 4,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop:20,
+        marginBottom: 20,
+        marginHorizontal: '3%'
+        
+      },
 
 
 });

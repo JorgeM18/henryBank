@@ -12,10 +12,10 @@ function InsertPin(props) {
     const dispatch = useDispatch()
     const verificarPin = useSelector(store => store.user.pin)
     //   console.warn(verificarPin)
-    const validar = (code) => {
-        const isValid=parseInt(code)
-        dispatch(validarPin(isValid, props))
-        setPin('')
+    const validar = (isValid, code) => {
+        
+        dispatch(validarPin(parseInt(code), props))
+        // setPin('')
 
     }
 
@@ -45,8 +45,8 @@ function InsertPin(props) {
                             compareWithCode='123456'
                             autoFocus={false}
                             codeInputStyle={{ fontWeight: '800' }}
-                            onFulfill={(code) => validar(code)}
-                            // onChangeText={Npin => setPin(parseInt(Npin))}
+                            onFulfill={(isValid,code) => validar(isValid,code)}
+                            onCodeChange={Npin => setPin(parseInt(Npin))}
                         />
 
 

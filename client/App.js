@@ -25,7 +25,7 @@ export default function App() {
     onLoad()
   }, [user])
   //esto elimina los warning
-  console.disableYellowBox = true
+   console.disableYellowBox = true
   //-----------------------------
   return (
     <Provider store={store}>
