@@ -17,6 +17,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ResetTransacctions } from '../Store/actions/transactions'
 import { ResetAccount } from '../Store/actions/account'
+import {logout} from '../Store/actions/user'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 
@@ -28,7 +29,7 @@ function MenuUser(props) {
     const logHome = async () => {
         AsyncStorage.removeItem('token');
         AsyncStorage.removeItem('usuario')
-        // await  dispatch(logout())
+        //  await  dispatch(logout())
         await dispatch(ResetAccount())
         await dispatch(ResetTransacctions())
         props.navigation.navigate('Home');
@@ -113,7 +114,7 @@ function MenuUser(props) {
                     />
 
                 </Drawer.Section>
-                <Drawer.Section title="nose">
+                <Drawer.Section title="Tools">
                     <DrawerItem
                         icon={({ color, size }) => (
                             <Feather

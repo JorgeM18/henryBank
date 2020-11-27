@@ -25,8 +25,11 @@ export default (state = initialState, action) => {
             }
             
         case 'GET_ALL_CARDS':
-            console.log('get all', state.cards)
-            return state
+            // console.log('get all', state.cards)
+            return {
+                ...state,
+                cards:action.cards
+            }
         default:
             return state
 

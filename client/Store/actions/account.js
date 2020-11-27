@@ -31,12 +31,12 @@ export function getBalance(id){
 export function getAccount(id){
     console.log('ACTION ID',id)
     return (dispatch)=>{
-        return axios.get(`http://${URL}/api/account?id=${id}`)
+        return axios.get(`http://${URL}/api/account?userId=${id}`)
         .then((resp)=>{
-            // console.log('ACTION', resp)
+            console.log('ACTION account', resp)
             dispatch({
                 type: GET_ACCOUNT,
-                account:resp.data.content
+                account:resp.data
             })
         })
         .catch(error=>{

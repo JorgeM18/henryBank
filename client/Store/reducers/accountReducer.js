@@ -15,9 +15,10 @@ export default (state = initialState, actions) => {
                 balance: actions.balance
             }
         case GET_ACCOUNT:
+            console.log('cuenta reducer',actions.account.data)
             return {
                 ...state,
-                account: actions.account
+                account: actions.account.data
             }
         case OUTCOME_MOVEMENT:
             return {

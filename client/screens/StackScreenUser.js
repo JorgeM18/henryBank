@@ -16,6 +16,7 @@ import stadistics from './stadistics'
 import ConnectionPages from './ConnectionPages'
 import TransactionsView from './Users/TransactionsView'
 import TransactionItem from './Users/TransactionItem'
+// import Home from './StackScrrens'
 
 const Drawer = createDrawerNavigator();
 
@@ -26,7 +27,8 @@ const StackScreenUser = (props) => {
         drawerContent={props => <MenuUser {...props} />}
         // initialRouteName="UserProfile"
         drawerStyle={{
-            width: 240,      
+            width: 240, 
+             
           }}
         screenOptions={{
             headerShown:true,
@@ -35,6 +37,7 @@ const StackScreenUser = (props) => {
               backgroundColor:'#292768'
             },
             headerTintColor: '#BB59FA',
+        
   
           }} 
            >
@@ -51,6 +54,8 @@ const StackScreenUser = (props) => {
             <Drawer.Screen name="ConnectionPages" component={ConnectionPages} />
             <Drawer.Screen name="TransactionsView" component={TransactionsView} />
             <Drawer.Screen name="TransactionItem" component={TransactionItem} />
+            {/* <Drawer.Screen name="Home" component={Home} /> */}
+            
         </Drawer.Navigator>
     )
 

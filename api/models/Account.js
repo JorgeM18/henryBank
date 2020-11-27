@@ -25,7 +25,11 @@ module.exports = (sequelize) => {
     accounttype:{
         type: DataTypes.STRING,
         allowNull: false
+    },
+    customer: {
+      type: DataTypes.TEXT,
+      allowNull: true
     }
   });
-}; 
+};
   

@@ -17,6 +17,7 @@
     "@react-navigation/native": "^5.8.5",
     "@react-navigation/stack": "^5.12.2",
     "axios": "^0.21.0",
+    "babel-preset-expo": "^8.3.0",
     "bootnative": "^1.1.12",
     "chart.js": "^2.9.4",
     "expo": "~39.0.2",
