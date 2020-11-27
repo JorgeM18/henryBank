@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { View, StyleSheet, Image, Text, TouchableOpacity } from 'react-native'
+import { View, StyleSheet, Image, Text, TouchableOpacity, ImageBackground, Alert } from 'react-native'
 import Feather from 'react-native-vector-icons/Feather';
-import { getBalance } from '../../Store/actions/account'
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Foundation from 'react-native-vector-icons/Foundation';
+import { logout, getDataUser } from '../../Store/actions/user'
+import { getBalance, ResetAccount } from '../../Store/actions/account'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Contacts from 'expo-contacts'
 import { postContacts } from '../../Store/actions/contact'
-import { incomeOutcome } from '../../Store/actions/transactions'
-
+import { incomeOutcome, ResetTransacctions } from '../../Store/actions/transactions'
+import backgroundImage from '../../assets/Logo_Background.png';
+import colorLogo from '../../assets/Logo-15.png';
 
 
 const ProfileUser = (props) => {
@@ -16,10 +23,10 @@ const ProfileUser = (props) => {
     const [token, setToken] = useState('')
     const [balanc, setBalanc] = useState('')
     const balance = useSelector(store => store.balance)
-    const userStore=useSelector(store=>store.user.user)
+    const userStore = useSelector(store => store.user.user)
     const inc_out = useSelector(store => store.transaction.income_outcome)
 
-    console.log('USUARIO STORE',userStore)
+    console.log('USUARIO STORE', userStore)
     const onLoad = async () => {
         try {
             var usuario = await AsyncStorage.getItem('usuario')
@@ -38,12 +45,12 @@ const ProfileUser = (props) => {
     }
 
 
-    useEffect( () => {
+    useEffect(() => {
         onLoad()
-   
-         userStore ? dispatch(getBalance(userStore.id)): null
-         userStore ?  dispatch(incomeOutcome(userStore.id, 1)): null
-       // eject()
+
+        userStore ? dispatch(getBalance(userStore.id)) : null
+        userStore ? dispatch(incomeOutcome(userStore.id, 1)) : null
+        // eject()
 
     }, []);
 
@@ -84,212 +91,254 @@ const ProfileUser = (props) => {
     }
     //  console.log('nuevo balance',balanc)
     return (
+
         <View style={style.container}>
-        <View style={style.banner}>
-
-           
-            <View style={{ paddingHorizontal: 14 }}>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                   
-                    <View style={{ alignItems: 'center' }}>
-                        <Text style={style.text}>${balance.balance.balance}</Text>
-                        <Text style={{ fontSize: 12, color: '#fff', opacity: 0.6, marginTop: 2, marginHorizontal: '2.5%' }}>Balance de mi cuenta</Text>
+            <ImageBackground
+                source={backgroundImage}
+                style={{ width: '100%', height: '100%' }}
+            >
+                <View style={style.banner}>
+                    <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginHorizontal: '3%', height: '20%' }}>
+                        {/* <TouchableOpacity onPress={() => Logout()}>
+                            <Feather
+                                name='menu'
+                                color='#BB59FA'
+                                size={30}
+                            />
+                        </TouchableOpacity> */}
                     </View>
-
+                    <View style={{ paddingHorizontal: 14, flex: 1, justifyContent: 'center' }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                            <View style={style.profile}>
+                                <View style={style.contImage}>
+                                    <Image
+                                        source={user ? { uri: user ? user.data.image : '' } : require('../images/favicon.png')}
+                                        style={style.Image}
+                                    />
+                                </View>
+                                <Text style={{ fontSize: 16, color: '#FFF', opacity: 0.9, marginTop: 2 }}>{user ? `${user.data.name} ${user.data.lastname}` : ''}</Text>
+                                <Text style={{ fontSize: 12, color: '#FFF', opacity: 0.5 }}>(Go-banker Lvl. 1)</Text>
+                            </View>
+                            <View style={style.contBalance}>
+                                <Text style={style.balance}>${balance.balance.balance}.00</Text>
+                                <Text style={{ fontSize: 16, color: '#fff', opacity: 0.5 }}>(Go-wallet)</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
-            </View>
+                <View style={style.contSummary}>
+                    <View style={style.summaryBox}>
+                        <View style={style.contSummaryLogo}>
+                            <Image
+                                source={colorLogo}
+                                style={style.summaryLogo}
+                            />
+                        </View>
+                        <View style={style.incomeOutcome}>
+                            <View style={style.subbox1}>
+                                <Text style={style.text1}>Income</Text>
+                                <Text style={style.text2}>${inc_out.income ? inc_out.income : '0'}</Text>
+                            </View>
+                            <View style={style.subbox1}>
+                                <Text style={style.text1}>Outcome</Text>
+                                <Text style={style.text2}>${inc_out.outcome ? inc_out.outcome : '0'}</Text>
+                            </View>
+                        </View>
+                        <View style={style.filter}>
+                            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 1))}><Text style={style.textFilter}>1 Day</Text></TouchableOpacity>
+                            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 7))}><Text style={style.textFilter}>7 Days</Text></TouchableOpacity>
+                            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 30))}><Text style={style.textFilter}>30 Days</Text></TouchableOpacity>
+                            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(user.data.id, 180))}><Text style={style.textFilter}>6 Months</Text></TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                <View style={style.contButtons}>
+                    <View style={style.contLink}>
+                        <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('TransactionsView')}>
+                            <FontAwesome
+                                style={style.icon}
+                                name="send"
+                                color="#BB59FA"
+                                size={50}
+                            />
+                        </TouchableOpacity>
+                        <Text style={style.textButton}>Transactions</Text>
+                    </View>
+                    <View style={style.contLink}>
+                        <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('stadistics')}>
+                            <MaterialIcons
+                                style={style.icon}
+                                name="insert-chart"
+                                color="#BB59FA"
+                                size={60}
+                            />
+                        </TouchableOpacity>
+                        <Text style={style.textButton}>Statistics</Text>
+                    </View>
+                    <View style={style.contLink}>
+                        <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
+                            <MaterialCommunityIcons
+                                style={style.icon}
+                                name="google-controller"
+                                color="#BB59FA"
+                                size={75}
+                            />
+                        </TouchableOpacity>
+                        <Text style={style.textButton}>Products</Text>
+                    </View>
+                </View>
+                {/* <View style={style.box4}>
+        <View>
+            <TouchableOpacity style={style.button2}
+                onPress={() => { props.navigation.navigate('RechargeMoney') }}>
+                <Feather
+                    name="arrow-down-circle"
+                    color="#FFF"
+                    size={20}
+                />
+                <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Recargar Dinero</Text>
+            </TouchableOpacity>
         </View>
-        <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row' }}>
-            <Text style={{ fontSize: 20, marginVertical: '3%' }}>General</Text></View>
-        <View style={style.box2}>
-            <View style={style.subbox1}>
-                <Text>Income</Text>
-                <Text style={style.text1}>${inc_out.income}</Text>
-
-            </View>
-            <View style={style.subbox1}>
-                <Text >Outcome</Text>
-                <Text style={style.text1}>${inc_out.outcome}</Text>
-            </View>
-
+        <View>
+            <TouchableOpacity style={style.button2}
+                onPress={() => { props.navigation.navigate('EnviarDinero') }}
+            >
+                <Feather
+                    name="arrow-up-circle"
+                    color="#FFF"
+                    size={20}
+                />
+                <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Enviar Dinero</Text>
+            </TouchableOpacity>
         </View>
-        <View style={{ justifyContent: 'flex-end', alignItems: 'center', backgroundColor: '#FFF', flexDirection: 'row', paddingRight: 70 }}>
-            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 1))}><Text >1 Día</Text></TouchableOpacity>
-            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 7))}><Text >7 Dias</Text></TouchableOpacity>
-            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 30))}><Text >30 Días</Text></TouchableOpacity>
-            <TouchableOpacity style={style.link} onPress={() => dispatch(incomeOutcome(userStore.id, 180))}><Text >6 Meses</Text></TouchableOpacity>
-
+    </View> */}
+            </ImageBackground>
         </View>
-
-
-        <View style={style.box3}>
-            <View>
-                <TouchableOpacity style={style.button1} onPress={() => { userStore === '' ? '' : dispatch(getBalance(userStore.id)) }}>
-                    <Feather
-                        style={style.icon}
-                        name="send"
-                        color="#FFF"
-                        size={30}
-                    />
-                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Transacciones</Text>
-                </TouchableOpacity>
-
-
-            </View>
-            <View>
-
-                <TouchableOpacity style={style.button1}>
-                    <Feather
-                        style={style.icon}
-                        name="activity"
-                        color="#FFF"
-                        size={35}
-                    />
-                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '7%', marginVertical: '5%' }}>Estadisticas</Text>
-                </TouchableOpacity>
-
-
-            </View>
-            <View style={{}}>
-
-                <TouchableOpacity style={style.button1} onPress={() => { props.navigation.navigate('MyData') }}>
-                    <Feather
-                        style={style.icon}
-                        name="globe"
-                        color="#FFF"
-                        size={30}
-                    />
-                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '15%', marginVertical: '5%' }}>Mis Datos</Text>
-                </TouchableOpacity>
-
-
-            </View>
-            <View>
-                <TouchableOpacity style={style.button1} onPress={() => props.navigation.navigate('MyProducts')}>
-                    <Feather
-                        style={style.icon}
-                        name="credit-card"
-                        color="#FFF"
-                        size={30}
-                    />
-                    <Text style={{ fontSize: 10, color: '#FFF', marginHorizontal: '2%', marginVertical: '5%' }}>Mis Productos</Text>
-                </TouchableOpacity>
-
-
-            </View>
-        </View>
-        <View style={style.box4}>
-            <View>
-                <TouchableOpacity style={style.button2}
-                    onPress={() => { props.navigation.navigate('RechargeMoney') }}>
-                    <Feather
-                        name="arrow-down-circle"
-                        color="#FFF"
-                        size={20}
-                    />
-
-                    <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Recargar Dinero</Text>
-                </TouchableOpacity>
-
-
-            </View>
-            <View>
-                <TouchableOpacity style={style.button2}
-                    onPress={() => { props.navigation.navigate('EnviarDinero') }}
-                >
-                    <Feather
-                        name="arrow-up-circle"
-                        color="#FFF"
-                        size={20}
-                    />
-                    <Text style={{ fontSize: 12, color: '#FFF', marginHorizontal: '3%' }}>Enviar Dinero</Text>
-                </TouchableOpacity>
-
-
-            </View>
-
-        </View>
-
-    </View>
-
-
     )
 }
 
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1e1e1e'
+        backgroundColor: '#13124E'
     },
     banner: {
-        height: 250,
-        flex: 2,//el componente crece de arriba hacia abajo con el espacio disponible
-
+        flex: 2, //el componente crece de arriba hacia abajo con el espacio disponible
     },
-    box2: {
-        flex: 2,
-        backgroundColor: '#FFF',
-        flexDirection: 'row',
-
-        // flexDirection:'row',
-        // alignItems:'center',
-    },
-    link: {
-        marginHorizontal: '3%'
-    },
-    box3: {
-        flex: 2,
-        backgroundColor: '#FFF',
+    profile: {
         justifyContent: 'center',
-        flexWrap: 'wrap',
-    },
-    box4: {
-        flex: 1,
-        flexWrap: 'wrap',
-        alignItems: 'center'
-    },
-    subbox1: {
-        flex: 1,
-        backgroundColor: '#F4EDE2',
-        // flexWrap: 'wrap',
         alignItems: 'center',
-        height: 90,
-        justifyContent: 'center',
-        marginHorizontal: '3%',
-        marginVertical: '5%',
-        borderWidth: 1,
-        borderColor: '#CFC9C0',
-        borderRadius: 8
+        height: '100%'
     },
-    text1: {
-        fontSize: 25,
-        color: 'black',
-
-    },
-    icon: {
-        marginVertical: '10%',
-        marginHorizontal: '22%'
-    },
-    text: {
-        fontSize: 35,
-        color: '#FFF',
-        marginHorizontal: '15%',
-        fontWeight: 'bold'
+    contImage: {
+        width: 115,
+        height: 115,
+        borderRadius: 110,
+        borderColor: '#BB59FA',
+        borderWidth: 3,
+        justifyContent: "center",
+        alignItems: "center"
     },
     Image: {
         width: 100,
         height: 100,
-        // borderRadius: 40
+        borderRadius: 100
+    },
+    contBalance: {
+        height: '100%',
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingBottom: '5%'
+    },
+    balance: {
+        fontSize: 30,
+        color: '#FFF',
+        fontWeight: 'bold',
+    },
+    contSummary: {
+        flex: 2.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    summaryBox: {
+        width: '90%',
+        height: '70%',
+        alignItems: 'center',
+        borderColor: '#BB59FA',
+        borderWidth: 3,
+        borderRadius: 10,
+        padding: 10
+    },
+    contSummaryLogo: {
+        width: 55,
+        height: 50
+    },
+    summaryLogo: {
+        width: '100%',
+        height: '100%'
+    },
+    incomeOutcome: {
+        flex: 1,
+        flexDirection: 'row',
+    },
+    subbox1: {
+        flex: 1,
+        alignItems: 'center',
+        //height: 90,
+        justifyContent: 'center',
+        marginHorizontal: '3%',
+    },
+    text1: {
+        fontSize: 20,
+        color: '#FFF',
+        opacity: 0.4
+    },
+    text2: {
+        fontSize: 25,
+        color: '#FFF',
+    },
+    filter: {
+        flexDirection: 'row',
+    },
+    link: {
+        marginHorizontal: '3%',
+    },
+    textFilter: {
+        color: '#FFF',
+        opacity: 0.8
+    },
+    contButtons: {
+        flex: 2,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+    },
+    contLink: {
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     button1: {
-        width: 70,
-        height: 70,
-        marginHorizontal: 15,
-        marginVertical: 20,
-        backgroundColor: '#1e1e1e',
-        justifyContent: 'flex-end',
-        borderRadius: 8,
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 2,
+        borderColor: '#BB59FA',
+        borderRadius: 20,
+    },
+    icon: {
+        //color: '#FFF',
+        textAlign: 'center',
+    },
+    textButton: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#FFF',
+        opacity: 0.8,
+        marginVertical: '5%'
     },
     button2: {
         width: 130,
@@ -304,7 +353,7 @@ const style = StyleSheet.create({
     titulo: {
         fontWeight: 'bold',
         fontSize: 24,
-        marginVertical: 20
+        marginVertical: 20,
     },
     contenedor: {
         marginHorizontal: 10
@@ -312,14 +361,12 @@ const style = StyleSheet.create({
     ciudad: {
         width: 250,
         height: 300,
-        marginRight: 10 //da un margen entre las imagenes
-
+        marginRight: 10, //da un margen entre las imagenes
     },
     mejores: {
         width: '100%', //para que la imagen tome toda la pantalla el componente padre debera tener un fleDirection: 'row'
         height: 200,
         marginVertical: 5
-
     },
     listado: {
         flexDirection: 'row',
@@ -329,7 +376,12 @@ const style = StyleSheet.create({
     },
     listadoItems: {
         flexBasis: '49%'
-    }
+    },
+    box4: {
+        flex: 1,
+        flexWrap: 'wrap',
+        alignItems: 'center'
+    },
 
 })
 
