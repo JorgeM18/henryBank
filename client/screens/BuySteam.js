@@ -1,15 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, Image, TouchableOpacity, Alert, Text,  ScrollView} from 'react-native';
+import {View, StyleSheet, Image, TouchableOpacity, Alert, Text, ScrollView} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { getBalance } from '../Store/actions/account'
 import Axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { URL } from '@env' 
-export default function Buy_PlayStation(props){
-    const [user, setUser] = useState('')
+import { URL } from '@env'
+
+export default function BuySteam(props){
+
     const dispatch = useDispatch()
+    const [user, setUser] = useState('')
+
     const onLoad = async () => {
-        
         try {
             var usuario = await AsyncStorage.getItem('usuario')
             console.log(usuario)
@@ -40,7 +42,7 @@ export default function Buy_PlayStation(props){
        },
        {
         text: 'OK',
-        onPress:() => crear(user.data.id, amount, 'play station')
+        onPress:() => crear(user.data.id, amount, 'steam')
        },
      
        ],
@@ -52,6 +54,7 @@ export default function Buy_PlayStation(props){
     const crear = async (userid, amount, commerce) =>{
         try{
             const {data} = await Axios.post(`http://${URL}/api/transactions/purchase`, {userid, amount, commerce})
+
             dispatch(getBalance(user.data.id,))
             Alert.alert(
                 'successful',
@@ -81,10 +84,10 @@ export default function Buy_PlayStation(props){
     return(
         <ScrollView>
             <View style={styles.MainContainer}>
-                <Image source={require('./images/PlayStation_20.jpeg')} style={styles.Imagen}/>
-                <TouchableOpacity style={styles.PlayStation_Style} activeOpacity={0.5}  onPress={(e)=>createBuy(1620)}>
+                <Image source={require('./images/Steam_20.jpg')} style={styles.Imagen}/>
+                <TouchableOpacity style={styles.Steam_Style} activeOpacity={0.5}  onPress={(e)=>createBuy(1620)}>
                 <Image
-                source={require('./images/PlayStation-logo1.png')}
+                source={require('./images/Steam_icono.png')}
                 style={styles.ImageIconStyle}
                 />
 
@@ -94,10 +97,10 @@ export default function Buy_PlayStation(props){
                 </TouchableOpacity>
 
 
-                <Image source={require('./images/Playstation_50.jpeg')} style={styles.Imagen}/>
-                <TouchableOpacity style={styles.PlayStation_Style} activeOpacity={0.5} onPress={(e)=>createBuy(4050)}>
+                <Image source={require('./images/Steam_50.jpeg')} style={styles.Imagen}/>
+                <TouchableOpacity style={styles.Steam_Style} activeOpacity={0.5} onPress={(e)=>createBuy(4050)}>
                 <Image
-                source={require('./images/PlayStation-logo1.png')}
+                source={require('./images/Steam_icono.png')}
                 style={styles.ImageIconStyle}
                 />
 
@@ -105,10 +108,10 @@ export default function Buy_PlayStation(props){
                 <Text style={styles.TextStyle}>PAY $4,050  (50USD)</Text>
                 </TouchableOpacity>
 
-                <Image source={require('./images/PlayStation_100.jpg')} style={styles.Imagen}/>
-                <TouchableOpacity style={styles.PlayStation_Style} activeOpacity={0.5} onPress={(e)=>createBuy(8101)}>
+                <Image source={require('./images/Steam_100.jpg')} style={styles.Imagen}/>
+                <TouchableOpacity style={styles.Steam_Style} activeOpacity={0.5} onPress={(e)=>createBuy(8101)}>
                 <Image
-                source={require('./images/PlayStation-logo1.png')}
+                source={require('./images/Steam_icono.png')}
                 style={styles.ImageIconStyle}
                 />
 
@@ -130,12 +133,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 130,
     height: 200,
+    marginBottom: 30,
     marginTop: 30,
     marginLeft:20,
-    marginBottom: 30,
     },
 
-   PlayStation_Style:{
+   Steam_Style:{
         width: 260,
         flexDirection: 'row',
         alignItems: 'center',

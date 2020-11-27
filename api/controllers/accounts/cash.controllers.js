@@ -74,10 +74,10 @@ const purchase = async (ctx) =>{
     console.log(ctx.params)
     let numMov = await numTransaction();
 
-    if(commerce.toLowerCase() === 'google play'){
-        numMov = `GP-ALSADO1OAM-${numMov}`
-    }else if(commerce.toLowerCase() === 'epic games'){
-        numMov = `EG-1AJWEIS1-${numMov}`
+    if(commerce.toLowerCase() === 'play store'){
+        numMov = `PS-ALSADO1OAM-${numMov}`
+    }else if(commerce.toLowerCase() === 'play station'){
+        numMov = `PSN-1AJWEIS1-${numMov}`
     }else if(commerce.toLowerCase() === 'steam'){
         numMov = `ST-QWIEJS5E-${numMov}`
     }

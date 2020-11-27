@@ -1,44 +1,64 @@
 import React from 'react'
 import {View, StyleSheet, Image, TouchableOpacity, Text} from 'react-native'
 
-export default function Buy(){
+export default function Buy(props){
+
+    const handlePlay = () =>{
+        props.navigation.navigate('Buy_PlayStation')
+    }
+    const handleSteam = () =>{
+        props.navigation.navigate('BuySteam')
+    }
+    const handleGplay = () =>{
+        props.navigation.navigate('Buy_PlayStore')
+    }
 
     return(
         <View style={styles.MainContainer}>
-               <Image source={require('./images/PlayStation-logo.jpg')} style={styles.Imagen}/>
-            <TouchableOpacity style={styles.Shop_Style} activeOpacity={0.5} >
-            <Image
-            source={require('./images/PlayStation-logo.jpg')}
-            style={styles.ImageIconStyle}
-            />
+            <View>
+                <TouchableOpacity  onPress={(e) => handlePlay()}>
+                    <Image source={require('./images/PlayStation-logo1.png')} style={styles.Imagen}/>
+                    <View style={styles.Shop_Style}>
+                        <Image
+                        source={require('./images/PlayStation-logo1.png')}
+                        style={styles.ImageIconStyle}
+                        />
 
-            <View style={styles.SeparatorLine}/>
-            <Text style={styles.TextStyle}>BUY PLAY STATION</Text>
-            
-            </TouchableOpacity>
+                        <View style={styles.SeparatorLine}/>
+                        <Text style={styles.TextStyle}>BUY PLAY STATION</Text>
+                    </View>
+                </TouchableOpacity>
 
+            </View>
+            <View>
+                <TouchableOpacity   onPress={(e) => handleSteam()}>
+                    <Image source={require('./images/Steam_icono.png')} style={styles.Imagen}/>
+                    <View style={styles.Shop_Style}>
+                        <Image
+                        source={require('./images/Steam_icono.png')}
+                        style={styles.ImageIconStyle}
+                        />
 
-            <Image source={require('./images/Steam_icono.png')} style={styles.Imagen}/>
-            <TouchableOpacity style={styles.Shop_Style} activeOpacity={0.5} >
-            <Image
-            source={require('./images/Steam_icono.png')}
-            style={styles.ImageIconStyle}
-            />
+                        <View style={styles.SeparatorLine}/>
+                        <Text style={styles.TextStyle}>BUY STEAM</Text>
+                    </View> 
+                </TouchableOpacity>
+            </View>
+            <View>
+                <TouchableOpacity  onPress={(e) => handleGplay()}>
+                    <Image source={require('./images/Logo-PlayStore.png')} style={styles.Imagen}/>
+                    <View style={styles.Shop_Style}>
+                        <Image
+                        source={require('./images/Logo-PlayStore.png')}
+                        style={styles.ImageIconStyle}
+                        />
 
-            <View style={styles.SeparatorLine}/>
-            <Text style={styles.TextStyle}>BUY STEAM</Text>
-            </TouchableOpacity>
+                        <View style={styles.SeparatorLine}/>
+                        <Text style={styles.TextStyle}>BUY PLAY STORE</Text>
+                        </View>
+                </TouchableOpacity>
 
-            <Image source={require('./images/Logo-PlayStore.png')} style={styles.Imagen}/>
-            <TouchableOpacity style={styles.Shop_Style} activeOpacity={0.5}>
-            <Image
-            source={require('./images/Logo-PlayStore.png')}
-            style={styles.ImageIconStyle}
-            />
-
-            <View style={styles.SeparatorLine}/>
-            <Text style={styles.TextStyle}>BUY PLAY STORE</Text>
-            </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -47,26 +67,24 @@ const styles = StyleSheet.create({
     MainContainer:{
         flex: 1,
         backgroundColor: '#292768',
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 10
     },
 
     Imagen:{
     alignItems: 'center',
-    width: 230,
-    height: 200,
+    width: 100,
+    height: 100,
     marginBottom: 30,
-    marginTop: 1
+    marginTop: 30,
+    marginLeft:20
     },
 
    Shop_Style:{
         width: 260,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#000000',
+        backgroundColor: '#13124E',
         borderWidth: .5,
-        borderColor: '#fff',
+        borderColor: '#BB59FA',
         height: 40,
         borderRadius: 5,
         margin: 5,
@@ -75,8 +93,8 @@ const styles = StyleSheet.create({
     ImageIconStyle:{
         padding: 10,
         margin: 5,
-        height: 25,
-        width: 25,
+        height: 30,
+        width: 30,
         resizeMode: 'stretch'
     },
 
@@ -87,7 +105,7 @@ const styles = StyleSheet.create({
     },
 
     SeparatorLine: {
-        backgroundColor: '#fff',
+        backgroundColor: '#BB59FA',
         width: 1,
         height: 40
     }
