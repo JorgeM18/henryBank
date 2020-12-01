@@ -7,6 +7,7 @@ const { forgotPassword, validatePasswordPin, updatePassword } = require('../cont
 const { approveUser, validateUserPin } = require('../controllers/users/approveUser.controllers');
 const login = require('../controllers/authentication/login.controllers');
 const logout = require('../controllers/authentication/logout.controller');
+const { addCard, getCards } = require('../controllers/cards/cards.controllers');
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
@@ -182,6 +183,21 @@ module.exports = {
 			handler: searchContacts
 		},
 
+		//CARDS
+		addCard: {
+			rest: {
+				method: 'POST',
+				path: '/:userId/addCard'
+			},
+			handler: addCard
+		},
+		getCards: {
+			rest: {
+				method: 'GET',
+				path: '/:userId/getCards'
+			},
+			handler: getCards
+		}
     },
 
 	//////////////// EVENTS ////////////////

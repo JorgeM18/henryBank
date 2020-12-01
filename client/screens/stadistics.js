@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { ScrollView, Dimensions, Text, View, StyleSheet, TouchableOpacity, Alert, ImageBackground } from 'react-native'
+import { ScrollView, Dimensions, Text, View, StyleSheet, TouchableOpacity, Alert, TouchableWithoutFeedback } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 
@@ -11,6 +11,10 @@ import axios from 'axios'
 import Svg, { Rect } from "react-native-svg";
 import { outcomeMovements } from '../Store/actions/account'
 import { URL } from '@env'
+import moment from "moment";
+
+
+
 
 const Texta = require('react-native-svg').Text
 
@@ -28,7 +32,9 @@ function Stadistics(props) {
     const dispatch = useDispatch()
     const [estadisticas, setEstadisticas] = useState('')
     const usuario = useSelector(store => store.user)
+    const account=useSelector(store=>store.account)
     console.log('usuario', usuario)
+    console.log('cuenta', account)
     const stadistics = async () => {
         try {
             var est = await AsyncStorage.getItem('stadistics')
@@ -45,11 +51,33 @@ function Stadistics(props) {
         }
 
     }
+    const actualizar=()=>{
+        if(account){
+            axios.get(`http://${URL}/api/account/est2?id=${account.account.id}`)
+            .then((resp) => {
+            if (resp) {
+              
+                const array=resp.data.content.gastos
+                const labelGrafig =[] 
+                const amount=[]
+                array.map(item=>{
+                    labelGrafig.push(moment(item.month).format('MMM'))
+                     amount.push(item.total_amount)
+                })
+                console.log(array)
+                setLabel(labelGrafig)
+                setData(amount)
+
+            }
+        }).catch(err=>console.log(err))
+        }
+
+
+    }
 
     useEffect(() => {
-        // usuario.user? dispatch(outcomeMovements(usuario.user.id,7)):null
-        lastMoth()
-        //    stadistics()
+       actualizar()
+      
     }, [])
 
    
@@ -69,7 +97,7 @@ function Stadistics(props) {
             .catch(err => {
                 Alert.alert(
                     'Error', //titulo
-                    'Hay una demora en su rpta, intente nuevamente', //Mensaje
+                    'You have not Income the last 12 weeks', //Mensaje
                     [{
                         text: 'OK', //Arreglo de botones
                         onPress: () => {
@@ -110,7 +138,7 @@ function Stadistics(props) {
             .catch(err => {
                 Alert.alert(
                     'Error', //titulo
-                    'Hay una demora en su rpta, intente nuevamente', //Mensaje
+                    'You have not Income the last 6 moths', //Mensaje
                     [{
                         text: 'OK', //Arreglo de botones
                         onPress: () => {
@@ -186,7 +214,9 @@ function Stadistics(props) {
             <ScrollView >
 
                 <View style={styles.view1}>
-                    <Text style={styles.title}>My Stats</Text>
+                 <TouchableWithoutFeedback onPress={()=>actualizar()}>
+                      <Text style={styles.title}>My Stats</Text>
+                      </TouchableWithoutFeedback>  
 
                 </View>
                 <View style={styles.view2}>

@@ -8,7 +8,10 @@ const {User, Account, Movement} = require('../../db.js')
 const paypal = require('paypal-rest-sdk');
 const { default: Axios } = require("axios");
 const { whatsappSend } = require("../whatsapp/whats.config.js");
-const {CLIENT_ID, CLIENT_SECRET, TOKEN_PAYPAL, URL } = process.env;
+
+const {CLIENT_ID, CLIENT_SECRET, TOKEN_PAYPAL,STRIPE_SECRET_KEY, URL } = process.env;
+const stripe = require('stripe')(`${STRIPE_SECRET_KEY}`);
+
 paypal.configure({
     'mode': 'sandbox', //sandbox or live 
     'client_id': CLIENT_ID, // please provide your client id here 
@@ -231,6 +234,36 @@ const confirmPaypal = async (ctx) =>{
     }
 }
 
+const creditCard = async (ctx) =>{
+    try {
+        const {userId, amount, cardId} = ctx.params;
+        const account = await Account.findOne({where: {userId: userId }});
+        const customer = account.customer;
+        const paymentMethods = await stripe.paymentMethods.list({ customer: customer, type: 'card' });
+        const paymentMethod = paymentMethods.data.filter(pm => pm.metadata.cardId == cardId)[0];
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: `${amount}00`,
+            currency: 'cop',
+            payment_method_types: ['card'],
+            payment_method: paymentMethod.id,
+            customer: customer,
+            confirm: true
+          });
+          console.log('ANTES: ', account.balance)
+          account.balance += parseInt(amount);
+          account.save();
+          console.log('DESPUES: ', account.balance)
+        return {
+            message: 'success',
+            content: paymentIntent
+        }
+    }
+    catch(err){
+        console.log(err);
+    }
+
+}
+
 const getTransaction = async (ctx) =>{
     const {id} = ctx.params
 
@@ -255,5 +288,6 @@ module.exports={
     transaction,
     paypalDeposits,
     confirmPaypal,
-    getTransaction
+    getTransaction,
+    creditCard
 }

@@ -13,15 +13,17 @@ var juice = require('juice');
 const hbs = require('nodemailer-express-handlebars');
 const { account } = require("../accounts/accounts.controllers");
 const { whatsappSend } = require("../whatsapp/whats.config");
+
 // const Op = Sequelize.Op;
 const BCRYPT_SALT_ROUNDS = 12;
 const {
     EMAIL_ADDRESS, 
-    EMAIL_PASSWORD
+    EMAIL_PASSWORD,
+    STRIPE_SECRET_KEY
   } = process.env;
 
 
-
+const stripe = require('stripe')(`${STRIPE_SECRET_KEY}`);
 const createUser =  async (ctx)=>{              // crea un usuario y envia el mail de validacion
 
 
@@ -142,7 +144,13 @@ const editData = async (ctx) => {                         // editar num telefono
           }
           if(user[0]){
             console.log(json.content[1][0])
-            account(json.content[1][0].id, `GO_${json.content[1][0].name}_${Math.floor(Math.random() * 999999)}`,'1234')
+            const customer = await stripe.customers.create({
+              name: `${json.content[1][0].name} ${json.content[1][0].lastname}`,
+              email: json.content[1][0].email,
+              phone: json.content[1][0].phone,
+            });
+            const customerId = customer.id;
+            account(json.content[1][0].id, `GO_${json.content[1][0].name}_${Math.floor(Math.random() * 999999)}`,'1234',customerId)
             whatsappSend(`+${json.content[1][0].phone}`,`*${json.content[1][0].name}!!* Bienvenido a *GO BANK* 🏦 realiza tu primer deposito y comienza disfrutar todos los beneficios que tenemos para vos 🙌 💳`)
             return json;
             } else {

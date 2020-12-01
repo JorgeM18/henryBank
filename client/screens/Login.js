@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux'
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator } from 'react-native';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import PassMeter from 'react-native-passmeter'
 import axios from 'axios';
 import { connect } from "react-redux";
@@ -36,7 +36,7 @@ function Login(props) {
     }
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <LinearGradient
                 colors={['#1f2333', '#1f2333', '#7847e5', '#BB59FA']}
                 start={{ x: 0, y: 0 }}
@@ -85,7 +85,7 @@ function Login(props) {
                 </View>
               
             </LinearGradient>
-        </View>
+        </ScrollView>
     );
 }
 

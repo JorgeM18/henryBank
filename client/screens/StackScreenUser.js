@@ -16,6 +16,7 @@ import stadistics from './stadistics'
 import ConnectionPages from './ConnectionPages'
 import TransactionsView from './Users/TransactionsView'
 import TransactionItem from './Users/TransactionItem'
+// import Home from './StackScrrens'
 import Buy from './Buy'
 import BuySteam from './BuySteam'
 import Buy_PlayStore from './Buy_PlayStore'
@@ -30,7 +31,8 @@ const StackScreenUser = (props) => {
         drawerContent={props => <MenuUser {...props} />}
         // initialRouteName="UserProfile"
         drawerStyle={{
-            width: 240,      
+            width: 240, 
+             
           }}
         screenOptions={{
             headerShown:true,
@@ -39,6 +41,7 @@ const StackScreenUser = (props) => {
               backgroundColor:'#292768'
             },
             headerTintColor: '#BB59FA',
+        
   
           }} 
            >
@@ -55,6 +58,8 @@ const StackScreenUser = (props) => {
             <Drawer.Screen name="ConnectionPages" component={ConnectionPages} />
             <Drawer.Screen name="TransactionsView" component={TransactionsView} />
             <Drawer.Screen name="TransactionItem" component={TransactionItem} />
+            {/* <Drawer.Screen name="Home" component={Home} /> */}
+            
             <Drawer.Screen name="Buy" component={Buy} />
             <Drawer.Screen name="BuySteam" component={BuySteam} />
             <Drawer.Screen name="Buy_PlayStore" component={Buy_PlayStore} />

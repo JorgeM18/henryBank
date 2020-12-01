@@ -14,7 +14,7 @@ const genCBU = async() =>{
     
 }
 
-const account = async (id, alias, pin) =>{
+const account = async (id, alias, pin,customer) =>{
     //const {id, alias, pin} = ctx.params
     const cbuCode = await genCBU();
     try{
@@ -25,7 +25,8 @@ const account = async (id, alias, pin) =>{
             cbu:cbuCode,
             pin:pin,
             accounttype:"ARS",
-            userId:id
+            userId:id,
+            customer: customer
         })
         return data
 

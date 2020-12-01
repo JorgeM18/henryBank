@@ -47,7 +47,12 @@ export default (state = initialState, action) => {
             }
         case 'LOGOUT_SUCCESS':
             // AsyncStorage.clear();
-             state=initialState
+             return{
+                 ...state,
+                 token: null,
+                 isAuthenticated: false,
+                 user: null,
+             }
         case 'AUTH_ERROR':
             AsyncStorage.removeItem("token");
             return {

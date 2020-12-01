@@ -1,11 +1,12 @@
 const { MoleculerError } = require("moleculer").Errors;
 const { Errors } = require('moleculer-web');
 const { use } = require("passport");
-const { Sequelize, Model } = require("sequelize");
+const { Sequelize, Model, RANGE } = require("sequelize");
 const {User, Account, Movement} = require('../../db.js');
 const Op = Sequelize.Op;
 const fn = Sequelize.fn;
 const col = Sequelize.col;
+var moment = require('moment')
 
 
 
@@ -34,23 +35,42 @@ const est2 = async (ctx) => {
     //     }
     // })
 
-    const movements = await Movement.sum('amount', {
+    // const movements = await Movement.sum('amount', {
+    //     where: {
+    //         accountId: id,
+    //         movement_type: {
+    //             [Op.or]: ['sender', 'purchase', 'extraction']
+    //         },
+            
+    //     },
+    //     group: [fn('date_trunc', 'month', col('createdAt'))]
+    // })
+
+    // return movements;
+    const movements = await Movement.findAll( {
         where: {
             accountId: id,
             movement_type: {
                 [Op.or]: ['sender', 'purchase', 'extraction']
             },
-            
         },
-        group: [fn('date_trunc', 'month', col('createdAt'))]
+        attributes: [[fn('date_trunc', 'month', col('createdAt')), 'month'],[fn('sum',col('amount')), 'total_amount']],
+        // group: [fn('date_trunc', 'month', col('createdAt'))],
+        group:['month']
+       
+   
     })
+    const json={
+        message: 'success',
+        content: {
+            gastos:movements
+        },  
+    }
 
-    return movements;
+    return json;
 
 
 }
-
-
 
 module.exports = {
     est2
