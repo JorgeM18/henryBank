@@ -2,9 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {View, StyleSheet, Image, TouchableOpacity, Alert, Text, ScrollView} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux'
 import { getBalance } from '../Store/actions/account'
+import {getTransactions} from '../Store/actions/transactions'
 import Axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { URL } from '@env'
+
 
 export default function BuySteam(props){
 

@@ -57,10 +57,10 @@ const Home = (props) => {
                         </View>
                     </View>
                 </View>
-                <View style={{...style.box2, marginTop:30}}>
+                <View style={{...style.box2, marginTop:69}}>
                     <View>
-                        <Text style={style.text}>GO</Text>
-                        <Text style={{ fontSize: 19, color: '#fff', marginTop: 10, marginHorizontal: '2.5%',fontFamily:'serif' }}>E-Wallet for the gaming comunity</Text>
+                    <Text style={{ fontSize: 'bold', fontSize: 19, color: '#fff', marginTop: 20, marginHorizontal: '2.5%',fontFamily:'serif' }}>GO</Text>
+                        <Text style={{ fontSize: 16, color: '#fff', marginTop: 10, marginHorizontal: '2.5%',fontFamily:'serif' }}>E-Wallet for the gaming comunity</Text>
                       
                     </View>
 
